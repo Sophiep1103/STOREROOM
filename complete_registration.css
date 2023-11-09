@@ -1,0 +1,22 @@
+body {
+    background-color: #f0f0f0;
+    font-family: 'Sofia Sans', sans-serif;
+    background-image: url('background_img/pic4.jpg');
+    background-size: cover; /* Ensure the background image covers the entire viewport */
+}
+
+/* Heading styles */
+h1 {
+    color: rgb(10, 10, 83);
+    font-size: 50px; /* Slightly reduced font size for a cleaner look */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px; /* Reduce the margin between h1 and h2 */
+    display: block; /* Make h1 a block-level element to create a line break */
+}
+
+h2 {
+    text-align: center;
+    display: block; /* Make h2 a block-level element to create a line break */
+    font-size: 36px;
+}
