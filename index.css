@@ -1,0 +1,128 @@
+body {
+    background-image: url('background_img/main_page_pic2.jpg');
+    background-size: cover;
+    background-position: center;
+    text-align: center; /* Center-align content */
+    padding: 50px 180px;
+    font-size: 24px; /* Adjust the font size as needed */
+    color: white; /* Text color set to white */
+    font-weight: bold; /* Font weight set to bold */
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+/* Style the h1 heading */
+h1 {
+    font-size: 50px;
+    padding: 10px;
+    color: rgb(10, 10, 83);
+    font-weight: bold;
+    border-radius: 10px;
+    display: inline-block;
+    font-family: 'Sofia Sans', sans-serif;
+    position: relative;
+    z-index: 0; /* Change the z-index value to 0 or a lower value */
+}
+
+/* Style the h3 heading */
+h3 {
+    font-size: 30px; /* Adjust the font size as needed */
+    padding: 20px; /* Padding around the heading */
+    color: rgb(10, 10, 83);  /* Text color set to white */
+    font-weight: bold; /* Font weight set to bold */
+    border-radius: 10px; /* Rounded corners for the heading */
+    font-family: 'Sofia Sans', sans-serif;
+    padding: 10px;
+}
+
+/* Custom CSS class for customized buttons */
+.btn-custom {
+    background-color: rgba(211, 185, 224, 0.902) !important;
+    color: rgb(10, 10, 83) !important; /* Dark purple color for text */
+    width: 320px; /* Adjust the width as needed */
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 10px; /* Add rounded corners */
+    margin: 0 auto; /* Center horizontally within the container */
+    display: block; /* Display as a block element */
+    padding: 2px 10px;
+    border: 2px solid  rgb(10, 10, 83);
+    margin-bottom: 10px; 
+}
+
+/* Center the buttons horizontally and vertically */
+.background-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 40px;
+    position: relative; /* Change from 'absolute' to 'relative' */
+    z-index: 1; /* Ensure it appears above the background image */
+
+}
+
+/* Apply a background color to list items with the "btn-custom" class */
+ul li {
+    margin-bottom: 0px; /* Add some spacing between list items */
+    font-size: 28px; /* Adjust the font size as needed */
+    text-align: center; /* Center-align the buttons */
+    
+}
+
+/* Reduce the font size and width of the counter input fields */
+.quantity-input {
+    font-size: 20px; /* Adjust the font size as needed */
+    width: 50px; /* Adjust the width as needed */
+}
+
+/* Remove bullet points from the unordered list */
+ul {
+  
+    text-align: center; /* Center-align the buttons within the container */
+}
+
+/* Style the last pink button */
+.pink-button {
+    
+    background-color: rgba(211, 185, 224, 0.902) !important;
+    color:rgb(10, 10, 83) !important;
+    
+    width: 320px;
+    height: 70px;
+    font-size: 25px;
+}
+
+
+
+.username-container {
+    position: absolute;
+    top: 10px; /* Adjust the top position as needed */
+    left: 10px; /* Adjust the right position as needed */
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    border-radius: 15px; /* Rounded corners for the heading */
+}
+
+
+
+#logOut{
+    color: black; 
+    margin-left: 10px;
+    text-decoration: none; /* Remove underline from the link */
+    border: 1px solid black; /* Add a 1px black border to the button */
+    padding: 5px 10px; /* Adjust padding as needed for button size */
+    border-radius: 5px; /* Add rounded corners to the button */
+}
+
+
+
+.username-container a {
+    color: black;
+    margin-left: 20px; /* Increase the margin to add more space */
+    text-decoration: none; /* Remove underline from the link */
+    border: 1px solid black; /* Add a 1px black border to the button */
+    padding: 5px 10px; /* Adjust padding as needed for button size */
+    border-radius: 5px; /* Add rounded corners to the button */
+}
+
+
+

@@ -1,0 +1,593 @@
+/* Apply a faded background image */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('background_img/veg.jpg') center/cover no-repeat;
+    opacity: 0.3; /* Adjust the opacity for the desired fade effect */
+    z-index: -1;
+}
+
+/* Set font-family for all text elements */
+body, h1, p, select, input {
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+/* Style the header (h1 element) */
+h1 {
+    font-size: 28px; /* Adjust the font size as needed */
+    color: rgb(10, 10, 83); /* Change the text color to your desired color */
+    font-weight: bold; /* Make the text bold (if desired) */
+    text-align: center; /* Align the text to the center (if desired) */
+    text-transform: uppercase; /* Change the text to uppercase (if desired) */
+    padding: 15px 0; /* Add padding to the top and bottom of the h1 element */
+    font-size: 50px; /* Adjust the font size as needed */
+}
+
+/* Style the item container */
+.items-container {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.8); /* Add a light background for items */
+    padding: 10px; /* Reduce padding for items */
+    align-items: stretch; /* Ensure all items have the same height */
+}
+
+/* Style each item */
+.item {
+    width: 18%; /* Adjust the width as needed for 5 items in a row */
+    margin: 0 10px;
+    text-align: center;
+    border: 2px solid #ccc; /* Bold gray border */
+    padding: 5px; /* Reduce padding for smaller items */
+    background-color: #fff; /* White background */
+    margin-bottom: 10px; /* Add margin between rows */
+}
+
+/* Style the item image */
+.item img {
+    max-width: 100%;
+    height: 100px;
+    max-height: 80px; /* Set a smaller maximum height for images */
+}
+
+/* Style the item name */
+.item h2 {
+    font-size: 20px; /* Reduce the font size for smaller items */
+    margin: 5px 0; /* Adjust margins for smaller items */
+}
+
+/* Style the item details */
+.item-details p {
+    font-size: 14px; /* Reduce the font size for smaller items */
+}
+
+/* Style the unit and quantity spans */
+.item-details select, .item-details input {
+    font-weight: bold;
+}
+
+/* Adjust alignment for the last row */
+.items-container::after {
+    content: "";
+    flex-grow: 1;
+    width: calc(20% - 20px); /* Adjust the width for smaller items */
+}
+
+/* Style the plus and minus buttons */
+.item-controls button {
+    background-color: #ccc;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    text-align: center;
+    line-height: 30px;
+    position: relative;
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.increment {
+    background-color: rgb(139, 223, 139);
+    font-size: 16px; /* Adjust the font size */
+    width: 30px; /* Set the width */
+    height: 30px; /* Set the height */
+    top: 5px; /* Position the button vertically in the middle */
+    border: 2px solid rgb(134, 199, 134); /* Add a green border around the button */
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.decrement {
+    background-color: rgb(225, 94, 94);
+    font-size: 16px; /* Adjust the font size */
+    width: 30px; /* Set the width */
+    height: 30px; /* Set the height */
+    top: 5px; /* Position the button vertically in the middle */
+    border: 2px solid rgb(189, 100, 100); /* Add a red border around the button */
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.quantity-container {
+    display: flex; /* Enable flex layout for the quantity container */
+    align-items: center; /* Vertically align items in the container */
+}
+
+.small-space {
+    width: 60px; /* Adjust the width as needed */
+}
+
+#saveButton {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px; /* Add some margin to the top */
+}
+
+#saveButton:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+.extra_item{
+    width: 20%;
+}
+
+
+.sticky-note {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+
+
+    
+}
+
+.note-text {
+    width: 100%;
+    height: 75px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    margin-bottom: 10px;
+    
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 24px, #ddd 24px, #ddd 25px, transparent 25px);
+}
+
+.save-button {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+   /* margin-top: 10px; /* Add some margin to the top */
+}
+
+
+.save-button:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+/*border-color:rgb(10, 10, 83);*/
+
+.note-text:focus {
+    outline: none; /* Remove the default outline */
+    border: 2px solid rgb(10, 10, 83); /* Change the border color to blue on focus */
+}
+
+
+
+
+
+
+
+
+
+/* Style the item */
+.item {
+    position: relative;
+}
+
+/* Apply a faded background image */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('veg.jpg') center/cover no-repeat;
+    opacity: 0.3; /* Adjust the opacity for the desired fade effect */
+    z-index: -1;
+}
+
+/* Set font-family for all text elements */
+body, h1, p, select, input {
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+/* Style the header (h1 element) */
+h1 {
+    font-size: 28px; /* Adjust the font size as needed */
+    color: rgb(10, 10, 83); /* Change the text color to your desired color */
+    font-weight: bold; /* Make the text bold (if desired) */
+    text-align: center; /* Align the text to the center (if desired) */
+    text-transform: uppercase; /* Change the text to uppercase (if desired) */
+    padding: 15px 0; /* Add padding to the top and bottom of the h1 element */
+    font-size: 50px; /* Adjust the font size as needed */
+}
+
+/* Style the item container */
+.items-container {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.8); /* Add a light background for items */
+    padding: 10px; /* Reduce padding for items */
+    align-items: stretch; /* Ensure all items have the same height */
+}
+
+/* Style each item */
+.item {
+    width: 18%; /* Adjust the width as needed for 5 items in a row */
+    margin: 0 10px;
+    text-align: center;
+    border: 2px solid #ccc; /* Bold gray border */
+    padding: 5px; /* Reduce padding for smaller items */
+    background-color: #fff; /* White background */
+    margin-bottom: 10px; /* Add margin between rows */
+}
+
+/* Style the item image */
+.item img {
+    max-width: 100%;
+    height: 100px;
+    max-height: 90px; /* Set a smaller maximum height for images */
+}
+
+/* Style the item name */
+.item h2 {
+    font-size: 20px; /* Reduce the font size for smaller items */
+    margin: 5px 0; /* Adjust margins for smaller items */
+}
+
+/* Style the item details */
+.item-details p {
+    font-size: 14px; /* Reduce the font size for smaller items */
+}
+
+/* Style the unit and quantity spans */
+.item-details select, .item-details input {
+    font-weight: bold;
+}
+
+/* Adjust alignment for the last row */
+.items-container::after {
+    content: "";
+    flex-grow: 1;
+    width: calc(20% - 20px); /* Adjust the width for smaller items */
+}
+
+/* Style the plus and minus buttons */
+.item-controls button {
+    background-color: #ccc;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    text-align: center;
+    line-height: 30px;
+    position: relative;
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.increment {
+    background-color: rgb(139, 223, 139);
+    font-size: 16px; /* Adjust the font size */
+    width: 30px; /* Set the width */
+    height: 30px; /* Set the height */
+    top: 5px; /* Position the button vertically in the middle */
+    border: 2px solid rgb(134, 199, 134); /* Add a green border around the button */
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.decrement {
+    background-color: rgb(225, 94, 94);
+    font-size: 16px; /* Adjust the font size */
+    width: 30px; /* Set the width */
+    height: 30px; /* Set the height */
+    top: 5px; /* Position the button vertically in the middle */
+    border: 2px solid rgb(189, 100, 100); /* Add a red border around the button */
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.quantity-container {
+    display: flex; /* Enable flex layout for the quantity container */
+    align-items: center; /* Vertically align items in the container */
+}
+
+.small-space {
+    width: 60px; /* Adjust the width as needed */
+}
+
+#saveButton {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px; /* Add some margin to the top */
+}
+
+#saveButton:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+.extra_item{
+    width: 20%;
+}
+
+
+.sticky-note {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+
+
+    
+}
+
+.note-text {
+    width: 100%;
+    height: 75px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    margin-bottom: 10px;
+    
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 24px, #ddd 24px, #ddd 25px, transparent 25px);
+}
+
+.save-button {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+   /* margin-top: 10px; /* Add some margin to the top */
+}
+
+
+.save-button:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+/*border-color:rgb(10, 10, 83);*/
+
+.note-text:focus {
+    outline: none; /* Remove the default outline */
+    border: 2px solid rgb(10, 10, 83); /* Change the border color to blue on focus */
+}
+
+
+
+
+
+
+
+
+
+/* Style the item */
+.item {
+    position: relative;
+}
+
+/* Style the item date */
+.item .item-date {
+    font-size: 14px;
+    color: #0a0a53;
+    font-weight: bold;
+    padding: 5px 5px;
+    margin-bottom: 10px;
+}
+
+/* Style the item image container */
+.item .image-container {
+    max-height: 80px; /* Set a maximum height for the image container */
+    overflow: hidden; /* Hide overflowing image */
+    padding-top: 20px; /* Add padding to the top of the image container */
+}
+
+/* Style the item image */
+.item img {
+    max-width: 100%;
+    height: auto; /* Make the height adjust automatically */
+    padding-top: 15px; /* Add padding to the top of the image container */
+}
+
+
+
+
+
+
+
+/* Style the item image container */
+.item .image-container {
+    max-height: 80px; /* Set a maximum height for the image container */
+    overflow: hidden; /* Hide overflowing image */
+    padding-top: 20px; /* Add padding to the top of the image container */
+}
+
+/* Style the item image */
+.item img {
+    max-width: 100%;
+    height: auto; /* Make the height adjust automatically */
+    padding-top: 10px; /* Add padding to the top of the image container */
+    padding: 10px; /* Add padding to all sides of the image */
+    
+}
+
+
+
+/*vi ticking*/
+
+
+/* Style the item checkbox */
+.item-checkbox {
+   
+    top: 0;
+    left: 0;
+    margin: 10px; /* Adjust the margin as needed */
+}
+
+/* Style the item checkbox label */
+.item-checkbox-label {
+
+    top: 10;
+    left: 10;
+    margin: 10px; /* Adjust the margin as needed */
+}
+
+/* Style the item content */
+.item-content {
+    position: relative;
+}
+
+/* Style the item image */
+.item img {
+    max-width: 100%;
+    height: auto; /* Make the height adjust automatically */
+    padding-top: 10px; /* Add padding to the top of the image */
+}
+
+
+
+
+
+
+
+
+
+/* Style the item */
+.item {
+    position: relative;
+    border: 2px solid #ccc; /* Add a border to the item */
+    padding: 10px; /* Add padding to the item */
+}
+
+/* Style the item checkbox */
+.item input[type="checkbox"] {
+    position: absolute;
+    top: 5px; /* Add some top padding */
+    left: 5px; /* Add some left padding */
+}
+
+/* Style the item image */
+.item img {
+    max-width: 100%;
+    height: auto; /* Make the height adjust automatically */
+    padding-top: 15px; /* Add padding to the top of the image */
+}
+
+
+
+/* Style the item checkbox */
+/* Style the item checkbox */
+.item input[type="checkbox"] {
+    position: absolute;
+    top: 5px; /* Add some top padding */
+    left: 5px; /* Add some left padding */
+    appearance: none; /* Remove the default checkbox appearance */
+    width: 20px; /* Set the width of the custom checkbox */
+    height: 20px; /* Set the height of the custom checkbox */
+    border: 2px solid #ccc; /* Add a border to the custom checkbox */
+    border-radius: 3px; /* Add some border radius for rounded corners */
+}
+
+/* Style the custom checkbox when checked */
+.item input[type="checkbox"]:checked {
+    content: "\002714";
+    background-color: #10d300; /* Change the background color when checked */
+    border-color: #10d300; /* Change the border color when checked */
+}
+
+/* Add a "vi" icon when the checkbox is checked */
+.item input[type="checkbox"]:checked::before {
+    position: absolute;
+    top: 3px; /* Adjust the vertical position */
+    left: 3px; /* Adjust the horizontal position */
+    font-size: 16px; /* Adjust the font size of the icon */
+    color: #fff; /* Color of the icon */
+}
+
+
+
+
+
+#addToCartButton {
+    display: none; /* Initially hide the button */
+    background-color: #66db34; /* Background color (blue) */
+    color: #fff; /* Text color (white) */
+    border: none;
+    border-radius: 50%; /* Make it a circle */
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    font-size: 24px; /* Icon size */
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+}
+
+/*star */
+.favorite {
+    text-align: center;
+}
+
+.favorite i {
+    font-size: 24px;
+    cursor: pointer;
+    color: #999; /* Default color for empty star */
+    display: block;
+    margin-top: 5px; /* Adjust the margin to control the space between checkbox and star */
+}
+
+
+
+.selectable.selected {
+    background-color: #e0e0e0; /* Change the background color for selected items */
+}

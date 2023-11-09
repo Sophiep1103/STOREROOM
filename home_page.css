@@ -1,0 +1,120 @@
+
+body {
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    background-image: url('background_img/main_page_pic2.jpg'); /* Replace 'main_page_pic1.jpg' with your image file path */
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center; /* Center the background image */
+    background-attachment: fixed; /* Fixed background to prevent scrolling */
+    font-family: 'Sofia Sans', sans-serif;
+    text-align: center;
+}
+
+/* Center the form container */
+.background-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background for content readability */
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+label {
+    font-weight: bold;
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+
+}
+
+#username {
+    width: 50%; 
+}
+#password {
+    width: 50%; 
+}
+
+h1 {
+    color:rgb(10, 10, 83);
+    font-size: 50px; /* Adjust the font size as needed */
+}
+/* Style the "?" tooltip */
+.tooltip {
+    cursor: help; /* Change cursor to a help cursor */
+    position: relative;
+    display: inline-block;
+    margin-left: 10px; /* Add some space between the "?" and the text */
+}
+
+.tooltip::after {
+    content: "Only Uppercase, Lowercase, and 0-9 digits are allowed"; /* Updated tooltip text */
+    position: absolute;
+    top: 10px; /* Adjust the distance from the text */
+    left: 50%; /* Center the tooltip horizontally */
+    transform: translateX(-50%); /* Center the tooltip horizontally */
+    background-color: #ccc;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tooltip:hover::after {
+    opacity: 1; /* Show the tooltip on hover */
+}
+
+button[type="submit"] {
+    background-color:rgb(10, 10, 83);
+    color: #fff; /* Change the text color */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+button[type="submit"]:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+
+
+/* Style the "Forgot Password?" button */
+#forgotPassword {
+    background-color: transparent;
+    color: #0059b9; /* Change the text color */
+    border: none;
+    cursor: pointer;
+    text-decoration: underline; /* Add underline effect */
+    transition: color 0.3s ease-in-out;
+    margin-left: 10px; /* Add some margin to separate it from the "?" tooltip */
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+
+
+#RegistationForm {
+    background-color: transparent;
+    color: #0059b9; /* Change the text color */
+    border: none;
+    cursor: pointer;
+    text-decoration: underline; /* Add underline effect */
+    transition: color 0.3s ease-in-out;
+    margin-left: 10px; /* Add some margin to separate it from the "?" tooltip */
+    padding: 20px;
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+
+
+#forgotPassword:hover {
+    color:#5ca0ed; /* Change the text color on hover */
+}
