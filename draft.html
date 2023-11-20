@@ -1,0 +1,445 @@
+    <!-- main container -->
+    <ul class="items-container" id="main-container">
+    
+        <li class="item selectable" id="apples">
+            <img src="fruits_pics/apple.jpg" alt="Apples">
+            <h2>Red Apples</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitApple" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p>
+                    <!-- Quantity input -->
+                    <button class="decrement">-</button>
+                    <input id="quantityApple" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <!-- Note textarea -->
+                <div id="stickyNoteApple" class="sticky-note">
+                    <textarea id="noteTextApple" class="note-text" placeholder="Write your note here..."></textarea>
+                    <!-- Item date input -->
+                    <input id="DateApple" class="item-date" type="date">
+                    <button id="saveNoteButtonApple" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+ 
+        <li class="item selectable" id="bananas">
+            <img src="fruits_pics/banana.jpg" alt="Bananas">
+            <h2>Bananas</h2>
+            <div class ="item-details">
+                <p>Unit:
+                    <select id="unitBanana" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+
+                    </select>
+                </p>
+                <p>
+                    <button class="decrement">-</button>
+                    <input id="quantityBanana" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteBanana" class="sticky-note">
+                    <textarea id="noteTextBanana" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataBanana" class="item-date" type="date">
+                    <button id="saveNoteButtonBanana" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i> 
+            </div>
+        </li>
+
+        <li class="item selectable" id="lemons">
+            <img src="fruits_pics/lemon.jpg" alt="Lemon">
+            <h2>Lemon</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitLemon" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p>
+                    <button class="decrement">-</button>
+                    <input id="quantityLemon" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteLemon" class="sticky-note">
+                    <textarea id="noteTextLemon" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataLemon"class="item-date" type="date">
+                    <button id="saveNoteButtonLemon" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i> 
+            </div>
+        </li>
+
+        <li class="item selectable" id="orange">
+            <img src="fruits_pics/orange.jpg" alt="Oranges">
+            <h2>Oranges</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitOrange" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p> 
+                    <button class="decrement">-</button>
+                    <input id="quantityOrange" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteOrange" class="sticky-note">
+                    <textarea id="noteTextOrange" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataOrange" class="item-date" type="date">
+                    <button id="saveNoteButtonOrange" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i> 
+            </div>
+        </li>
+
+        <li class="item selectable" id="GreenApple">
+            <img src="fruits_pics/green_apple.jpg" alt="Green Apples">
+            <h2>Green Apples</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitGreenApples" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+
+                    </select>
+                </p>
+                <p>
+                    <button class="decrement">-</button>
+                    <input id="quantityGreenApple" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteGreenApple" class="sticky-note">
+                    <textarea id="noteTextGreenApple" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataGreenApple"class="item-date" type="date">
+                    <button id="saveNoteButtonGreenApple" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+        <li class="item selectable" id="mango">
+            <img src="fruits_pics/mango.jpg" alt="Mango">
+            <h2>Mango</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitMango" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+
+                    </select>
+                </p>
+                <p>
+                    <button class="decrement">-</button>
+                    <input id="quantityMango" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteMango" class="sticky-note">
+                    <textarea id="noteTextMango" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataMango" class="item-date" type="date">
+                    <button id="saveNoteButtonMango" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+        <li class="item selectable" id="pomegranate">
+            <img src="fruits_pics/pomegranate.jpg" alt="Pomegranate">
+            <h2>Pomegranate</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitPomegranate" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p>
+                    <button class="decrement">-</button>
+                    <input id="quantityPomegranate" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNotePomegranate" class="sticky-note">
+                    <textarea id="noteTextPomegranate" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataPomegranate" class="item-date" type="date">
+                    <button id="saveNoteButtonPomegranate" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+        <li class="item selectable" id="avocado">
+            <img src="fruits_pics/avocado.jpg" alt="Avocado">
+            <h2>Avocado</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitAvocado" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p>
+                    <button class="decrement">-</button>
+                    <input id="quantityAvocado" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteAvocado" class="sticky-note">
+                    <textarea id="noteTextAvocado" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataAvocado" class="item-date" type="date">
+                    <button id="saveNoteButtonAvocado" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i> 
+            </div>
+        </li>
+
+        <li class="item selectable" id="persimmon">
+            <img src="fruits_pics/persimmon.jpg" alt="Persimmon">
+            <h2>Persimmon</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitPersimmon" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+
+                    </select>
+                </p>
+                <p>
+                    <button class="decrement">-</button>
+                    <input id="quantityPersimmon" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNotePersimmon" class="sticky-note">
+                    <textarea id="noteTextPersimmon" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataPersimmon" class="item-date" type="date">
+                    <button id="saveNoteButtonPersimmon" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+
+        <li class="item selectable" id="pomelo">
+            <img src="fruits_pics/pomelo.jpg" alt="Pomelo">
+            <h2>Pomelo</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitPomelo" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p> 
+                    <button class="decrement">-</button>
+                    <input id="quantityPomelo" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNotePomelo" class="sticky-note">
+                    <textarea id="noteTextPomelo" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataPomelo" class="item-date" type="date">
+                    <button id="saveNoteButtonPomelo" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i> 
+            </div>
+        </li>
+
+        <li class="item selectable" id="red_pomelo">
+            <img src="fruits_pics/red_pomelo.jpg" alt="Red_Pomelo">
+            <h2>Red Pomelo</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitRedPomelo" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p> 
+                    <button class="decrement">-</button>
+                    <input id="quantityRedPomelo" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteRedPomelo" class="sticky-note">
+                    <textarea id="noteTextRedPomelo" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataRedPomelo" class="item-date" type="date">
+                    <button id="saveNoteButtonRedPomelo" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+        <li class="item selectable" id="watermelon">
+            <img src="fruits_pics/watermelon.jpg" alt="Watermelon">
+            <h2>Watermelon</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitWatermelon" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p> 
+                    <button class="decrement">-</button>
+                    <input id="quantityWatermelon" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteWatermelon" class="sticky-note">
+                    <textarea id="noteTextWatermelon" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataWatermelon" class="item-date" type="date">
+                    <button id="saveNoteButtonWatermelon" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+        <li class="item selectable" id="melon">
+            <img src="fruits_pics/melon.jpeg" alt="Melon">
+            <h2>Melon</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitMelon" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p> 
+                    <button class="decrement">-</button>
+                    <input id="quantityMelon" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteMelon" class="sticky-note">
+                    <textarea id="noteTextMelon" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataMelon" class="item-date" type="date">
+                    <button id="saveNoteButtonMelon" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+        <li class="item selectable" id="black_grapes">
+            <img src="fruits_pics/black_grapes.jpg" alt="black_grapes">
+            <h2>Black Grapes</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitBlackGrapes" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p> 
+                    <button class="decrement">-</button>
+                    <input id="quantityBlackGrapes" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteBlackGrapes" class="sticky-note">
+                    <textarea id="noteTextBlackGrapes" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataBlackGrapes" class="item-date" type="date">
+                    <button id="saveNoteButtonBlackGrapes" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+        <li class="item selectable" id="green_grapes">
+            <img src="fruits_pics/green_grapes.jpg" alt="green_grapes">
+            <h2>Green Grapes</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitGreenGrapes" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p> 
+                    <button class="decrement">-</button>
+                    <input id="quantityGreenGrapes" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNoteGreenGrapes" class="sticky-note">
+                    <textarea id="noteTextGreenGrapes" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataGreenGrapes" class="item-date" type="date">
+                    <button id="saveNoteButtonGreenGrapes" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i> 
+            </div>
+        </li>
+
+        <li class="item selectable" id="pineapple">
+            <img src="fruits_pics/pineapple.jpg" alt="pineapple">
+            <h2>Pineapple</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unitPineapple" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <p> 
+                    <button class="decrement">-</button>
+                    <input id="quantityPineapple" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
+                    <button class="increment">+</button>
+                </p>
+                <div id="stickyNotePineapple" class="sticky-note">
+                    <textarea id="noteTextPineapple" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="DataPineapple" class="item-date" type="date">
+                    <button id="saveNoteButtonPineapple" class="save-button">Save</button>
+                </div>
+            </div>
+            <div class="favorite">
+                <i class="far fa-star"></i>
+            </div>
+        </li>
+
+        </ul>

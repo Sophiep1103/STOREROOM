@@ -2,7 +2,6 @@
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    echo "hi1";
     $data = json_decode(file_get_contents('php://input'), true);
 
     if (is_array($data)) {
@@ -20,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(["error" => "Invalid data format"]);
     }
 } else {
-    echo "hi2";
+
     // Handle other HTTP methods or requests as needed
     http_response_code(405); // Method Not Allowed
 }

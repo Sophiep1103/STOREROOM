@@ -1,58 +1,58 @@
 <?php
+print_r($_POST);
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
-require "vendor/autoload.php";
-
-try {
-    // Retrieve form input
-    $email = $_POST["email"];
-    $name = "Sophie";
-    $subject = "Welcome to STOREROOM!";
-    $message = "Your registration is now complete";
-
-    // Initialize PHPMailer
-    $mail = new PHPMailer(true);
-    // Enable SMTP debugging (for debugging purposes)
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-
-    // Set as SMTP mailer and enable SMTP authentication
-    $mail->isSMTP();
-    $mail->SMTPAuth = true;
-    echo $email;
-    // SMTP server settings for Gmail
-    $mail->Host = "smtp.gmail.com";
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use TLS encryption
-    $mail->Port = 587; // Port for TLS
-
-    // Your Gmail email address and application-specific password (if using 2FA)
-    $mail->Username = "sofi1103@gmail.com";
-    $mail->Password = "anqnoarjlaohreah";
-    
-    // Set the sender and recipient
-    $mail->setFrom($email, $name);
-    $mail->addAddress($email);
-
-    // Email subject and body
-    $mail->Subject = $subject;
-    $mail->Body = $message;
-    // Send the email
-    $mail->SMTPOptions = array(
-        'ssl' => array(
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-        )
-    );
-
-    $mail->send();
-    // Redirect to a success page
-    header("Location: home_page.php");
-
-} catch (Exception $e) {
-    // Handle exceptions (e.g., log errors or display an error page)
-    echo "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
+if (empty($_POST["username"])) {
+    die("Name is required");
 }
-?>
+
+if ( ! filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+    die("Valid email is required");
+}
+
+if (strlen($_POST["password"]) < 8) {
+    die("Password must be at least 8 characters");
+}
+
+if ( ! preg_match("/[a-z]/i", $_POST["password"])) {
+    die("Password must contain at least one letter");
+}
+
+if ( ! preg_match("/[0-9]/", $_POST["password"])) {
+    die("Password must contain at least one number");
+}
+
+if ($_POST["password"] !== $_POST["cpassword"]) {
+    die("Passwords must match");
+}
+
+$password_hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
+
+$mysqli = require __DIR__ . "/rp_database.php";
+
+$sql = "INSERT INTO users (name, email, password_hash)
+        VALUES (?, ?, ?)";
+     //   "INSERT INTO users(username, email, password) VALUES('$username', '$email','$hash')"
+$stmt = $mysqli->stmt_init();
+
+if ( ! $stmt->prepare($sql)) {
+    die("SQL error: " . $mysqli->error);
+}
+
+$stmt->bind_param("sss",
+                  $_POST["username"],
+                  $_POST["email"],
+                  $password_hash);
+                  
+if ($stmt->execute()) {
+
+    header("Location: signup_success.php");
+    exit;
+    
+} else {
+    
+    if ($mysqli->errno === 1062) {
+        die("email already taken");
+    } else {
+        die($mysqli->error . " " . $mysqli->errno);
+    }
+}

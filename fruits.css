@@ -6,19 +6,19 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('background_img/veg.jpg') center/cover no-repeat;
+    background: url('background_img/main_page_pic2.jpg');
     opacity: 0.3; /* Adjust the opacity for the desired fade effect */
     z-index: -1;
 }
 
 /* Set font-family for all text elements */
-body, h1, p, select, input {
+body, h1, p,select, input {
     font-family: 'Sofia Sans', sans-serif;
 }
 
 /* Style the header (h1 element) */
 h1 {
-    font-size: 28px; /* Adjust the font size as needed */
+    font-size: 30px; /* Adjust the font size as needed */
     color: rgb(10, 10, 83); /* Change the text color to your desired color */
     font-weight: bold; /* Make the text bold (if desired) */
     text-align: center; /* Align the text to the center (if desired) */
@@ -47,6 +47,7 @@ h1 {
     padding: 5px; /* Reduce padding for smaller items */
     background-color: #fff; /* White background */
     margin-bottom: 10px; /* Add margin between rows */
+    border-radius: 5px;
 }
 
 /* Style the item image */
@@ -68,7 +69,12 @@ h1 {
 }
 
 /* Style the unit and quantity spans */
+/*
 .item-details select, .item-details input {
+    font-weight: bold;
+}
+*/
+.item-details input {
     font-weight: bold;
 }
 
@@ -151,10 +157,7 @@ h1 {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
-    margin-top: 10px;
-
-
-    
+    margin-top: 10px;  
 }
 
 .note-text {
@@ -192,13 +195,6 @@ h1 {
     outline: none; /* Remove the default outline */
     border: 2px solid rgb(10, 10, 83); /* Change the border color to blue on focus */
 }
-
-
-
-
-
-
-
 
 
 /* Style the item */
@@ -360,9 +356,6 @@ h1 {
     padding: 10px;
     border-radius: 5px;
     margin-top: 10px;
-
-
-    
 }
 
 .note-text {
@@ -404,11 +397,6 @@ h1 {
 
 
 
-
-
-
-
-
 /* Style the item */
 .item {
     position: relative;
@@ -439,10 +427,6 @@ h1 {
 
 
 
-
-
-
-
 /* Style the item image container */
 .item .image-container {
     max-height: 80px; /* Set a maximum height for the image container */
@@ -450,20 +434,8 @@ h1 {
     padding-top: 20px; /* Add padding to the top of the image container */
 }
 
-/* Style the item image */
-.item img {
-    max-width: 100%;
-    height: auto; /* Make the height adjust automatically */
-    padding-top: 10px; /* Add padding to the top of the image container */
-    padding: 10px; /* Add padding to all sides of the image */
-    
-}
-
-
 
 /*vi ticking*/
-
-
 /* Style the item checkbox */
 .item-checkbox {
    
@@ -484,17 +456,6 @@ h1 {
 .item-content {
     position: relative;
 }
-
-/* Style the item image */
-.item img {
-    max-width: 100%;
-    height: auto; /* Make the height adjust automatically */
-    padding-top: 10px; /* Add padding to the top of the image */
-}
-
-
-
-
 
 
 
@@ -523,55 +484,7 @@ h1 {
 
 
 
-/* Style the item checkbox */
-/* Style the item checkbox */
-.item input[type="checkbox"] {
-    position: absolute;
-    top: 5px; /* Add some top padding */
-    left: 5px; /* Add some left padding */
-    appearance: none; /* Remove the default checkbox appearance */
-    width: 20px; /* Set the width of the custom checkbox */
-    height: 20px; /* Set the height of the custom checkbox */
-    border: 2px solid #ccc; /* Add a border to the custom checkbox */
-    border-radius: 3px; /* Add some border radius for rounded corners */
-}
 
-/* Style the custom checkbox when checked */
-.item input[type="checkbox"]:checked {
-    content: "\002714";
-    background-color: #10d300; /* Change the background color when checked */
-    border-color: #10d300; /* Change the border color when checked */
-}
-
-/* Add a "vi" icon when the checkbox is checked */
-.item input[type="checkbox"]:checked::before {
-    position: absolute;
-    top: 3px; /* Adjust the vertical position */
-    left: 3px; /* Adjust the horizontal position */
-    font-size: 16px; /* Adjust the font size of the icon */
-    color: #fff; /* Color of the icon */
-}
-
-
-
-
-
-#addToCartButton {
-    display: none; /* Initially hide the button */
-    background-color: #66db34; /* Background color (blue) */
-    color: #fff; /* Text color (white) */
-    border: none;
-    border-radius: 50%; /* Make it a circle */
-    width: 50px; /* Adjust the width as needed */
-    height: 50px; /* Adjust the height as needed */
-    font-size: 24px; /* Icon size */
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    text-align: center;
-    line-height: 50px;
-    cursor: pointer;
-}
 
 /*star */
 .favorite {
@@ -587,7 +500,181 @@ h1 {
 }
 
 
-
 .selectable.selected {
-    background-color: #e0e0e0; /* Change the background color for selected items */
+    /*background-color: #e0e0e0; /* Change the background color for selected items */
+    border: 4px solid rgb(10, 10, 83);
+    border-radius: 5px;
+    
+    
+}
+
+
+/* Additional styles for the search bar */
+.search-wrapper {
+    margin-bottom: 20px;
+    padding-left: 10px;
+}
+
+
+/* Style for the search label */
+label[for="search"] {
+    display: block;
+    margin-bottom: 2px;
+    font-weight: bold;
+    padding-left: 70px;
+    color: rgb(10, 10, 83);
+    font-size: 16px;
+
+}
+
+/* Style for the search input */
+#search {
+    width: 20%;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+
+}
+
+/* Optional: Add some animation on focus */
+#search:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px  rgb(10, 10, 83);;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+
+
+
+
+
+.open-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+   
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+   /* background-color:rgb(221, 210, 242);*/
+    background: rgba(255, 255, 255, 0.8);
+    overflow-x: hidden;
+    padding-top: 20px;
+    z-index: 1;
+}
+
+.popup-content {
+    padding: 20px;
+    
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.left-arrow-button {
+    position: absolute;
+    top: 90%;
+    right: 80%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    cursor: pointer;
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+
+
+
+/* Style the window items */
+.items-container-window {
+    list-style: none;
+    padding: 5px;
+    margin: 0; /* Add space above and below the list */
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next row */
+    justify-content: space-between; /* Adjust as needed */
+}
+
+.selectable-window {
+    text-align: center; /* Center text and image */
+    border: 2px solid #999; /* Add a thin frame */
+    padding: 5px; /* Adjust padding for spacing */
+    background-color: #fff;
+    border-radius: 5px;
+    width: 48%; /* Set your desired width for two items in a row with some spacing */
+    box-sizing: border-box; /* Include padding and border in the total width/height */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items vertically */
+    margin: 5px 0; /* Add margin for spacing between rows */
+}
+
+.selectable-window img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain; /* Maintain aspect ratio and cover the container */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+
+
+
+
+
+
+
+
+/* Style for the search input */
+#search-window {
+    width: 100%;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border: 2px solid   #999 ; /* Add a thin frame */
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    
+
+}
+label {
+    display: block; /* Ensure the label takes full width */
+    margin-top: 15px;
+}
+
+.highlight {
+    background-color: rgb(229, 229, 244);
+    font-weight: bold;
+}
+
+.selected-frame {
+    border: 3px solid rgb(10, 10, 83);
+    font-weight: bold;
+    border-radius: 5px;
 }

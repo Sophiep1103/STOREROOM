@@ -29,7 +29,7 @@ $password_hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
 $mysqli = require __DIR__ . "/rp_database.php";
 
-$sql = "INSERT INTO users (username, email, password)
+$sql = "INSERT INTO users (name, email, password_hash)
         VALUES (?, ?, ?)";
      //   "INSERT INTO users(username, email, password) VALUES('$username', '$email','$hash')"
 $stmt = $mysqli->stmt_init();
@@ -41,7 +41,7 @@ if ( ! $stmt->prepare($sql)) {
 $stmt->bind_param("sss",
                   $_POST["username"],
                   $_POST["email"],
-                  $password);
+                  $password_hash);
                   
 if ($stmt->execute()) {
 
