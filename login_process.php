@@ -3,8 +3,6 @@ session_start(); // Start a session
 include('connection.php');
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Assuming you have a database connection in connection.php
-   // include('connection.php');
 
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = $_POST['password']; // Note: Don't escape the password
@@ -17,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   
         $row = mysqli_fetch_assoc($result);
         $hashedPassword = $row['password_hash'];
+        $account_id = $row['account_id']; // Add this line to fetch the account_id
         
         // Verify the password
         if (password_verify($password, $hashedPassword)) {
@@ -24,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Authentication successful
             $_SESSION['authenticated'] = true;
             $_SESSION['username'] = $username; // Store the user's name in the session
+            $_SESSION['account_id'] = $account_id; 
             header("Location: index.php");
         } else {
    
