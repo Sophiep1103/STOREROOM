@@ -4,6 +4,8 @@ session_start();
 if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
     // User is authenticated, retrieve the username
     $username = $_SESSION['username'];
+    $account_id = $_SESSION['account_id'];
+    
 } else {
     // User is not authenticated, handle accordingly (e.g., redirect to a login page)
     header("Location: home_page.php");
@@ -17,7 +19,6 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-gn538M5rFqNw5f5Vg5f5P5b5F5q5f5V5p5w5f5V5/5f5V5p5w5f5V5w5P5O5G5J5J5D5b5" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="index.css">
     <style>
@@ -54,18 +55,18 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
     <script>
         document.getElementById("buttonToFruits").addEventListener("click", function() {
             // Navigate to the fruits_and_vegetables.php page
-            window.location.href = "fruits.php";
+            window.location.href = "fruits.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
             
         });
 
         document.getElementById("buttonToVegetables").addEventListener("click", function() {
             // Navigate to the fruits_and_vegetables.php page
-            window.location.href = "vegetables.php";
+            window.location.href = "fruits.php?username=<?php echo $username; ?>";
             
         });
 
         document.getElementById("buttonToShoppingCart").addEventListener("click", function() {
-            window.location.href = "shopping_cart.php";
+            window.location.href = "shopping_cart.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
             
         });
 
