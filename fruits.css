@@ -1,15 +1,4 @@
-/* Apply a faded background image */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('background_img/main_page_pic2.jpg');
-    opacity: 0.3; /* Adjust the opacity for the desired fade effect */
-    z-index: -1;
-}
+
 
 /* Set font-family for all text elements */
 body, h1, p,select, input {
@@ -18,13 +7,12 @@ body, h1, p,select, input {
 
 /* Style the header (h1 element) */
 h1 {
-    font-size: 30px; /* Adjust the font size as needed */
-    color: rgb(10, 10, 83); /* Change the text color to your desired color */
-    font-weight: bold; /* Make the text bold (if desired) */
-    text-align: center; /* Align the text to the center (if desired) */
-    text-transform: uppercase; /* Change the text to uppercase (if desired) */
-    padding: 15px 0; /* Add padding to the top and bottom of the h1 element */
-    font-size: 50px; /* Adjust the font size as needed */
+    font-size: 70px; 
+    color: rgb(10, 10, 83); 
+    font-weight: bold; 
+    text-align: center; 
+    text-transform: uppercase; 
+    padding: 15px 0; 
 }
 
 /* Style the item container */
@@ -50,13 +38,6 @@ h1 {
     border-radius: 5px;
 }
 
-/* Style the item image */
-.item img {
-    max-width: 100%;
-    height: 100px;
-    max-height: 80px; /* Set a smaller maximum height for images */
-}
-
 /* Style the item name */
 .item h2 {
     font-size: 20px; /* Reduce the font size for smaller items */
@@ -68,12 +49,6 @@ h1 {
     font-size: 14px; /* Reduce the font size for smaller items */
 }
 
-/* Style the unit and quantity spans */
-/*
-.item-details select, .item-details input {
-    font-weight: bold;
-}
-*/
 .item-details input {
     font-weight: bold;
 }
@@ -203,6 +178,7 @@ h1 {
 }
 
 /* Apply a faded background image */
+
 body::before {
     content: "";
     position: fixed;
@@ -211,25 +187,10 @@ body::before {
     width: 100%;
     height: 100%;
     background: url('veg.jpg') center/cover no-repeat;
-    opacity: 0.3; /* Adjust the opacity for the desired fade effect */
+    opacity: 0.3; 
     z-index: -1;
 }
 
-/* Set font-family for all text elements */
-body, h1, p, select, input {
-    font-family: 'Sofia Sans', sans-serif;
-}
-
-/* Style the header (h1 element) */
-h1 {
-    font-size: 28px; /* Adjust the font size as needed */
-    color: rgb(10, 10, 83); /* Change the text color to your desired color */
-    font-weight: bold; /* Make the text bold (if desired) */
-    text-align: center; /* Align the text to the center (if desired) */
-    text-transform: uppercase; /* Change the text to uppercase (if desired) */
-    padding: 15px 0; /* Add padding to the top and bottom of the h1 element */
-    font-size: 50px; /* Adjust the font size as needed */
-}
 
 /* Style the item container */
 .items-container {
@@ -251,13 +212,6 @@ h1 {
     padding: 5px; /* Reduce padding for smaller items */
     background-color: #fff; /* White background */
     margin-bottom: 10px; /* Add margin between rows */
-}
-
-/* Style the item image */
-.item img {
-    max-width: 100%;
-    height: 100px;
-    max-height: 90px; /* Set a smaller maximum height for images */
 }
 
 /* Style the item name */
@@ -387,7 +341,6 @@ h1 {
     background-color: #5ca0ed; /* Change the button's background color on hover */
 }
 
-/*border-color:rgb(10, 10, 83);*/
 
 .note-text:focus {
     outline: none; /* Remove the default outline */
@@ -418,14 +371,6 @@ h1 {
     padding-top: 20px; /* Add padding to the top of the image container */
 }
 
-/* Style the item image */
-.item img {
-    max-width: 100%;
-    height: auto; /* Make the height adjust automatically */
-    padding-top: 15px; /* Add padding to the top of the image container */
-}
-
-
 
 /* Style the item image container */
 .item .image-container {
@@ -437,25 +382,15 @@ h1 {
 
 /*vi ticking*/
 /* Style the item checkbox */
-.item-checkbox {
-   
-    top: 0;
-    left: 0;
-    margin: 10px; /* Adjust the margin as needed */
-}
 
-/* Style the item checkbox label */
-.item-checkbox-label {
 
-    top: 10;
-    left: 10;
-    margin: 10px; /* Adjust the margin as needed */
-}
+
 
 /* Style the item content */
 .item-content {
     position: relative;
 }
+
 
 
 
@@ -468,20 +403,18 @@ h1 {
     padding: 10px; /* Add padding to the item */
 }
 
-/* Style the item checkbox */
-.item input[type="checkbox"] {
-    position: absolute;
-    top: 5px; /* Add some top padding */
-    left: 5px; /* Add some left padding */
-}
+
 
 /* Style the item image */
 .item img {
     max-width: 100%;
-    height: auto; /* Make the height adjust automatically */
-    padding-top: 15px; /* Add padding to the top of the image */
+    height: auto; /* 100px?*/
+    border: 4px solid rgba(219, 182, 232, 0.95);
+    max-height: 90px; /*80?*/
+    margin-top: 45px; 
+    border-radius: 5px;
+    
 }
-
 
 
 
@@ -494,15 +427,15 @@ h1 {
 .favorite i {
     font-size: 24px;
     cursor: pointer;
-    color: #999; /* Default color for empty star */
+    color: #0ff1da ;
     display: block;
-    margin-top: 5px; /* Adjust the margin to control the space between checkbox and star */
+    margin-top: 5px; 
 }
 
 
 .selectable.selected {
-    /*background-color: #e0e0e0; /* Change the background color for selected items */
     border: 4px solid rgb(10, 10, 83);
+    font-weight: bold;
     border-radius: 5px;
     
     
@@ -546,9 +479,6 @@ label[for="search"] {
     box-shadow: 0 0 5px  rgb(10, 10, 83);;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
-
-
-
 
 
 
@@ -643,13 +573,6 @@ label[for="search"] {
 }
 
 
-
-
-
-
-
-
-
 /* Style for the search input */
 #search-window {
     width: 100%;
@@ -669,12 +592,106 @@ label {
 }
 
 .highlight {
-    background-color: rgb(229, 229, 244);
+    background-color:rgba(219, 182, 232, 0.95);
     font-weight: bold;
 }
 
 .selected-frame {
     border: 3px solid rgb(10, 10, 83);
     font-weight: bold;
+    font-weight: bold;
     border-radius: 5px;
 }
+
+/* Example styling for the top-left button */
+.top-left-button {
+    position: absolute;
+    left: 16px;
+    background-color:rgb(10, 10, 83);
+    color: #fff;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    width: 185px; /* Adjust the width as needed */
+    height: 28px; /* Adjust the height as needed */
+}
+
+
+/* Specific styling for fruit popups */
+.fruit-popup, .fruit-popup-addToCart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Set a value higher than the z-index of the fruit elements */
+    background-color: white;
+    padding: 10px; /* Adjust the padding to make the popup smaller */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 200px; /* Set a specific width for the popup */
+    text-align: center; /* Center text content */
+    max-height: 120px; /* Set a maximum height to limit the popup size */
+    overflow: auto; /* Add scrollbar if content overflows */
+    background-color:rgba(219, 182, 232, 0.95); /* Set the background color to blue */
+}
+
+/* Styling for the close button in the fruit popup */
+.fruit-popup .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+
+/* Styling for the close button in the fruit popup */
+.fruit-popup-addToCart .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+
+.setBtn{
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+  
+}
+
+[id^="topLeftButton-AddToCart"] {
+    margin-top: 8px; /* Adjust the margin as needed */
+}
+
+
+
+
+/*
+.speedometer{
+    width: 30px; 
+    height: auto; 
+    display: block;
+    margin: 0 auto;
+}
+
+.top-left-button.with-icon {
+    padding-left: 40px; 
+    position: relative;
+}
+
+.top-left-button.with-icon::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 50%; 
+    transform: translateY(-50%); 
+    width: 20px; 
+    height: 20px; 
+    background-image: url('speedometer.png');
+    background-size: cover;
+}
+*/
