@@ -1,5 +1,15 @@
 <?php
     $user = $_GET['username'];
+    $account_id = $_GET['account_id'];
+    // Establish a connection to MySQL
+    $conn  = new mysqli("localhost", "root", "", "database_app");
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -17,10 +27,16 @@
 </head>
 <body>
     <h1>Fruits</h1>
+    <!-- <a href="https://www.flaticon.com/free-icons/minimum" title="minimum icons">Minimum icons created by Freepik - Flaticon</a>
+    <img src="speedometer.png" alt="Speedometer" class="speedometer">)-->
     <!-- search bar (to the main container)-->
     <div class="search-wrapper">
         <label for="search" >Fruits Search:</label>
         <input type="search" id="search" data-search  placeholder="enter a fruit" oninput="searchItems()">
+    </div>
+
+    <div id="savedInfo">
+        <!-- Content to be cleared -->
     </div>
 
     <!-- pop up window -->
@@ -46,7 +62,7 @@
                 </li>
 
                 <li class="selectable-window" id="Bananas-window" onclick="selectItem('Bananas-window')">
-                <img src="fruits_pics/banana.jpg" alt="Bananas">
+                <img src="fruits_pics/Bananas.jpg" alt="Bananas">
                 <p>Bananas</p>
                 </li>
 
@@ -129,71 +145,41 @@
 
     <!-- main container -->
     <ul class="items-container" id="main-container">
-    
-    <li class="item selectable" id="apples">
-            <img src="fruits_pics/apple.jpg" alt="Apples">
-            <h2>Red Apples</h2>
-            <div class="item-details">
-                <p>Unit:
-                    <select id="unitApple" class="unit-select">
-                        <option value="units">units</option>
-                        <option value="kg">kg</option>
-                        <option value="gram">gram</option>
-                    </select>
-                </p>
-                <p>
-                    <!-- Quantity input -->
-                    <button class="decrement">-</button>
-                    <input id="quantityApple" type="number" class="quantity-input small-space" min="0" step="0.1" value="0.0">
-                    <button class="increment">+</button>
-                </p>
-                <!-- Note textarea -->
-                <div id="stickyNoteApple" class="sticky-note">
-                    <textarea id="noteTextApple" class="note-text" placeholder="Write your note here..."></textarea>
-                    <!-- Item date input -->
-                    <input id="DateApple" class="item-date" type="date">
-                    <button id="saveNoteButtonApple" class="save-button">Save</button>
-                </div>
-            </div>
-            <div class="favorite">
-                <i class="far fa-star"></i>
-            </div>
-        </li>
-
+   
         
     </ul>
 
         <button id="saveButton">Save</button>
 
     <script>
+
+    // Array to store the names of starred items
+    starredItems = [];
+
+    // Array to store selected items
+    selectedItemsArray = [];
+
     // Assuming you have a list of fruit IDs
-    var fruitIds = ["Apple", "Banana", "Lemon", "Orange", "GreenApple", "Mango", "Pomegranate", "Avocado", "Persimmon", "Pomelo", "RedPomelo", "Watermelon", "Melon", "BlackGrapes", "GreenGrapes", "Pineapple"];
+    var fruitIds = ["Apple", "Bananas", "Lemon", "Orange", "GreenApple", "Mango", "Pomegranate", "Avocado", "Persimmon", "Pomelo", "RedPomelo", "Watermelon", "Melon", "BlackGrapes", "GreenGrapes", "Pineapple"];
 
-    // Loop through each fruit ID and set up event listeners
-    fruitIds.forEach(function (fruitId) {
-        var saveButton = document.getElementById("saveNoteButton" + fruitId);
-
-        if (saveButton) {
-            saveButton.addEventListener("click", function () {
-                var quantity = document.getElementById("quantity" + fruitId).value;
-                var note = document.getElementById("noteText" + fruitId).value;
-                var item_date = document.getElementById("Data" + fruitId).value;
-
-                console.log("Fruit ID:", fruitId);
-                console.log("Quantity:", quantity);
-                console.log("Note:", note);
-                console.log("Item Date:", item_date);
-                // Additional logic or send data to the server for this specific fruit
-            });
-        }
-    });
+// Call fetchStarredItems when the page loads
+document.addEventListener("DOMContentLoaded", function () {
+    fetchStarredItems();
+});
 
     // General event listener for the "Save" button
     document.getElementById("saveButton").addEventListener("click", function () {
-        var quantity = document.getElementById("quantity-input").value;
-        var note = document.getElementById("noteText").value;
-        var item_date = document.getElementById("item_date").value;
+        var quantityInput = document.querySelector(".quantity-input");
+        var noteText = document.querySelector(".note-text");
+        var itemDate = document.querySelector(".item-date");
 
+        if (quantityInput && noteText && itemDate) {
+            var quantity = quantityInput.value;
+            var note = noteText.value;
+            var item_date = itemDate.value;
+        }else {
+            console.error("One or more elements not found");
+        }
         console.log("Sending general data to server...");
 
         fetch('fruit_save-info.php', {
@@ -227,35 +213,22 @@
             }
             return response.text(); // assuming you are returning plain text from the server
         })
-        .then(data => {
-            updateSavedInfo(data);
-        })
+     //   .then(data => {
+      //      updateSavedInfo(data);
+     //   })
         .catch(error => {
             console.error('Error:', error);
         });
     }
 /*
-    function updateSavedInfo(data) {
-        var savedInfoContainer = document.getElementById("savedInfo");
-        savedInfoContainer.innerHTML = ""; // Clear existing data
-
-        var quantity = data.quantity || "Not available";
-        var note = data.note || "Not available";
-        var item_date = data.item_date || "Not available";
-
-        savedInfoContainer.innerHTML = `
-            <h2>Saved Information:</h2>
-            <p><strong>Quantity:</strong> ${quantity}</p>
-            <p><strong>Note:</strong> ${note}</p>
-            <p><strong>Date:</strong> ${item_date}</p>
-        `;
-    }
-
-*/
-
 function updateSavedInfo(data) {
     var savedInfoContainer = document.getElementById("savedInfo");
-    savedInfoContainer.innerHTML = ""; // Clear existing data
+    if(savedInfoContainer){
+        savedInfoContainer.innerHTML = ""; // Clear existing data
+    }
+    else{
+        console.error("Element with ID 'savedInfo' not found");
+    }
 
     var quantity = data.quantity || "Not available";
     var note = data.note || "Not available";
@@ -270,9 +243,6 @@ function updateSavedInfo(data) {
     // Get references to all favorite star icons
     const favoriteIcons = document.querySelectorAll(".favorite i");
 
-    // Array to store the names of starred items
-    const starredItems = [];
-
     // Check if the item is starred and add its name to the array
     favoriteIcons.forEach(icon => {
         if (icon.classList.contains("fas")) {
@@ -284,128 +254,13 @@ function updateSavedInfo(data) {
     // Save the array of starred items in localStorage
     localStorage.setItem("starredItems", JSON.stringify(starredItems));
 
-    // Check if there are starred items and add them to the main container
-    if (starredItems.length > 0) {
-        starredItems.forEach(itemName => {
-            const item = document.querySelector(`.item img[alt="${itemName}"]`).closest(".item");
-            if (item) {
-                addItemToMainContainerFromStar(item);
-            }
-        });
-    }
 }
+*/
 
-//new
-// Fetch and display saved data on page load
-document.addEventListener('DOMContentLoaded', function () {
-    fetchSavedData();
-
-    // Load the array of starred items from localStorage
-    const starredItems = JSON.parse(localStorage.getItem("starredItems")) || [];
-
-    // Add the starred items to the main container
-    if (starredItems.length > 0) {
-        starredItems.forEach(itemName => {
-            const item = document.querySelector(`.item img[alt="${itemName}"]`).closest(".item");
-            if (item) {
-                addItemToMainContainerFromStar(item);
-            }
+        // Fetch and display saved data on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchSavedData();
         });
-    }
-});
-//new
-// Function to add an item to the main container when starred
-function addItemToMainContainer() {
-    // Get all selected items in the popup
-    var selectedItems = document.querySelectorAll('.selectable-window.selected-frame');
-
-    if (selectedItems.length > 0) {
-        // Iterate through each selected item
-        selectedItems.forEach(function(selectedItem) {
-            // Get the fruit name (assuming it's in the alt attribute of the image)
-            var fruitName = selectedItem.querySelector('img').alt;
-
-            // Check if the item with the same name already exists in the main container
-            var existingItem = document.getElementById("main-" + fruitName);
-
-            // Check if the item is already starred
-            var isStarred = selectedItem.querySelector('.favorite i').classList.contains("fas");
-
-            if (!existingItem && !isStarred) {
-                // Create a new list item for the main container
-                var newItem = document.createElement('li');
-                newItem.className = "item selectable";
-
-                // Set innerHTML based on the selected item in the popup
-                newItem.innerHTML = `
-                    <img src="${selectedItem.querySelector('img').src}" alt="${selectedItem.querySelector('img').alt}">
-                    <h2>${selectedItem.querySelector('p').innerText}</h2>
-                    <div class="item-details">
-                        <p>Unit:
-                            <select id="unit${uniqueIdCounter}" class="unit-select">
-                                <option value="units">units</option>
-                                <option value="kg">kg</option>
-                                <option value="gram">gram</option>
-                            </select>
-                        </p>
-                        <button class="decrement">
-                            <i class="fas fa-minus"></i> 
-                        </button>
-                        <input type="number" id="quantity${uniqueIdCounter}" class="quantity-input small-space" min="0" step="1" value="0">
-                        <button class="increment">
-                            <i class="fas fa-plus"></i> 
-                        </button>
-
-                        <div id="stickyNote" class="sticky-note">
-                            <textarea id="noteText${uniqueIdCounter}" class="note-text" placeholder="Write your note here..."></textarea>
-                            <input id="Date${uniqueIdCounter}" class="item-date" type="date">
-                            <button id="saveNoteButton" class="save-button">Save</button>
-                        </div> 
-                    </div>
-                    <div class="favorite">
-                        <i class="far fa-star"></i> 
-                    </div>
-                `;
-
-                // Update the ID to make it unique
-                var newItemId = "main-" + fruitName;
-                newItem.id = newItemId;
-
-                // Increment the counter for the next iteration
-                uniqueIdCounter++;
-
-                // Reset the quantity input value
-                newItem.querySelector('.quantity-input').value = "0";
-
-                // Remove the 'selected-frame' class from the cloned item
-                selectedItem.classList.remove('selected-frame');
-
-                // Add the cloned item to the main container
-                document.getElementById('main-container').appendChild(newItem);
-
-                // Attach event listeners to the increment and decrement buttons
-                newItem.querySelector('.increment').addEventListener('click', handleIncrement);
-                newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
-            } else {
-                // Alert or notify the user that the item already exists in the main container or is starred
-                if (isStarred) {
-                    alert("Item '" + fruitName + "' is already starred.");
-                } else {
-                    alert("Item '" + fruitName + "' is already in the main container.");
-                }
-            }
-        });
-
-        // Close the popup
-        closePopup();
-    }
-}
-
-
-    // Fetch and display saved data on page load
-    document.addEventListener('DOMContentLoaded', function () {
-        fetchSavedData();
-    });
 
         // Function to handle parsing the quantity based on the selected unit
         function parseQuantity(input, unit) {
@@ -424,13 +279,6 @@ function addItemToMainContainer() {
 
         // Get references to the input fields, unit selects, and buttons for all items
         const items = document.querySelectorAll(".item");
-
-
-
-
-        //check!!!
-        // Load saved quantities from local storage
-        const savedQuantities = JSON.parse(localStorage.getItem("quantities")) || {};
 
         // Initialize input fields with saved values
         function updateInputs() {
@@ -470,7 +318,6 @@ function addItemToMainContainer() {
             // Save updated quantities to local storage
             localStorage.setItem("quantities", JSON.stringify(savedQuantities));
         });
-        //end check!!!
 
         // Function to handle increment and decrement buttons for all items
         items.forEach(item => {
@@ -506,7 +353,6 @@ function addItemToMainContainer() {
             });
         });
 
-        //check
         // Save the date when the user changes it
         itemDateInputs.forEach(dateInput => {
             dateInput.addEventListener("change", function () {
@@ -519,46 +365,6 @@ function addItemToMainContainer() {
 
         // Get references to the favorite star icons
         const favoriteIcons = document.querySelectorAll(".favorite i");
-/*
-        // Add event listeners to the favorite icons
-        favoriteIcons.forEach(icon => {
-            icon.addEventListener("click", function () {
-                icon.classList.toggle("fas"); // Toggle the "fas" class to switch between empty and full star
-                icon.classList.toggle("far");
-                if (icon.classList.contains("fas")) {
-                    icon.style.color = "#f1c40f"; // Set the color to yellow for a full star
-                } else {
-                    icon.style.color = "#999"; // Set the color to the default for an empty star
-                }
-            });
-        });
-
-*/
-
-        // Add event listeners to the favorite icons
-favoriteIcons.forEach(icon => {
-    icon.addEventListener("click", function () {
-        icon.classList.toggle("fas"); // Toggle the "fas" class to switch between empty and full star
-        icon.classList.toggle("far");
-        if (icon.classList.contains("fas")) {
-            icon.style.color = "#f1c40f"; // Set the color to yellow for a full star
-            const item = icon.closest(".item");
-            addItemToMainContainerFromStar(item);
-        } else {
-            icon.style.color = "#999"; // Set the color to the default for an empty star
-            const itemName = icon.closest(".item").querySelector('img').alt;
-            const mainItem = document.getElementById("main-" + itemName);
-            if (mainItem) {
-                mainItem.remove(); // Remove the item from the main container
-            }
-        }
-    });
-});
-
-
-
-
-
 
         // Get references to all selectable items
         const selectableItems = document.querySelectorAll(".selectable");
@@ -569,17 +375,6 @@ favoriteIcons.forEach(icon => {
                 const selectedItems = document.querySelectorAll(".selected");
                 return selectedItems.length > 0;
         }
-
-
-
-    // Add a click event listener to the "favorite" elements to toggle the "starred" class
-    const favoriteItems = document.querySelectorAll(".favorite");
-    favoriteItems.forEach(favorite => {
-        favorite.addEventListener("click", (event) => {
-        favorite.classList.toggle("starred");
-        event.stopPropagation(); // Prevent the click event from propagating to the parent item
-        });
-    });
 
 // Function to handle item search
   function searchItems() {
@@ -640,6 +435,69 @@ favoriteIcons.forEach(icon => {
         document.getElementById('open-window-btn').style.display = 'block';
     }
 
+
+
+    function openPopupMinQuantity(fruitName) {
+    var popupElement = document.getElementById("fruit-popup" + fruitName);
+    var buttonElement = document.getElementById('topLeftButton' + fruitName);
+
+    if (popupElement && buttonElement) {
+        // Apply the specific class for fruit popups
+        popupElement.classList.add('fruit-popup');
+
+        popupElement.style.display = "block";
+        buttonElement.style.display = 'none';
+    } else {
+        console.error("Popup or button element not found for", fruitName);
+    }
+}
+
+
+function openPopupAddToCart(fruitName) {
+    var popupElement = document.getElementById("fruit-popup-addToCart" + fruitName);
+    var buttonElement = document.getElementById('topLeftButton-AddToCart' + fruitName);
+
+    if (popupElement && buttonElement) {
+        // Apply the specific class for fruit popups
+        popupElement.classList.add('fruit-popup-addToCart');
+
+        popupElement.style.display = "block";
+        buttonElement.style.display = 'none';
+    } else {
+        console.error("Popup or button element not found for", fruitName);
+    }
+}
+
+function closePopupMinQuantity(fruitName) {
+    var popupElement = document.getElementById("fruit-popup" + fruitName);
+    var buttonElement = document.getElementById('topLeftButton' + fruitName);
+
+    if (popupElement && buttonElement) {
+        // Remove the specific class when closing the popup
+        popupElement.classList.remove('fruit-popup');
+
+        popupElement.style.display = "none";
+        buttonElement.style.display = 'block';
+    } else {
+        console.error("Popup or button element not found for", fruitName);
+    }
+}
+
+function closePopupAddToCart(fruitName) {
+    var popupElement = document.getElementById("fruit-popup-addToCart" + fruitName);
+    var buttonElement = document.getElementById('topLeftButton-AddToCart' + fruitName);
+
+    if (popupElement && buttonElement) {
+        // Remove the specific class when closing the popup
+        popupElement.classList.remove('fruit-popup-addToCart');
+
+        popupElement.style.display = "none";
+        buttonElement.style.display = 'block';
+    } else {
+        console.error("Popup or button element not found for", fruitName);
+    }
+}
+
     // Function to handle item selection
     function selectItem(itemId) {
         // Find the clicked item
@@ -648,8 +506,6 @@ favoriteIcons.forEach(icon => {
         // Toggle the 'selected-frame' class on the clicked item
         selectedItem.classList.toggle('selected-frame');
     }
-
-        
 
 
     function searchItemsWindow() {
@@ -681,11 +537,12 @@ favoriteIcons.forEach(icon => {
     }
 
 
-    
+
 // Counter for generating unique IDs
 var uniqueIdCounter = 1;
 
 function addItemToMainContainer() {
+    const account_id = <?php echo json_encode($account_id); ?>;
     // Get all selected items in the popup
     var selectedItems = document.querySelectorAll('.selectable-window.selected-frame');
 
@@ -699,41 +556,103 @@ function addItemToMainContainer() {
             var existingItem = document.getElementById("main-" + fruitName);
 
             if (!existingItem) {
+
+                // Make an AJAX request to check if the item already exists in the database
+                /*
+    var xhrCheckItem = new XMLHttpRequest();
+    xhrCheckItem.open("POST", "checkItem.php", true);
+    xhrCheckItem.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhrCheckItem.onreadystatechange = function () {
+        if (xhrCheckItem.readyState == 4 && xhrCheckItem.status == 200) {
+            // Parse the response from the server
+            var response = JSON.parse(xhrCheckItem.responseText);
+
+            if (response.exists) {
+                // Item already exists in the database
+                // Update the quantity and unit with values from the database
+                newItem.querySelector('#quantity' + fruitName).value = response.quantity;
+                newItem.querySelector('#unit' + fruitName).value = response.unit;
+            }
+        }
+    };
+
+    // Send data to checkItem.php (replace with your actual endpoint and parameters)
+    xhrCheckItem.send(`fruitName=${fruitName}&account_id=${account_id}`);
+    */
                 // Create a new list item for the main container
                 var newItem = document.createElement('li');
                 newItem.className = "item selectable";
 
+
                 // Set innerHTML based on the selected item in the popup
                 newItem.innerHTML = `
+                <div class="button-container">
+                <button onclick="openPopupMinQuantity('${fruitName}')" class="top-left-button with-icon" id="topLeftButton${fruitName}">define minimum quantity </button>
+                    <div id="fruit-popup${fruitName}" class="popup"> 
+                        <div class="popup-content-fruits">
+                            <span class="close" onclick="closePopupMinQuantity('${fruitName}')">&times;</span>
+                            <h6> Minimum Quantity: </h6>
+                            <p class="input-row">
+                                <input type="number" id="fruit-quantity${fruitName}" class="fruit-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="fruit-unit${fruitName}" class="fruit-unit-select" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupMinQuantity('${fruitName}')" id="set${fruitName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+
+                    </br>
+                    <button onclick="openPopupAddToCart('${fruitName}')" class="top-left-button" id="topLeftButton-AddToCart${fruitName}" >Add To Cart</button>
+                    <div id="fruit-popup-addToCart${fruitName}" class="popup"> 
+                        <div class="popup-content-fruits">
+                            <span class="close" onclick="closePopupAddToCart('${fruitName}')">&times;</span>
+                            <h6>Add To Cart: </h6>
+                            <p class="input-row">
+                                <input type="number" id="fruit-quantity-addToCart${fruitName}" class="fruit-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="fruit-unit-addToCart${fruitName}" class="fruit-unit-select-addToCart" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupAddToCart('${fruitName}')" id="set-addToCart${fruitName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+                <div>
                     <img src="${selectedItem.querySelector('img').src}" alt="${selectedItem.querySelector('img').alt}">
                     <h2>${selectedItem.querySelector('p').innerText}</h2>
                     <div class="item-details">
                         <p>Unit:
-                            <select id="unit${uniqueIdCounter}" class="unit-select">
+                            <select id="unit${fruitName}" class="unit-select">
                                 <option value="units">units</option>
                                 <option value="kg">kg</option>
                                 <option value="gram">gram</option>
                             </select>
+
                         </p>
                         <button class="decrement">
                             <i class="fas fa-minus"></i> 
                         </button>
-                        <input type="number" id="quantity${uniqueIdCounter}" class="quantity-input small-space" min="0" step="1" value="0">
+                        <input type="number" id="quantity${fruitName}" class="quantity-input small-space" min="0" step="1" value="0">
                         <button class="increment">
                             <i class="fas fa-plus"></i> 
                         </button>
 
-                        <div id="stickyNote" class="sticky-note">
-                            <textarea id="noteText${uniqueIdCounter}" class="note-text" placeholder="Write your note here..."></textarea>
-                            <input id="Date${uniqueIdCounter}" class="item-date" type="date">
-                            <button id="saveNoteButton" class="save-button">Save</button>
+                        <div id="stickyNote${fruitName}" class="sticky-note">
+                            <textarea id="noteText${fruitName}" class="note-text" placeholder="Write your note here..."></textarea>
+                            <input id="Date${fruitName}" class="item-date" type="date">
+                            <button id="saveNoteButton${fruitName}" class="save-button">Save</button>
                         </div> 
                     </div>
                     <div class="favorite">
-                        <i class="far fa-star"></i> 
+                        <i id="starIcon${fruitName}" class="far fa-star"></i> 
                     </div>
                 `;
 
+                
                 // Update the ID to make it unique
                 var newItemId = "main-" + fruitName;
                 newItem.id = newItemId;
@@ -750,19 +669,328 @@ function addItemToMainContainer() {
                 // Add the cloned item to the main container
                 document.getElementById('main-container').appendChild(newItem);
 
+
+
+                // Make an AJAX request to addItem.php to add default information to the item in the database
+                //account_id = ...
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "addItem.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        console.log(xhr.responseText); // Log the response from the server
+                        /*
+                         // Parse the JSON response from the server
+                         var response = JSON.parse(xhr.responseText);
+
+                        // Check if response has existing item information
+                        if (response.hasOwnProperty('existingQuantity')) {
+                            // Update the quantity and other fields with values from the database
+                            newItem.querySelector('#quantity' + fruitName).value = response.existingQuantity;
+                            // Update other fields as needed
+                        }
+                        console.log("sophie");
+                        console.log(response); // Log the entire response
+                        */
+                    }
+                };
+                xhr.send(`fruitName=${fruitName}&account_id=${account_id}`);
+
                 // Attach event listeners to the increment and decrement buttons
                 newItem.querySelector('.increment').addEventListener('click', handleIncrement);
                 newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
-            } else {
-                // Alert or notify the user that the item already exists in the main container
-                alert("Item '" + fruitName + "' is already in the main container.");
-            }
-        });
+                  
+               // Set up listener for the "Save" button
+               var saveNoteButton = newItem.querySelector('#saveNoteButton' + fruitName);
+                saveNoteButton.addEventListener('click', function () {
+                    var quantity = newItem.querySelector('#quantity' + fruitName).value;
+                    var note = newItem.querySelector('#noteText' + fruitName).value;
+                    var item_date = newItem.querySelector('#Date' + fruitName).value;
+                    var unit = newItem.querySelector('#unit' + fruitName).value;
 
-        // Close the popup
-        closePopup();
+                });
+
+                
+
+                } else {
+                    // Alert or notify the user that the item already exists in the main container
+                    alert("Item '" + fruitName + "' is already in the main container.");
+                }
+            });
+
+            // Close the popup
+            closePopup();
+        }
+    }
+
+
+document.getElementById('main-container').addEventListener('click', function(event) {
+    // Check if the clicked element or any of its ancestors is an item
+    const clickedItem = event.target.closest('.item');
+  //  console.log('Clicked item:', clickedItem);
+
+    if (clickedItem) {
+        // Check if the clicked element is the image within the item
+        const clickedImage = event.target.closest('img');
+        //console.log('Clicked image:', clickedImage);
+
+        // Check if the clicked element is the star icon within the item
+        const clickedStar = event.target.closest('.favorite i ');
+
+
+        if (clickedImage) {
+            // Toggle the 'selected' class when the image is clicked
+            clickedItem.classList.toggle('selected');
+
+            // Update the list of selected items
+            updateSelectedItemsArray();
+
+            // Stop the event propagation to prevent other click event listeners from being triggered
+            event.stopPropagation();
+            
+            
+        } else if (clickedStar) {
+            // Toggle the 'fas' and 'far' classes on the clicked star
+
+            clickedStar.classList.toggle('fas');
+            clickedStar.classList.toggle('far');
+
+            // Toggle the color of the star
+            if (clickedStar.classList.contains('fas')) {
+                clickedStar.style.color = '#0ff1da'; // Set the color to yellow for a full star
+            } else {
+                clickedStar.style.color = '#999'; // Set the color to the default for an empty star
+            }
+        }
+    }
+});
+
+
+/*
+// Function to handle changes in item information
+function handleItemChange(event) {
+    const targetElement = event.target;
+
+    // Identify the parent item
+    const item = targetElement.closest('.item');
+
+    const isStarClicked = targetElement.classList.contains('favorite') || targetElement.closest('.favorite');
+    console.log(isStarClicked );
+
+    if (item && isStarClicked !== null) {
+        
+        // Extract relevant information from the item
+        const fruitId = item.id.replace('main-', '');
+        const quantity = item.querySelector('.quantity-input').value;
+        const note = item.querySelector('.note-text').value;
+        // Log the date element to check if it's correctly identified
+        const dateElement = item.querySelector('.item-date');
+
+
+        // Extract the date value
+        const date = dateElement ? dateElement.value : '';
+
+
+        const unit = item.querySelector('.unit-select').value;
+
+        const isStarred = item.querySelector('.favorite i').classList.contains('fas');
+        const isSelected = item.classList.contains('selected');
+        const account_id = <?php echo json_encode($account_id); ?>;
+
+        const fruit_quantity = item.querySelector('.fruit-quantity').value;
+        const fruit_unit_select = item.querySelector('.fruit-unit-select').value;
+
+        const fruit_quantity_addToCart = item.querySelector('.fruit-quantity-addToCart').value;
+        const fruit_unit_select_addToCart = item.querySelector('.fruit-unit-select-addToCart').value;
+
+        
+        // Use AJAX or another method to send the data to addItem.php
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'addItem.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Handle the response from the server if needed
+                console.log(xhr.responseText);
+            }
+        };
+
+        // Encode data and send the request
+        const data = `fruitName=${fruitId}&fruit_quantity=${fruit_quantity}&fruit_unit_select=${fruit_unit_select}&account_id=${account_id}&quantity=${quantity}&note=${note}&unit=${unit}&isStarred=${isStarred}&is_selected=${isSelected}&date=${date}&fruit_quantity_addToCart=${fruit_quantity_addToCart}&fruit_unit_select_addToCart=${fruit_unit_select_addToCart}`;
+        xhr.send(data);
+
+
+    // Log the changes to the console
+    console.log(`Item changed: ${fruitId}, Quantity: ${quantity}, Starred: ${isStarred}, Selected: ${isSelected}, Date: ${date}`);
+       
+    }
+
+    
+    if (item && isStarClicked === null) {
+        
+        // Extract relevant information from the item
+        const fruitId = item.id.replace('main-', '');
+        const quantity = item.querySelector('.quantity-input').value;
+        const note = item.querySelector('.note-text').value;
+        // Log the date element to check if it's correctly identified
+        const dateElement = item.querySelector('.item-date');
+
+
+        // Extract the date value
+        const date = dateElement ? dateElement.value : '';
+
+
+        const unit = item.querySelector('.unit-select').value;
+
+        const isStarred = item.querySelector('.favorite i').classList.contains('fas');
+        const isSelected = item.classList.contains('selected');
+        const account_id = <?php echo json_encode($account_id); ?>;
+
+        const fruit_quantity = item.querySelector('.fruit-quantity').value;
+        const fruit_unit_select = item.querySelector('.fruit-unit-select').value;
+
+        const fruit_quantity_addToCart = item.querySelector('.fruit-quantity-addToCart').value;
+        const fruit_unit_select_addToCart = item.querySelector('.fruit-unit-select-addToCart').value;
+
+        
+        // Use AJAX or another method to send the data to addItem.php
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'addItem.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Handle the response from the server if needed
+                console.log(xhr.responseText);
+            }
+        };
+
+        // Encode data and send the request
+        const data = `fruitName=${fruitId}&fruit_quantity=${fruit_quantity}&fruit_unit_select=${fruit_unit_select}&account_id=${account_id}&quantity=${quantity}&note=${note}&unit=${unit}&is_selected=${isSelected}&date=${date}&fruit_quantity_addToCart=${fruit_quantity_addToCart}&fruit_unit_select_addToCart=${fruit_unit_select_addToCart}`;
+        xhr.send(data);
+
+
+    // Log the changes to the console
+    console.log(`Item changed: ${fruitId}, Quantity: ${quantity}, Starred: ${isStarred}, Selected: ${isSelected}, Date: ${date}`);
+       
     }
 }
+*/
+
+
+// Function to handle changes in item information
+function handleItemChange(event) {
+    const targetElement = event.target;
+
+    // Identify the parent item
+    const item = targetElement.closest('.item');
+
+    if (item) {
+        // Extract relevant information from the item
+        const fruitId = item.id.replace('main-', '');
+        const quantity = item.querySelector('.quantity-input').value;
+        const note = item.querySelector('.note-text').value;
+        // Log the date element to check if it's correctly identified
+        const dateElement = item.querySelector('.item-date');
+
+        // Extract the date value
+        const date = dateElement ? dateElement.value : '';
+        const unit = item.querySelector('.unit-select').value;
+
+        const isStarClicked = targetElement.classList.contains('favorite') || targetElement.closest('.favorite');
+        const isStarred = isStarClicked !== null && item.querySelector('.favorite i').classList.contains('fas');
+        const isSelected = item.classList.contains('selected');
+        const account_id = <?php echo json_encode($account_id); ?>;
+
+        const fruit_quantity = item.querySelector('.fruit-quantity').value;
+        const fruit_unit_select = item.querySelector('.fruit-unit-select').value;
+
+        const fruit_quantity_addToCart = item.querySelector('.fruit-quantity-addToCart').value;
+        const fruit_unit_select_addToCart = item.querySelector('.fruit-unit-select-addToCart').value;
+
+        // Use AJAX or another method to send the data to addItem.php
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'addItem.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Handle the response from the server if needed
+                console.log(xhr.responseText);
+            }
+        };
+
+        // Encode data and send the request
+        const data = `fruitName=${fruitId}&fruit_quantity=${fruit_quantity}&fruit_unit_select=${fruit_unit_select}&account_id=${account_id}&quantity=${quantity}&note=${note}&unit=${unit}&isStarred=${isStarred}&is_selected=${isSelected}&date=${date}&fruit_quantity_addToCart=${fruit_quantity_addToCart}&fruit_unit_select_addToCart=${fruit_unit_select_addToCart}`;
+        xhr.send(data);
+
+        // Log the changes to the console
+        console.log(`Item changed: ${fruitId}, Quantity: ${quantity}, Starred: ${isStarred}, Selected: ${isSelected}, Date: ${date}`);
+    }
+}
+
+
+// Add event listeners to relevant elements within each item
+document.getElementById('main-container').addEventListener('input', handleItemChange);
+document.getElementById('main-container').addEventListener('click', handleItemChange);
+
+// Function to add an item
+function addItem() {
+    // Gather information from the form
+    const fruitName = document.getElementById('fruitName').value;
+    const quantity = item.querySelector('.quantity-input').value;
+    const note = item.querySelector('.note-text').value;
+    const unit = item.querySelector('.unit-select').value;
+
+    const isStarred = item.querySelector('.favorite i').classList.contains('far');
+    const isSelected = item.classList.contains('selected');
+
+    const dateElement = item.querySelector('.item-date');
+    const date = dateElement ? dateElement.value : '';
+    //const account_id = document.getElementById('account_id').value;
+    const account_id = <?php echo json_encode($account_id); ?>; 
+
+    
+    const fruit_quantity = item.querySelector('.fruit-quantity').value;
+    const fruit_unit_select = item.querySelector('.fruit-unit-select').value;
+
+    // Use AJAX or another method to send the data to addItem.php
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'addItem.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // Handle the response from the server if needed
+            console.log(xhr.responseText);
+        }
+    };
+
+    // Encode data and send the request
+    const data = `&fruitName=${fruitName}&fruit_quantity=${fruit_quantity}&fruit_unit_select=${fruit_unit_select}&account_id=${account_id}&date=${date}&quantity=${quantity}&note=${note}&unit=${unit}&isStarred=${isStarred}&is_selected=${isSelected}`;
+    xhr.send(data);
+}
+
+    function updateSelectedItemsArray() {
+    // Clear the array and re-populate it with the currently selected items
+    selectedItemsArray = [];
+
+    // Get all selected items in the main container
+    var selectedItems = document.querySelectorAll('.item.selectable.selected');
+
+    // Iterate through each selected item and add it to the array
+    selectedItems.forEach(function(selectedItem) {
+        var fruitName = selectedItem.querySelector('img').alt;
+        var newItemId = "main-" + fruitName;
+
+        selectedItemsArray.push({
+            fruitName: fruitName,
+            itemId: newItemId,
+            // Add other relevant information as needed
+        });
+    });
+
+    // Print the updated list to the console for verification
+    console.log("Selected Items:", selectedItemsArray);
+}
+
 
 // Function to handle the increment button click
 function handleIncrement() {
@@ -793,52 +1021,186 @@ function handleDecrement() {
 }
 
 
-// Add a click event listener to each item
-selectableItems.forEach(item => {
-    item.addEventListener("click", event => {
-        // Check if the clicked element or any of its ancestors is the note or star
-        const isNoteOrStar = event.target.closest('.sticky-note, .favorite');
-        
-        if (!isNoteOrStar) {
-            // Toggle the 'selected' class when the item is clicked
-            item.classList.toggle("selected");
+
+
+
+
+
+
+
+function fetchStarredItems() {
+    const account_id = <?php echo json_encode($account_id); ?>;
+
+    // Make an AJAX request to fetch starred items
+    var xhrFetchStarredItems = new XMLHttpRequest();
+    xhrFetchStarredItems.open("POST", "fetchStarredItems.php", true);
+    xhrFetchStarredItems.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhrFetchStarredItems.onreadystatechange = function () {
+        if (xhrFetchStarredItems.readyState == 4) {
+            if (xhrFetchStarredItems.status == 200) {
+                try {
+                    // Parse the response from the server
+                    var response = JSON.parse(xhrFetchStarredItems.responseText);
+
+                    // Check if starredItems is an array
+                    if (Array.isArray(response.starredItems)) {
+                        // Iterate through each starred item and add it to the main container
+                        response.starredItems.forEach(function (starredItem) {
+                            addItemToMainContainerStar(starredItem);
+                           
+                        });
+                    } else {
+                        console.error("starredItems is not an array:", response.starredItems);
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                }
+            } else {
+                console.error("HTTP Error:", xhrFetchStarredItems.status, xhrFetchStarredItems.statusText);
+            }
         }
-    });
-});
+    };
 
+    // Send data to fetchStarredItems.php (replace with your actual endpoint and parameters)
+    xhrFetchStarredItems.send(`account_id=${account_id}`);
+}
 
+function addItemToMainContainerStar(fruitId) {
+    console.log(fruitId) ;
+    fruitName = fruitId.fruit_id;
+    const account_id = <?php echo json_encode($account_id); ?>;
 
-// Add a click event listener to the main container
-document.getElementById('main-container').addEventListener('click', function(event) {
-    // Check if the clicked element or any of its ancestors is an item
-    const clickedItem = event.target.closest('.item');
+   /// $fruitName = fruit_id;
 
-    if (clickedItem) {
-        // Check if the clicked element is not the increment, decrement, unit select, note textarea, star icon, date input, or save button
-        const isNotInteractiveElement = !event.target.matches('.increment, .decrement, .unit-select, .note-text, .favorite i, .item-date, .save-button');
+    // Check if the item with the same name already exists in the main container
+    var existingItem = document.getElementById("main-" + fruitName);
 
-        if (isNotInteractiveElement) {
-            // Toggle the 'selected' class when the item is clicked outside of interactive elements
-            clickedItem.classList.toggle('selected');
-        }
+    if (!existingItem) {
+
+        // Create a new list item for the main container
+        var newItem = document.createElement('li');
+        newItem.className = "item selectable";
+
+        // Set innerHTML based on the selected item in the popup
+        newItem.innerHTML = `
+                <div class="button-container">
+                <button onclick="openPopupMinQuantity('${fruitName}')" class="top-left-button with-icon" id="topLeftButton${fruitName}">define minimum quantity </button>
+                    <div id="fruit-popup${fruitName}" class="popup"> 
+                        <div class="popup-content-fruits">
+                            <span class="close" onclick="closePopupMinQuantity('${fruitName}')">&times;</span>
+                            <h6> Minimum Quantity: </h6>
+                            <p class="input-row">
+                                <input type="number" id="fruit-quantity${fruitName}" class="fruit-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="fruit-unit${fruitName}" class="fruit-unit-select" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupMinQuantity('${fruitName}')" id="set${fruitName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+
+                    </br>
+                    <button onclick="openPopupAddToCart('${fruitName}')" class="top-left-button" id="topLeftButton-AddToCart${fruitName}" >Add To Cart</button>
+                    <div id="fruit-popup-addToCart${fruitName}" class="popup"> 
+                        <div class="popup-content-fruits">
+                            <span class="close" onclick="closePopupAddToCart('${fruitName}')">&times;</span>
+                            <h6>Add To Cart: </h6>
+                            <p class="input-row">
+                                <input type="number" id="fruit-quantity-addToCart${fruitName}" class="fruit-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="fruit-unit-addToCart${fruitName}" class="fruit-unit-select-addToCart" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupAddToCart('${fruitName}')" id="set-addToCart${fruitName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+                <div>
+                    <img src="fruits_pics/${fruitName}.jpg" alt="${fruitName}">
+                    <h2>${fruitName}</h2>
+                    <div class="item-details">
+                        <p>Unit:
+                            <select id="unit${fruitName}" class="unit-select">
+                                <option value="units">units</option>
+                                <option value="kg">kg</option>
+                                <option value="gram">gram</option>
+                            </select>
+
+                        </p>
+                        <button class="decrement">
+                            <i class="fas fa-minus"></i> 
+                        </button>
+                        <input type="number" id="quantity${fruitName}" class="quantity-input small-space" min="0" step="1" value="0">
+                        <button class="increment">
+                            <i class="fas fa-plus"></i> 
+                        </button>
+
+                        <div id="stickyNote${fruitName}" class="sticky-note">
+                            <textarea id="noteText${fruitName}" class="note-text" placeholder="Write your note here..."></textarea>
+                            <input id="Date${fruitName}" class="item-date" type="date">
+                            <button id="saveNoteButton${fruitName}" class="save-button">Save</button>
+                        </div> 
+                    </div>
+                    <div class="favorite">
+                        <i id="starIcon${fruitName}" class="fas fa-star"></i> 
+                    </div>
+                `;
+
+                
+                // Update the ID to make it unique
+                var newItemId = "main-" + fruitName;
+                newItem.id = newItemId;
+
+                // Increment the counter for the next iteration
+                uniqueIdCounter++;
+
+                // Reset the quantity input value
+                newItem.querySelector('.quantity-input').value = "0";
+
+                // Add the cloned item to the main container
+                document.getElementById('main-container').appendChild(newItem);
+
+                
+                // Make an AJAX request to addItem.php to add default information to the item in the database
+                //account_id = ...
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "addItem.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        console.log(xhr.responseText); // Log the response from the server
+                    }
+                };
+                xhr.send(`fruitName=${fruitName}&account_id=${account_id}`);
+
+                // Attach event listeners to the increment and decrement buttons
+                newItem.querySelector('.increment').addEventListener('click', handleIncrement);
+                newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
+
+                // Set up listener for the "Save" button
+                var saveNoteButton = newItem.querySelector('#saveNoteButton' + fruitName);
+                saveNoteButton.addEventListener('click', function () {
+                    var quantity = newItem.querySelector('#quantity' + fruitName).value;
+                    var note = newItem.querySelector('#noteText' + fruitName).value;
+                    var item_date = newItem.querySelector('#Date' + fruitName).value;
+                    var unit = newItem.querySelector('#unit' + fruitName).value;
+
+                });
+
+                
+
+                
+
     }
 
-    // Check if the clicked element or any of its ancestors is the favorite icon
-    const clickedStar = event.target.closest('.favorite i');
 
-    if (clickedStar) {
-        // Toggle the 'fas' and 'far' classes on the clicked star
-        clickedStar.classList.toggle('fas');
-        clickedStar.classList.toggle('far');
+}
+    
 
-        // Toggle the color of the star
-        if (clickedStar.classList.contains('fas')) {
-            clickedStar.style.color = '#f1c40f'; // Set the color to yellow for a full star
-        } else {
-            clickedStar.style.color = '#999'; // Set the color to the default for an empty star
-        }
-    }
-});
+
 
 
     </script>
