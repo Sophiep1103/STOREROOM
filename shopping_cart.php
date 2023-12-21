@@ -1,46 +1,44 @@
 <?php
 session_start();
+$user = $_GET['username'];
+$account_id = $_GET['account_id'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
+// Establish a connection to MySQL
+$conn = new mysqli("localhost", "root", "", "database_app");
 
-    if (is_array($data)) {
-        // Check if the session variable for the shopping cart exists and initialize it if not
-        $_SESSION['shopping_cart'] = isset($_SESSION['shopping_cart']) ? $_SESSION['shopping_cart'] : [];
-
-        // Add the selected item names to the shopping cart session variable
-        $_SESSION['shopping_cart'] = array_merge($_SESSION['shopping_cart'], $data);
-
-        // Respond with a success message or any other response if needed
-        echo json_encode(["message" => "Items added to the shopping cart successfully"]);
-    } else {
-        // Respond with an error message if the data is not in the expected format
-        http_response_code(400); // Bad Request
-        echo json_encode(["error" => "Invalid data format"]);
-    }
-} else {
-
-    // Handle other HTTP methods or requests as needed
-    http_response_code(405); // Method Not Allowed
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
+$fruitItems = "SELECT unit_minQuantity, minQuantity, fruit_id
+                FROM fruits
+                WHERE account_id = {$account_id}
+                AND is_selected = 1";
 
+$result = mysqli_query($conn, $fruitItems);
 
-
-// Retrieve and display the selected items
-if (isset($_SESSION['shopping_cart']) && !empty($_SESSION['shopping_cart'])) {
-    echo "<h2>Selected Items in Your Shopping Cart:</h2>";
-    echo "<ul>";
-    foreach ($_SESSION['shopping_cart'] as $item) {
-        echo "<li>$item</li>";
+// Check if the query was successful
+if ($result) {
+    // Fetch each row and store the fruit_id in an array
+    $fruitIds = array();
+    while ($row = $result->fetch_assoc()) {
+        $fruitIds[] = $row;
     }
-    echo "</ul>";
-} else {
-    echo "<p>Your shopping cart is empty.</p>";
+
+    // Output the JSON string
+    echo json_encode($fruitIds);
+
+    // Free the result set
+    $result->free();
 }
+// Your PHP logic to fetch or generate the array
+$phpArray = array("key1" => "value1", "key2" => "value2");
+
+// Output the JSON string
+echo json_encode($phpArray);
+$conn->close();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,8 +54,9 @@ if (isset($_SESSION['shopping_cart']) && !empty($_SESSION['shopping_cart'])) {
 <body>
     <h1>Shopping cart</h1>
 
+    <!-- Move the script here after the PHP script has defined fruitIds -->
+    <script>
+
+    </script>
 </body>
-<script>
-  
-</script>
 </html>
