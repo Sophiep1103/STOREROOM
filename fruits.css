@@ -84,6 +84,7 @@ h1 {
     top: 5px; /* Position the button vertically in the middle */
     border: 2px solid rgb(134, 199, 134); /* Add a green border around the button */
     border-radius: 50%; /* Make the buttons round */
+    padding-left: 2px;
 }
 
 .decrement {
@@ -494,6 +495,35 @@ label[for="search"] {
     cursor: pointer;
    
 }
+
+
+#main-menu-btn {
+    position: fixed;
+    top: 10px; 
+    left: 10px;
+    padding: 10px;
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* Add a transition for a smooth effect */
+    opacity: 1; /* Initially visible */
+   
+}
+
+.quantity-container {
+    display: inline-flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.quantity-container.warning {
+    border: 3px solid red; /* Change the border color to red for the warning condition */
+}
+
+
 
 .popup {
     display: none;

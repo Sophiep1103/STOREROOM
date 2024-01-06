@@ -61,7 +61,7 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
 
         document.getElementById("buttonToVegetables").addEventListener("click", function() {
             // Navigate to the fruits_and_vegetables.php page
-            window.location.href = "fruits.php?username=<?php echo $username; ?>";
+            window.location.href = "vegetables.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
             
         });
 

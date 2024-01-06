@@ -42,6 +42,8 @@ $conn->close();
     <!-- pop up window -->
     <button onclick="openPopup()" class="open-button" id= "open-window-btn">Open List of fruits</button>
 
+    <button id= "main-menu-btn">Back to the main menu</button>
+
     <div id="popup" class="popup">
         <div class="popup-content">
             <span class="close" onclick="closePopup()">&times;</span>
@@ -146,167 +148,66 @@ $conn->close();
     <!-- main container -->
     <ul class="items-container" id="main-container">
    
-        
     </ul>
 
         <button id="saveButton">Save</button>
 
     <script>
 
-    // Array to store the names of starred items
-    starredItems = [];
+const mainMenuBtn = document.getElementById('main-menu-btn');
 
-    // Array to store selected items
-    selectedItemsArray = [];
+let lastScrollTop = 0;
+
+window.addEventListener('scroll', () => {
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (st > lastScrollTop) {
+        // Scrolling down, hide the button
+        mainMenuBtn.style.opacity = '0';
+    } else {
+        // Scrolling up, show the button
+        mainMenuBtn.style.opacity = '1';
+    }
+
+    lastScrollTop = st <= 0 ? 0 : st; // For mobile or negative scrolling
+});
+
+
+
+
+    starredItems = []; // Array to store the names of starred items
+    selectedItemsArray = []; // Array to store selected items
 
     // Assuming you have a list of fruit IDs
     var fruitIds = ["Apple", "Bananas", "Lemon", "Orange", "GreenApple", "Mango", "Pomegranate", "Avocado", "Persimmon", "Pomelo", "RedPomelo", "Watermelon", "Melon", "BlackGrapes", "GreenGrapes", "Pineapple"];
 
-// Call fetchStarredItems when the page loads
-document.addEventListener("DOMContentLoaded", function () {
-    fetchStarredItems();
-});
-
-    // General event listener for the "Save" button
-    document.getElementById("saveButton").addEventListener("click", function () {
-        var quantityInput = document.querySelector(".quantity-input");
-        var noteText = document.querySelector(".note-text");
-        var itemDate = document.querySelector(".item-date");
-
-        if (quantityInput && noteText && itemDate) {
-            var quantity = quantityInput.value;
-            var note = noteText.value;
-            var item_date = itemDate.value;
-        }else {
-            console.error("One or more elements not found");
-        }
-        console.log("Sending general data to server...");
-
-        fetch('fruit_save-info.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'quantity=' + encodeURIComponent(quantity) + '&note=' + encodeURIComponent(note) + '&item_date=' + encodeURIComponent(item_date),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text(); // assuming you are returning plain text from the server
-        })
-        .then(data => {
-            console.log("General data saved successfully:", data);
-            // Fetch and display the saved data
-            fetchSavedData();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    // Call fetchStarredItems when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchStarredItems();
     });
 
-    function fetchSavedData() {
-        fetch('fruit_fetch-data.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text(); // assuming you are returning plain text from the server
-        })
-     //   .then(data => {
-      //      updateSavedInfo(data);
-     //   })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-/*
-function updateSavedInfo(data) {
-    var savedInfoContainer = document.getElementById("savedInfo");
-    if(savedInfoContainer){
-        savedInfoContainer.innerHTML = ""; // Clear existing data
-    }
-    else{
-        console.error("Element with ID 'savedInfo' not found");
-    }
-
-    var quantity = data.quantity || "Not available";
-    var note = data.note || "Not available";
-    var item_date = data.item_date || "Not available";
-
-    savedInfoContainer.innerHTML = `
-        <h2>Saved Information:</h2>
-        <p><strong>Quantity:</strong> ${quantity}</p>
-        <p><strong>Note:</strong> ${note}</p>
-        <p><strong>Date:</strong> ${item_date}</p>`;
-
-    // Get references to all favorite star icons
-    const favoriteIcons = document.querySelectorAll(".favorite i");
-
-    // Check if the item is starred and add its name to the array
-    favoriteIcons.forEach(icon => {
-        if (icon.classList.contains("fas")) {
-            const itemName = icon.closest(".item").querySelector('img').alt;
-            starredItems.push(itemName);
-        }
+    document.getElementById("main-menu-btn").addEventListener("click", function() {
+            window.location.href = "index.php";
+            
     });
 
-    // Save the array of starred items in localStorage
-    localStorage.setItem("starredItems", JSON.stringify(starredItems));
 
+    // Get references to the input fields, unit selects, and buttons for all items
+    const items = document.querySelectorAll(".item");
+
+// Function to handle parsing the quantity based on the selected unit
+function parseQuantity(input, unit) {
+    if (unit === "units") {
+        return parseInt(input);
+    } else {
+        return parseFloat(input);
+    }
 }
-*/
 
-        // Fetch and display saved data on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            fetchSavedData();
-        });
-
-        // Function to handle parsing the quantity based on the selected unit
-        function parseQuantity(input, unit) {
-            if (unit === "units") {
-                return parseInt(input);
-            } else {
-                return parseFloat(input);
-            }
-        }
-
-        // Set "kg" as the default unit
-        function setDefaultUnit(unitSelect) {
-            unitSelect.value = "kg";
-        }
-        
-
-        // Get references to the input fields, unit selects, and buttons for all items
-        const items = document.querySelectorAll(".item");
-
-        // Initialize input fields with saved values
-        function updateInputs() {
-            items.forEach(item => {
-                const itemName = item.querySelector("h2").textContent.trim();
-                const savedValue = savedQuantities[itemName];
-                if (savedValue) {
-                    const quantityInput = item.querySelector(".quantity-input");
-                    const unitSelect = item.querySelector(".unit-select");
-                    quantityInput.value = savedValue.value;
-                    unitSelect.value = savedValue.unit;
-                }
-            });
-        }
-
-        // Call the function to set initial input values
-        updateInputs();
-
-        // Set "kg" as the default unit for all items
+    // Save the quantities when the "Save" button is clicked
+    document.getElementById("saveButton").addEventListener("click", function () {
         items.forEach(item => {
-            const unitSelect = item.querySelector(".unit-select");
-            setDefaultUnit(unitSelect);
-        });
-
-        // Save the quantities when the "Save" button is clicked
-        document.getElementById("saveButton").addEventListener("click", function () {
-            items.forEach(item => {
-                const itemName = item.querySelector("h2").textContent.trim();
+            const itemName = item.querySelector("h2").textContent.trim();
                 const quantityInput = item.querySelector(".quantity-input");
                 const unitSelect = item.querySelector(".unit-select");
                 savedQuantities[itemName] = {
@@ -318,126 +219,124 @@ function updateSavedInfo(data) {
             // Save updated quantities to local storage
             localStorage.setItem("quantities", JSON.stringify(savedQuantities));
         });
+        
 
-        // Function to handle increment and decrement buttons for all items
-        items.forEach(item => {
-            const decrementButton = item.querySelector(".decrement");
-            const incrementButton = item.querySelector(".increment");
-            const quantityInput = item.querySelector(".quantity-input");
-            const unitSelect = item.querySelector(".unit-select");
+// Function to handle increment and decrement buttons for all items
+items.forEach(item => {
+    const decrementButton = item.querySelector(".decrement");
+    const incrementButton = item.querySelector(".increment");
+    const quantityInput = item.querySelector(".quantity-input");
+    const unitSelect = item.querySelector(".unit-select");
 
-            decrementButton.addEventListener("click", function () {
-                const currentValue = parseFloat(quantityInput.value);
-                if (currentValue > 0) {
-                    const decrementValue = unitSelect.value === "kg" ? 0.5 : 1;
-                    const newValue = currentValue - decrementValue;
-                    quantityInput.value = unitSelect.value === "units" ? Math.round(newValue) : newValue.toFixed(1);
-                }
-            });
-
-            incrementButton.addEventListener("click", function () {
-                const currentValue = parseFloat(quantityInput.value);
-                const incrementValue = unitSelect.value === "kg" ? 0.5 : 1;
-                const newValue = currentValue + incrementValue;
-                quantityInput.value = unitSelect.value === "units" ? Math.round(newValue) : newValue.toFixed(1);
-            });
-        });
-
-        // Get references to the date inputs for all items
-        const itemDateInputs = document.querySelectorAll(".item-date");
-
-        // Add an event listener to each date input
-        itemDateInputs.forEach(dateInput => {
-            dateInput.addEventListener("click", function () {
-                dateInput.removeAttribute("readonly"); // Make the date field editable
-            });
-        });
-
-        // Save the date when the user changes it
-        itemDateInputs.forEach(dateInput => {
-            dateInput.addEventListener("change", function () {
-                const itemName = dateInput.nextElementSibling.textContent.trim(); // Get the item name
-                const newDate = dateInput.value; // Get the updated date
-                // Save the updated date to local storage or wherever you prefer
-                // You can use a similar approach as saving quantities.
-            });
-        });
-
-        // Get references to the favorite star icons
-        const favoriteIcons = document.querySelectorAll(".favorite i");
-
-        // Get references to all selectable items
-        const selectableItems = document.querySelectorAll(".selectable");
-
-
-        // Function to check if at least one item is selected
-        function isAtLeastOneItemSelected() {
-                const selectedItems = document.querySelectorAll(".selected");
-                return selectedItems.length > 0;
+    decrementButton.addEventListener("click", function () {
+        const currentValue = parseFloat(quantityInput.value);
+        if (currentValue > 0) {
+            const decrementValue = unitSelect.value === "kg" ? 0.5 : 1;
+            const newValue = currentValue - decrementValue;
+            quantityInput.value = unitSelect.value === "units" ? Math.round(newValue) : newValue.toFixed(1);
         }
+    });
+
+    incrementButton.addEventListener("click", function () {
+        const currentValue = parseFloat(quantityInput.value);
+        const incrementValue = unitSelect.value === "kg" ? 0.5 : 1;
+        const newValue = currentValue + incrementValue;
+        quantityInput.value = unitSelect.value === "units" ? Math.round(newValue) : newValue.toFixed(1);
+    });
+});
+
+// Get references to the date inputs for all items
+const itemDateInputs = document.querySelectorAll(".item-date");
+
+// Add an event listener to each date input
+itemDateInputs.forEach(dateInput => {
+    dateInput.addEventListener("click", function () {
+        dateInput.removeAttribute("readonly"); // Make the date field editable
+    });
+});
+/*
+// Save the date when the user changes it
+itemDateInputs.forEach(dateInput => {
+    dateInput.addEventListener("change", function () {
+        const itemName = dateInput.nextElementSibling.textContent.trim(); // Get the item name
+        const newDate = dateInput.value; // Get the updated date
+
+     });
+});
+*/
+// Get references to the favorite star icons
+const favoriteIcons = document.querySelectorAll(".favorite i");
+
+// Get references to all selectable items
+const selectableItems = document.querySelectorAll(".selectable");
+
+
+// Function to check if at least one item is selected
+function isAtLeastOneItemSelected() {
+    const selectedItems = document.querySelectorAll(".selected");
+    return selectedItems.length > 0;
+}
 
 // Function to handle item search
-  function searchItems() {
-        const searchInput = document.getElementById("search").value.toLowerCase();
-        const items = document.querySelectorAll(".item");
+function searchItems() {
+    const searchInput = document.getElementById("search").value.toLowerCase();
+    const items = document.querySelectorAll(".item");
 
-        items.forEach(item => {
-            const itemName = item.querySelector("h2");
-            const itemText = itemName.textContent.trim().toLowerCase();
-            const itemWords = itemText.split(' ');
+    items.forEach(item => {
+        const itemName = item.querySelector("h2");
+        const itemText = itemName.textContent.trim().toLowerCase();
+        const itemWords = itemText.split(' ');
 
-            // Check if at least one word in the item name starts with the search input
-            const isMatch = itemWords.some(word => word.startsWith(searchInput));
+        // Check if at least one word in the item name starts with the search input
+        const isMatch = itemWords.some(word => word.startsWith(searchInput));
 
-            // Hide or show items based on the search input
-            if (isMatch) {
-                // Highlight the matched portion
-                highlightMatch(itemName, searchInput);
-                item.style.display = "block";
-            } else {
-                // Remove highlighting and hide the item
-                removeHighlight(itemName);
-                item.style.display = "none";
-            }
-        });
-    }
+        // Hide or show items based on the search input
+        if (isMatch) {
+            // Highlight the matched portion
+            highlightMatch(itemName, searchInput);
+            item.style.display = "block";
+        } else {
+            // Remove highlighting and hide the item
+            removeHighlight(itemName);
+            item.style.display = "none";
+        }
+    });
+}
 
-    // Function to highlight the matched portion
-    function highlightMatch(element, searchInput) {
-        const itemText = element.textContent.trim().toLowerCase();
-        const index = itemText.indexOf(searchInput);
+// Function to highlight the matched portion
+function highlightMatch(element, searchInput) {
+    const itemText = element.textContent.trim().toLowerCase();
+    const index = itemText.indexOf(searchInput);
 
-        // Wrap the matched portion with a span with the 'highlight' class
-        const highlightedText = itemText.substring(0, index) +
-            '<span class="highlight">' + itemText.substring(index, index + searchInput.length) + '</span>' +
-            itemText.substring(index + searchInput.length);
+    // Wrap the matched portion with a span with the 'highlight' class
+    const highlightedText = itemText.substring(0, index) +
+        '<span class="highlight">' + itemText.substring(index, index + searchInput.length) + '</span>' +
+        itemText.substring(index + searchInput.length);
 
-        // Update the element's HTML with the highlighted text
-        element.innerHTML = highlightedText;
-    }
+    // Update the element's HTML with the highlighted text
+    element.innerHTML = highlightedText;
+}
 
-    // Function to remove highlighting
-    function removeHighlight(element) {
-        element.innerHTML = element.textContent;
-    }
+// Function to remove highlighting
+function removeHighlight(element) {
+    element.innerHTML = element.textContent;
+}
 
-    // Add event listener for the search input
-    document.getElementById("search").addEventListener("input", searchItems);
-
-
-    function openPopup() {
-        document.getElementById("popup").style.display = "block";
-        document.getElementById('open-window-btn').style.display = 'none';
-    }
-
-    function closePopup() {
-        document.getElementById("popup").style.display = "none";
-        document.getElementById('open-window-btn').style.display = 'block';
-    }
+// Add event listener for the search input
+document.getElementById("search").addEventListener("input", searchItems);
 
 
+function openPopup() {
+    document.getElementById("popup").style.display = "block";
+    document.getElementById('open-window-btn').style.display = 'none';
+}
 
-    function openPopupMinQuantity(fruitName) {
+function closePopup() {
+    document.getElementById("popup").style.display = "none";
+    document.getElementById('open-window-btn').style.display = 'block';
+}
+
+function openPopupMinQuantity(fruitName) {
     var popupElement = document.getElementById("fruit-popup" + fruitName);
     var buttonElement = document.getElementById('topLeftButton' + fruitName);
 
@@ -451,7 +350,6 @@ function updateSavedInfo(data) {
         console.error("Popup or button element not found for", fruitName);
     }
 }
-
 
 function openPopupAddToCart(fruitName) {
     var popupElement = document.getElementById("fruit-popup-addToCart" + fruitName);
@@ -498,50 +396,50 @@ function closePopupAddToCart(fruitName) {
     }
 }
 
-    // Function to handle item selection
-    function selectItem(itemId) {
-        // Find the clicked item
-        const selectedItem = document.getElementById(itemId);
+// Function to handle item selection
+function selectItem(itemId) {
 
-        // Toggle the 'selected-frame' class on the clicked item
-        selectedItem.classList.toggle('selected-frame');
-    }
+    // Find the clicked item
+    const selectedItem = document.getElementById(itemId);
 
+    // Toggle the 'selected-frame' class on the clicked item
+    selectedItem.classList.toggle('selected-frame');
+}
 
-    function searchItemsWindow() {
-        const searchInput = document.getElementById("search-window").value.toLowerCase();
-        const items = document.querySelectorAll(".selectable-window");
+function searchItemsWindow() {
+    const searchInput = document.getElementById("search-window").value.toLowerCase();
+    const items = document.querySelectorAll(".selectable-window");
 
-        items.forEach(item => {
-            const itemName = item.querySelector("p");
-            const originalText = itemName.textContent;
-            const lowerCaseText = originalText.toLowerCase();
+    items.forEach(item => {
+        const itemName = item.querySelector("p");
+        const originalText = itemName.textContent;
+        const lowerCaseText = originalText.toLowerCase();
 
-            // Check if the search input is present in the item name
-            const index = lowerCaseText.indexOf(searchInput);
+        // Check if the search input is present in the item name
+        const index = lowerCaseText.indexOf(searchInput);
 
-            // Show or hide items based on the search input
-            if (index !== -1) {
-                item.style.display = "block";
+        // Show or hide items based on the search input
+        if (index !== -1) {
+            item.style.display = "block";
 
-                // Highlight the matching letters
-                const highlightedText = originalText.substring(0, index) +
+            // Highlight the matching letters
+            const highlightedText = originalText.substring(0, index) +
                     '<span class="highlight">' + originalText.substring(index, index + searchInput.length) + '</span>' +
                     originalText.substring(index + searchInput.length);
 
-                itemName.innerHTML = highlightedText;
-            } else {
-                item.style.display = "none";
-            }
-        });
-    }
-
+            itemName.innerHTML = highlightedText;
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
 
 
 // Counter for generating unique IDs
 var uniqueIdCounter = 1;
 
 function addItemToMainContainer() {
+
     const account_id = <?php echo json_encode($account_id); ?>;
     // Get all selected items in the popup
     var selectedItems = document.querySelectorAll('.selectable-window.selected-frame');
@@ -557,32 +455,9 @@ function addItemToMainContainer() {
 
             if (!existingItem) {
 
-                // Make an AJAX request to check if the item already exists in the database
-                /*
-    var xhrCheckItem = new XMLHttpRequest();
-    xhrCheckItem.open("POST", "checkItem.php", true);
-    xhrCheckItem.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhrCheckItem.onreadystatechange = function () {
-        if (xhrCheckItem.readyState == 4 && xhrCheckItem.status == 200) {
-            // Parse the response from the server
-            var response = JSON.parse(xhrCheckItem.responseText);
-
-            if (response.exists) {
-                // Item already exists in the database
-                // Update the quantity and unit with values from the database
-                newItem.querySelector('#quantity' + fruitName).value = response.quantity;
-                newItem.querySelector('#unit' + fruitName).value = response.unit;
-            }
-        }
-    };
-
-    // Send data to checkItem.php (replace with your actual endpoint and parameters)
-    xhrCheckItem.send(`fruitName=${fruitName}&account_id=${account_id}`);
-    */
                 // Create a new list item for the main container
                 var newItem = document.createElement('li');
                 newItem.className = "item selectable";
-
 
                 // Set innerHTML based on the selected item in the popup
                 newItem.innerHTML = `
@@ -633,13 +508,16 @@ function addItemToMainContainer() {
                             </select>
 
                         </p>
+
+                        <div class="quantity-container" id="quantityContainer${fruitName}">
                         <button class="decrement">
                             <i class="fas fa-minus"></i> 
                         </button>
-                        <input type="number" id="quantity${fruitName}" class="quantity-input small-space" min="0" step="1" value="0">
+                        <input type="number" id="quantity${fruitName}" class="quantity-input small-space" min="0" step="1" value="0" style="padding: 5px;">
                         <button class="increment">
                             <i class="fas fa-plus"></i> 
                         </button>
+                        </div>
 
                         <div id="stickyNote${fruitName}" class="sticky-note">
                             <textarea id="noteText${fruitName}" class="note-text" placeholder="Write your note here..."></textarea>
@@ -652,7 +530,6 @@ function addItemToMainContainer() {
                     </div>
                 `;
 
-                
                 // Update the ID to make it unique
                 var newItemId = "main-" + fruitName;
                 newItem.id = newItemId;
@@ -670,30 +547,61 @@ function addItemToMainContainer() {
                 document.getElementById('main-container').appendChild(newItem);
 
 
-
                 // Make an AJAX request to addItem.php to add default information to the item in the database
-                //account_id = ...
                 var xhr = new XMLHttpRequest();
+                console.log ( "from addItemToMainContainer");
                 xhr.open("POST", "addItem.php", true);
                 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         console.log(xhr.responseText); // Log the response from the server
-                        /*
-                         // Parse the JSON response from the server
-                         var response = JSON.parse(xhr.responseText);
+                        // here I get the previous data from the fruits database !!! 
+                        var jsonResponse = JSON.parse(xhr.responseText);
+                        console.log( jsonResponse.isNew)   
+                        if (jsonResponse.isNew === false) {
+                        console.log( jsonResponse.isNew)   
+                        var curQuantity = jsonResponse.existingQuantity;
+                        var quantityInput = document.getElementById('quantity' + fruitName);
+                        quantityInput.value = curQuantity;
 
-                        // Check if response has existing item information
-                        if (response.hasOwnProperty('existingQuantity')) {
-                            // Update the quantity and other fields with values from the database
-                            newItem.querySelector('#quantity' + fruitName).value = response.existingQuantity;
-                            // Update other fields as needed
+                        var curNote = jsonResponse.existingNote;
+                        var NoteInput = document.getElementById('noteText' + fruitName);
+                        NoteInput.value = curNote;
+
+                        var curUnit  = jsonResponse.existingUnit;
+                        var UnitInput = document.getElementById('unit' + fruitName);
+                        UnitInput.value = curUnit;
+
+                        var curMinQuantity= jsonResponse.existingMinQuantity;
+                        var MinQuantityInput = document.getElementById('fruit-quantity' + fruitName);
+                        MinQuantityInput.value = curMinQuantity;
+
+                        var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
+                        var UnitMinQuantityInput = document.getElementById('fruit-unit' + fruitName);
+                        UnitMinQuantityInput.value = curUnitMinQuantity;
+
+                        var curAddToCart = jsonResponse.existingAddToCart;
+                        var AddToCartInput = document.getElementById('fruit-quantity-addToCart' + fruitName);
+                        AddToCartInput.value = curAddToCart;
+
+                        var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
+                        var UnitAddToCartInput = document.getElementById('fruit-unit-addToCart' + fruitName);
+                        UnitAddToCartInput.value = curUnitAddToCart;
+                        
+                        var curDate = jsonResponse.existingDate;
+                        var DateInput = document.getElementById('Date' + fruitName);
+                        DateInput.value = curDate;
+
+                        var curRedFrame = jsonResponse.redFrame;
+                        console.log(curRedFrame);
                         }
-                        console.log("sophie");
-                        console.log(response); // Log the entire response
-                        */
+
+                        //var curIsStarred = jsonResponse.existingIsStarred;
+                        //var curIsSelected = jsonResponse.existingIsSelected;
+
                     }
                 };
+
                 xhr.send(`fruitName=${fruitName}&account_id=${account_id}`);
 
                 // Attach event listeners to the increment and decrement buttons
@@ -710,8 +618,6 @@ function addItemToMainContainer() {
 
                 });
 
-                
-
                 } else {
                     // Alert or notify the user that the item already exists in the main container
                     alert("Item '" + fruitName + "' is already in the main container.");
@@ -720,8 +626,8 @@ function addItemToMainContainer() {
 
             // Close the popup
             closePopup();
-        }
     }
+}
 
 
 document.getElementById('main-container').addEventListener('click', function(event) {
@@ -765,124 +671,13 @@ document.getElementById('main-container').addEventListener('click', function(eve
     }
 });
 
-
-/*
 // Function to handle changes in item information
 function handleItemChange(event) {
     const targetElement = event.target;
 
     // Identify the parent item
     const item = targetElement.closest('.item');
-
-    const isStarClicked = targetElement.classList.contains('favorite') || targetElement.closest('.favorite');
-    console.log(isStarClicked );
-
-    if (item && isStarClicked !== null) {
-        
-        // Extract relevant information from the item
-        const fruitId = item.id.replace('main-', '');
-        const quantity = item.querySelector('.quantity-input').value;
-        const note = item.querySelector('.note-text').value;
-        // Log the date element to check if it's correctly identified
-        const dateElement = item.querySelector('.item-date');
-
-
-        // Extract the date value
-        const date = dateElement ? dateElement.value : '';
-
-
-        const unit = item.querySelector('.unit-select').value;
-
-        const isStarred = item.querySelector('.favorite i').classList.contains('fas');
-        const isSelected = item.classList.contains('selected');
-        const account_id = <?php echo json_encode($account_id); ?>;
-
-        const fruit_quantity = item.querySelector('.fruit-quantity').value;
-        const fruit_unit_select = item.querySelector('.fruit-unit-select').value;
-
-        const fruit_quantity_addToCart = item.querySelector('.fruit-quantity-addToCart').value;
-        const fruit_unit_select_addToCart = item.querySelector('.fruit-unit-select-addToCart').value;
-
-        
-        // Use AJAX or another method to send the data to addItem.php
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'addItem.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // Handle the response from the server if needed
-                console.log(xhr.responseText);
-            }
-        };
-
-        // Encode data and send the request
-        const data = `fruitName=${fruitId}&fruit_quantity=${fruit_quantity}&fruit_unit_select=${fruit_unit_select}&account_id=${account_id}&quantity=${quantity}&note=${note}&unit=${unit}&isStarred=${isStarred}&is_selected=${isSelected}&date=${date}&fruit_quantity_addToCart=${fruit_quantity_addToCart}&fruit_unit_select_addToCart=${fruit_unit_select_addToCart}`;
-        xhr.send(data);
-
-
-    // Log the changes to the console
-    console.log(`Item changed: ${fruitId}, Quantity: ${quantity}, Starred: ${isStarred}, Selected: ${isSelected}, Date: ${date}`);
-       
-    }
-
-    
-    if (item && isStarClicked === null) {
-        
-        // Extract relevant information from the item
-        const fruitId = item.id.replace('main-', '');
-        const quantity = item.querySelector('.quantity-input').value;
-        const note = item.querySelector('.note-text').value;
-        // Log the date element to check if it's correctly identified
-        const dateElement = item.querySelector('.item-date');
-
-
-        // Extract the date value
-        const date = dateElement ? dateElement.value : '';
-
-
-        const unit = item.querySelector('.unit-select').value;
-
-        const isStarred = item.querySelector('.favorite i').classList.contains('fas');
-        const isSelected = item.classList.contains('selected');
-        const account_id = <?php echo json_encode($account_id); ?>;
-
-        const fruit_quantity = item.querySelector('.fruit-quantity').value;
-        const fruit_unit_select = item.querySelector('.fruit-unit-select').value;
-
-        const fruit_quantity_addToCart = item.querySelector('.fruit-quantity-addToCart').value;
-        const fruit_unit_select_addToCart = item.querySelector('.fruit-unit-select-addToCart').value;
-
-        
-        // Use AJAX or another method to send the data to addItem.php
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'addItem.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // Handle the response from the server if needed
-                console.log(xhr.responseText);
-            }
-        };
-
-        // Encode data and send the request
-        const data = `fruitName=${fruitId}&fruit_quantity=${fruit_quantity}&fruit_unit_select=${fruit_unit_select}&account_id=${account_id}&quantity=${quantity}&note=${note}&unit=${unit}&is_selected=${isSelected}&date=${date}&fruit_quantity_addToCart=${fruit_quantity_addToCart}&fruit_unit_select_addToCart=${fruit_unit_select_addToCart}`;
-        xhr.send(data);
-
-
-    // Log the changes to the console
-    console.log(`Item changed: ${fruitId}, Quantity: ${quantity}, Starred: ${isStarred}, Selected: ${isSelected}, Date: ${date}`);
-       
-    }
-}
-*/
-
-
-// Function to handle changes in item information
-function handleItemChange(event) {
-    const targetElement = event.target;
-
-    // Identify the parent item
-    const item = targetElement.closest('.item');
+    console.log(item);
 
     if (item) {
         // Extract relevant information from the item
@@ -896,8 +691,13 @@ function handleItemChange(event) {
         const date = dateElement ? dateElement.value : '';
         const unit = item.querySelector('.unit-select').value;
 
-        const isStarClicked = targetElement.classList.contains('favorite') || targetElement.closest('.favorite');
-        const isStarred = isStarClicked !== null && item.querySelector('.favorite i').classList.contains('fas');
+        //const isStarClicked = targetElement.classList.contains('favorite') || targetElement.closest('.favorite');
+        //const isStarred = isStarClicked !== null && item.querySelector('.favorite i').classList.contains('fas');
+        const starIcon = document.querySelector('[id^="starIcon' + fruitId + '"]');
+        console.log(starIcon);
+        const isStarred = starIcon.classList.contains('fas');
+        console.log(isStarred);
+
         const isSelected = item.classList.contains('selected');
         const account_id = <?php echo json_encode($account_id); ?>;
 
@@ -924,6 +724,16 @@ function handleItemChange(event) {
 
         // Log the changes to the console
         console.log(`Item changed: ${fruitId}, Quantity: ${quantity}, Starred: ${isStarred}, Selected: ${isSelected}, Date: ${date}`);
+
+        const quantityContainer = document.getElementById(`quantityContainer${fruitId}`);
+        console.log(fruitId);
+        if (fruit_quantity > quantity ){
+            console.log("error");
+            document.getElementById(`quantityContainer${fruitId}`).classList.add('warning');
+        } else {
+            document.getElementById(`quantityContainer${fruitId}`).classList.remove('warning');
+        }
+        
     }
 }
 
@@ -968,7 +778,7 @@ function addItem() {
     xhr.send(data);
 }
 
-    function updateSelectedItemsArray() {
+function updateSelectedItemsArray() {
     // Clear the array and re-populate it with the currently selected items
     selectedItemsArray = [];
 
@@ -991,11 +801,15 @@ function addItem() {
     console.log("Selected Items:", selectedItemsArray);
 }
 
-
 // Function to handle the increment button click
 function handleIncrement() {
-    var quantityInput = this.parentNode.querySelector('.quantity-input');
-    var selectedUnit = this.parentNode.querySelector('.unit-select').value;
+    var button = this;
+    var quantityContainer = button.parentNode;
+    var itemDetails = quantityContainer.parentNode;
+    var greatGrandparent = itemDetails.parentNode;
+
+    var quantityInput = quantityContainer.querySelector('.quantity-input');
+    var selectedUnit = greatGrandparent.querySelector('.unit-select').value;
 
     if (selectedUnit === 'kg') {
         quantityInput.value = (parseFloat(quantityInput.value) + 0.1).toFixed(1);
@@ -1008,8 +822,13 @@ function handleIncrement() {
 
 // Function to handle the decrement button click
 function handleDecrement() {
-    var quantityInput = this.parentNode.querySelector('.quantity-input');
-    var selectedUnit = this.parentNode.querySelector('.unit-select').value;
+    var button = this;
+    var quantityContainer = button.parentNode;
+    var itemDetails = quantityContainer.parentNode;
+    var greatGrandparent = itemDetails.parentNode;
+    
+    var quantityInput = quantityContainer.querySelector('.quantity-input');
+    var selectedUnit = greatGrandparent.querySelector('.unit-select').value;
 
     if (selectedUnit === 'kg' && parseFloat(quantityInput.value) >= 0.1) {
         quantityInput.value = (parseFloat(quantityInput.value) - 0.1).toFixed(1);
@@ -1019,13 +838,6 @@ function handleDecrement() {
         quantityInput.value = parseInt(quantityInput.value, 10) - 1;
     }
 }
-
-
-
-
-
-
-
 
 
 function fetchStarredItems() {
@@ -1041,14 +853,27 @@ function fetchStarredItems() {
                 try {
                     // Parse the response from the server
                     var response = JSON.parse(xhrFetchStarredItems.responseText);
+                    console.log(response);
 
                     // Check if starredItems is an array
                     if (Array.isArray(response.starredItems)) {
                         // Iterate through each starred item and add it to the main container
+                        
                         response.starredItems.forEach(function (starredItem) {
                             addItemToMainContainerStar(starredItem);
                            
                         });
+                        
+                       /*
+                        // Iterate through each starred item and add it to the main container
+                        response.starredItems.forEach(function (starredItem) {
+                            (function (item) {
+                                console.log(item);
+                                addItemToMainContainerStar(item);
+                            })(starredItem);
+                        });
+                        */
+
                     } else {
                         console.error("starredItems is not an array:", response.starredItems);
                     }
@@ -1063,6 +888,37 @@ function fetchStarredItems() {
 
     // Send data to fetchStarredItems.php (replace with your actual endpoint and parameters)
     xhrFetchStarredItems.send(`account_id=${account_id}`);
+}
+
+
+// Get references to the input fields, unit selects, and buttons for all items
+//const items = document.querySelectorAll(".item");
+
+// Initialize input fields with saved values
+function updateInputs() {
+    items.forEach(item => {
+        const itemName = item.querySelector("h2").textContent.trim();
+        const savedValue = savedQuantities[itemName];
+        if (savedValue) {
+            const quantityInput = item.querySelector(".quantity-input");
+            const unitSelect = item.querySelector(".unit-select");
+            quantityInput.value = savedValue.value;
+            unitSelect.value = savedValue.unit;
+        }
+    });
+}
+// Call the function to set initial input values
+updateInputs();
+
+// Set "kg" as the default unit for all items
+items.forEach(item => {
+    const unitSelect = item.querySelector(".unit-select");
+    setDefaultUnit(unitSelect);
+});
+
+// Set "kg" as the default unit
+function setDefaultUnit(unitSelect) {
+        unitSelect.value = "kg";
 }
 
 function addItemToMainContainerStar(fruitId) {
@@ -1122,6 +978,7 @@ function addItemToMainContainerStar(fruitId) {
                     <img src="fruits_pics/${fruitName}.jpg" alt="${fruitName}">
                     <h2>${fruitName}</h2>
                     <div class="item-details">
+                   
                         <p>Unit:
                             <select id="unit${fruitName}" class="unit-select">
                                 <option value="units">units</option>
@@ -1130,13 +987,16 @@ function addItemToMainContainerStar(fruitId) {
                             </select>
 
                         </p>
+
+                        <div class="quantity-container" id="quantityContainer${fruitName}">
                         <button class="decrement">
                             <i class="fas fa-minus"></i> 
                         </button>
-                        <input type="number" id="quantity${fruitName}" class="quantity-input small-space" min="0" step="1" value="0">
+                        <input type="number" id="quantity${fruitName}" class="quantity-input small-space" min="0" step="1" value="0" style="padding: 5px;">
                         <button class="increment">
                             <i class="fas fa-plus"></i> 
                         </button>
+                        </div>
 
                         <div id="stickyNote${fruitName}" class="sticky-note">
                             <textarea id="noteText${fruitName}" class="note-text" placeholder="Write your note here..."></textarea>
@@ -1167,14 +1027,58 @@ function addItemToMainContainerStar(fruitId) {
                 // Make an AJAX request to addItem.php to add default information to the item in the database
                 //account_id = ...
                 var xhr = new XMLHttpRequest();
+                console.log("from addItemToMainContainerStar");
                 xhr.open("POST", "addItem.php", true);
                 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         console.log(xhr.responseText); // Log the response from the server
+                        var jsonResponse = JSON.parse(xhr.responseText);
+                        // here I get the previous data from the fruits database !!! 
+                        var jsonResponse = JSON.parse(xhr.responseText);
+
+                        var curFruit = jsonResponse.existingFruit;
+                       // console.log(curFruit);
+
+                        var curQuantity = jsonResponse.existingQuantity;
+                        var quantityInput = document.getElementById('quantity' + curFruit);
+                        quantityInput.value = curQuantity;
+
+                        var curNote = jsonResponse.existingNote;
+                        var NoteInput = document.getElementById('noteText' + curFruit);
+                        NoteInput.value = curNote;
+
+                        var curUnit  = jsonResponse.existingUnit;
+                        var UnitInput = document.getElementById('unit' + curFruit);
+                        UnitInput.value = curUnit;
+
+                        var curMinQuantity= jsonResponse.existingMinQuantity;
+                        var MinQuantityInput = document.getElementById('fruit-quantity' + curFruit);
+                        MinQuantityInput.value = curMinQuantity;
+
+                        var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
+                        var UnitMinQuantityInput = document.getElementById('fruit-unit' + curFruit);
+                        UnitMinQuantityInput.value = curUnitMinQuantity;
+
+                        var curAddToCart = jsonResponse.existingAddToCart;
+                        var AddToCartInput = document.getElementById('fruit-quantity-addToCart' + curFruit);
+                        AddToCartInput.value = curAddToCart;
+
+                        var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
+                        var UnitAddToCartInput = document.getElementById('fruit-unit-addToCart' + curFruit);
+                        UnitAddToCartInput.value = curUnitAddToCart;
+                        
+                        var curDate = jsonResponse.existingDate;
+                        var DateInput = document.getElementById('Date' + curFruit);
+                        DateInput.value = curDate;
+
+
+            
                     }
                 };
                 xhr.send(`fruitName=${fruitName}&account_id=${account_id}`);
+
 
                 // Attach event listeners to the increment and decrement buttons
                 newItem.querySelector('.increment').addEventListener('click', handleIncrement);
@@ -1182,6 +1086,7 @@ function addItemToMainContainerStar(fruitId) {
 
                 // Set up listener for the "Save" button
                 var saveNoteButton = newItem.querySelector('#saveNoteButton' + fruitName);
+                console.log(fruitName);
                 saveNoteButton.addEventListener('click', function () {
                     var quantity = newItem.querySelector('#quantity' + fruitName).value;
                     var note = newItem.querySelector('#noteText' + fruitName).value;
@@ -1190,19 +1095,10 @@ function addItemToMainContainerStar(fruitId) {
 
                 });
 
-                
-
-                
-
     }
-
 
 }
     
-
-
-
-
     </script>
 
 </body>
