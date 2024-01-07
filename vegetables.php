@@ -198,7 +198,7 @@ window.addEventListener('scroll', () => {
     starredItems = []; // Array to store the names of starred items
     selectedItemsArray = []; // Array to store selected items
 
-    // Assuming you have a list of fruit IDs
+    // Assuming you have a list of vegs IDs
     var vegetableIds = ["beet", "broccoli", "carrot", "cucumber", "eggplant", "green_beans", "green_pepper", "kolorabi", "leeks", "lettuce", "libya", "onion", "red_onion", "red_pepper", "red_potato", "studel", "sweet_potato", "tomato", "white_potato", "yellow_pepper"];
 
     // Call fetchStarredItems when the page loads
@@ -357,12 +357,12 @@ function closePopup() {
 }
 
 function openPopupMinQuantity(vegetableName) {
-    var popupElement = document.getElementById("fruit-popup" + vegetableName);
+    var popupElement = document.getElementById("veg-popup" + vegetableName);
     var buttonElement = document.getElementById('topLeftButton' + vegetableName);
 
     if (popupElement && buttonElement) {
-        // Apply the specific class for fruit popups
-        popupElement.classList.add('fruit-popup');
+        
+        popupElement.classList.add('veg-popup');
 
         popupElement.style.display = "block";
         buttonElement.style.display = 'none';
@@ -372,12 +372,12 @@ function openPopupMinQuantity(vegetableName) {
 }
 
 function openPopupAddToCart(vegetableName) {
-    var popupElement = document.getElementById("fruit-popup-addToCart" + vegetableName);
+    var popupElement = document.getElementById("veg-popup-addToCart" + vegetableName);
     var buttonElement = document.getElementById('topLeftButton-AddToCart' + vegetableName);
 
     if (popupElement && buttonElement) {
-        // Apply the specific class for fruit popups
-        popupElement.classList.add('fruit-popup-addToCart');
+    
+        popupElement.classList.add('veg-popup-addToCart');
 
         popupElement.style.display = "block";
         buttonElement.style.display = 'none';
@@ -387,12 +387,12 @@ function openPopupAddToCart(vegetableName) {
 }
 
 function closePopupMinQuantity(vegetableName) {
-    var popupElement = document.getElementById("fruit-popup" + vegetableName);
+    var popupElement = document.getElementById("veg-popup" + vegetableName);
     var buttonElement = document.getElementById('topLeftButton' + vegetableName);
 
     if (popupElement && buttonElement) {
         // Remove the specific class when closing the popup
-        popupElement.classList.remove('fruit-popup');
+        popupElement.classList.remove('veg-popup');
 
         popupElement.style.display = "none";
         buttonElement.style.display = 'block';
@@ -402,12 +402,12 @@ function closePopupMinQuantity(vegetableName) {
 }
 
 function closePopupAddToCart(vegetableName) {
-    var popupElement = document.getElementById("fruit-popup-addToCart" + vegetableName);
+    var popupElement = document.getElementById("veg-popup-addToCart" + vegetableName);
     var buttonElement = document.getElementById('topLeftButton-AddToCart' + vegetableName);
 
     if (popupElement && buttonElement) {
         // Remove the specific class when closing the popup
-        popupElement.classList.remove('fruit-popup-addToCart');
+        popupElement.classList.remove('veg-popup-addToCart');
 
         popupElement.style.display = "none";
         buttonElement.style.display = 'block';
@@ -467,7 +467,7 @@ function addItemToMainContainer() {
     if (selectedItems.length > 0) {
         // Iterate through each selected item
         selectedItems.forEach(function(selectedItem) {
-            // Get the fruit name (assuming it's in the alt attribute of the image)
+   
             var vegetableName = selectedItem.querySelector('img').alt;
 
             // Check if the item with the same name already exists in the main container
@@ -483,13 +483,13 @@ function addItemToMainContainer() {
                 newItem.innerHTML = `
                 <div class="button-container">
                 <button onclick="openPopupMinQuantity('${vegetableName}')" class="top-left-button with-icon" id="topLeftButton${vegetableName}">define minimum quantity </button>
-                    <div id="fruit-popup${vegetableName}" class="popup"> 
-                        <div class="popup-content-fruits">
+                    <div id="veg-popup${vegetableName}" class="popup"> 
+                        <div class="popup-content-vegs">
                             <span class="close" onclick="closePopupMinQuantity('${vegetableName}')">&times;</span>
                             <h6> Minimum Quantity: </h6>
                             <p class="input-row">
-                                <input type="number" id="fruit-quantity${vegetableName}" class="fruit-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
-                                <select id="fruit-unit${vegetableName}" class="fruit-unit-select" style="width: 60px; height:25px;">
+                                <input type="number" id="veg-quantity${vegetableName}" class="veg-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="veg-unit${vegetableName}" class="veg-unit-select" style="width: 60px; height:25px;">
                                     <option value="units">units</option>
                                     <option value="kg">kg</option>
                                     <option value="gram">gram</option>
@@ -501,13 +501,13 @@ function addItemToMainContainer() {
 
                     </br>
                     <button onclick="openPopupAddToCart('${vegetableName}')" class="top-left-button" id="topLeftButton-AddToCart${vegetableName}" >Add To Cart</button>
-                    <div id="fruit-popup-addToCart${vegetableName}" class="popup"> 
-                        <div class="popup-content-fruits">
+                    <div id="veg-popup-addToCart${vegetableName}" class="popup"> 
+                        <div class="popup-content-vegs">
                             <span class="close" onclick="closePopupAddToCart('${vegetableName}')">&times;</span>
                             <h6>Add To Cart: </h6>
                             <p class="input-row">
-                                <input type="number" id="fruit-quantity-addToCart${vegetableName}" class="fruit-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
-                                <select id="fruit-unit-addToCart${vegetableName}" class="fruit-unit-select-addToCart" style="width: 60px; height:25px;">
+                                <input type="number" id="veg-quantity-addToCart${vegetableName}" class="veg-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="veg-unit-addToCart${vegetableName}" class="veg-unit-select-addToCart" style="width: 60px; height:25px;">
                                     <option value="units">units</option>
                                     <option value="kg">kg</option>
                                     <option value="gram">gram</option>
@@ -575,7 +575,7 @@ function addItemToMainContainer() {
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         console.log(xhr.responseText); // Log the response from the server
-                        // here I get the previous data from the fruits database !!! 
+                    
                         var jsonResponse = JSON.parse(xhr.responseText);
                         console.log( jsonResponse.isNew)   
                         if (jsonResponse.isNew === false) {
@@ -593,19 +593,19 @@ function addItemToMainContainer() {
                         UnitInput.value = curUnit;
 
                         var curMinQuantity= jsonResponse.existingMinQuantity;
-                        var MinQuantityInput = document.getElementById('fruit-quantity' + vegetableName);
+                        var MinQuantityInput = document.getElementById('veg-quantity' + vegetableName);
                         MinQuantityInput.value = curMinQuantity;
 
                         var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
-                        var UnitMinQuantityInput = document.getElementById('fruit-unit' + vegetableName);
+                        var UnitMinQuantityInput = document.getElementById('veg-unit' + vegetableName);
                         UnitMinQuantityInput.value = curUnitMinQuantity;
 
                         var curAddToCart = jsonResponse.existingAddToCart;
-                        var AddToCartInput = document.getElementById('fruit-quantity-addToCart' + vegetableName);
+                        var AddToCartInput = document.getElementById('veg-quantity-addToCart' + vegetableName);
                         AddToCartInput.value = curAddToCart;
 
                         var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
-                        var UnitAddToCartInput = document.getElementById('fruit-unit-addToCart' + vegetableName);
+                        var UnitAddToCartInput = document.getElementById('veg-unit-addToCart' + vegetableName);
                         UnitAddToCartInput.value = curUnitAddToCart;
                         
                         var curDate = jsonResponse.existingDate;
@@ -622,7 +622,7 @@ function addItemToMainContainer() {
                     }
                 };
 
-                xhr.send(`vegetableName=${vegetableName}&account_id=${account_id}`);
+                xhr.send(`VegName=${vegetableName}&account_id=${account_id}`);
 
                 // Attach event listeners to the increment and decrement buttons
                 newItem.querySelector('.increment').addEventListener('click', handleIncrement);
@@ -721,11 +721,11 @@ function handleItemChange(event) {
         const isSelected = item.classList.contains('selected');
         const account_id = <?php echo json_encode($account_id); ?>;
 
-        const fruit_quantity = item.querySelector('.fruit-quantity').value;
-        const fruit_unit_select = item.querySelector('.fruit-unit-select').value;
+        const veg_quantity = item.querySelector('.veg-quantity').value;
+        const veg_unit_select = item.querySelector('.veg-unit-select').value;
 
-        const fruit_quantity_addToCart = item.querySelector('.fruit-quantity-addToCart').value;
-        const fruit_unit_select_addToCart = item.querySelector('.fruit-unit-select-addToCart').value;
+        const veg_quantity_addToCart = item.querySelector('.veg-quantity-addToCart').value;
+        const veg_unit_select_addToCart = item.querySelector('.veg-unit-select-addToCart').value;
 
         // Use AJAX or another method to send the data to addVeg.php
         const xhr = new XMLHttpRequest();
@@ -739,7 +739,7 @@ function handleItemChange(event) {
         };
 
         // Encode data and send the request
-        const data = `vegetableName=${vegetableId}&fruit_quantity=${fruit_quantity}&fruit_unit_select=${fruit_unit_select}&account_id=${account_id}&quantity=${quantity}&note=${note}&unit=${unit}&isStarred=${isStarred}&is_selected=${isSelected}&date=${date}&fruit_quantity_addToCart=${fruit_quantity_addToCart}&fruit_unit_select_addToCart=${fruit_unit_select_addToCart}`;
+        const data = `VegName=${vegetableId}&veg_quantity=${veg_quantity}&veg_unit_select=${veg_unit_select}&account_id=${account_id}&quantity=${quantity}&note=${note}&unit=${unit}&isStarred=${isStarred}&is_selected=${isSelected}&date=${date}&veg_quantity_addToCart=${veg_quantity_addToCart}&veg_unit_select_addToCart=${veg_unit_select_addToCart}`;
         xhr.send(data);
 
         // Log the changes to the console
@@ -747,7 +747,7 @@ function handleItemChange(event) {
 
         const quantityContainer = document.getElementById(`quantityContainer${vegetableId}`);
         console.log(vegetableId);
-        if (fruit_quantity > quantity ){
+        if (veg_quantity > quantity ){
             console.log("error");
             document.getElementById(`quantityContainer${vegetableId}`).classList.add('warning');
         } else {
@@ -779,8 +779,8 @@ function addItem() {
     const account_id = <?php echo json_encode($account_id); ?>; 
 
     
-    const fruit_quantity = item.querySelector('.fruit-quantity').value;
-    const fruit_unit_select = item.querySelector('.fruit-unit-select').value;
+    const veg_quantity = item.querySelector('.veg-quantity').value;
+    const veg_unit_select = item.querySelector('.veg-unit-select').value;
 
     // Use AJAX or another method to send the data to addVeg.php
     const xhr = new XMLHttpRequest();
@@ -794,7 +794,7 @@ function addItem() {
     };
 
     // Encode data and send the request
-    const data = `&vegetableName=${vegetableName}&fruit_quantity=${fruit_quantity}&fruit_unit_select=${fruit_unit_select}&account_id=${account_id}&date=${date}&quantity=${quantity}&note=${note}&unit=${unit}&isStarred=${isStarred}&is_selected=${isSelected}`;
+    const data = `&VegName=${vegetableName}&veg_quantity=${veg_quantity}&veg_unit_select=${veg_unit_select}&account_id=${account_id}&date=${date}&quantity=${quantity}&note=${note}&unit=${unit}&isStarred=${isStarred}&is_selected=${isSelected}`;
     xhr.send(data);
 }
 
@@ -865,7 +865,7 @@ function fetchStarredItems() {
 
     // Make an AJAX request to fetch starred items
     var xhrFetchStarredItems = new XMLHttpRequest();
-    xhrFetchStarredItems.open("POST", "fetchStarredItems.php", true);
+    xhrFetchStarredItems.open("POST", "fetchStarredItemsVeg.php", true);
     xhrFetchStarredItems.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhrFetchStarredItems.onreadystatechange = function () {
         if (xhrFetchStarredItems.readyState == 4) {
@@ -943,10 +943,9 @@ function setDefaultUnit(unitSelect) {
 
 function addItemToMainContainerStar(vegetableId) {
     console.log(vegetableId) ;
-    vegetableName = vegetableId.fruit_id;
+    vegetableName = vegetableId.veg_id;
     const account_id = <?php echo json_encode($account_id); ?>;
 
-   /// $vegetableName = fruit_id;
 
     // Check if the item with the same name already exists in the main container
     var existingItem = document.getElementById("main-" + vegetableName);
@@ -961,13 +960,13 @@ function addItemToMainContainerStar(vegetableId) {
         newItem.innerHTML = `
                 <div class="button-container">
                 <button onclick="openPopupMinQuantity('${vegetableName}')" class="top-left-button with-icon" id="topLeftButton${vegetableName}">define minimum quantity </button>
-                    <div id="fruit-popup${vegetableName}" class="popup"> 
-                        <div class="popup-content-fruits">
+                    <div id="veg-popup${vegetableName}" class="popup"> 
+                        <div class="popup-content-vegs">
                             <span class="close" onclick="closePopupMinQuantity('${vegetableName}')">&times;</span>
                             <h6> Minimum Quantity: </h6>
                             <p class="input-row">
-                                <input type="number" id="fruit-quantity${vegetableName}" class="fruit-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
-                                <select id="fruit-unit${vegetableName}" class="fruit-unit-select" style="width: 60px; height:25px;">
+                                <input type="number" id="veg-quantity${vegetableName}" class="veg-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="veg-unit${vegetableName}" class="veg-unit-select" style="width: 60px; height:25px;">
                                     <option value="units">units</option>
                                     <option value="kg">kg</option>
                                     <option value="gram">gram</option>
@@ -979,13 +978,13 @@ function addItemToMainContainerStar(vegetableId) {
 
                     </br>
                     <button onclick="openPopupAddToCart('${vegetableName}')" class="top-left-button" id="topLeftButton-AddToCart${vegetableName}" >Add To Cart</button>
-                    <div id="fruit-popup-addToCart${vegetableName}" class="popup"> 
-                        <div class="popup-content-fruits">
+                    <div id="veg-popup-addToCart${vegetableName}" class="popup"> 
+                        <div class="popup-content-vegs">
                             <span class="close" onclick="closePopupAddToCart('${vegetableName}')">&times;</span>
                             <h6>Add To Cart: </h6>
                             <p class="input-row">
-                                <input type="number" id="fruit-quantity-addToCart${vegetableName}" class="fruit-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
-                                <select id="fruit-unit-addToCart${vegetableName}" class="fruit-unit-select-addToCart" style="width: 60px; height:25px;">
+                                <input type="number" id="veg-quantity-addToCart${vegetableName}" class="veg-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="veg-unit-addToCart${vegetableName}" class="veg-unit-select-addToCart" style="width: 60px; height:25px;">
                                     <option value="units">units</option>
                                     <option value="kg">kg</option>
                                     <option value="gram">gram</option>
@@ -995,7 +994,7 @@ function addItemToMainContainerStar(vegetableId) {
                         </div>
                     </div>
                 <div>
-                    <img src="fruits_pics/${vegetableName}.jpg" alt="${vegetableName}">
+                    <img src="vegtables_pics/${vegetableName}.jpg" alt="${vegetableName}">
                     <h2>${vegetableName}</h2>
                     <div class="item-details">
                    
@@ -1055,10 +1054,10 @@ function addItemToMainContainerStar(vegetableId) {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         console.log(xhr.responseText); // Log the response from the server
                         var jsonResponse = JSON.parse(xhr.responseText);
-                        // here I get the previous data from the fruits database !!! 
-                        var jsonResponse = JSON.parse(xhr.responseText);
+                     
+                        //var jsonResponse = JSON.parse(xhr.responseText);
 
-                        var curFruit = jsonResponse.existingFruit;
+                        var curFruit = jsonResponse.existingVeg;
                        // console.log(curFruit);
 
                         var curQuantity = jsonResponse.existingQuantity;
@@ -1074,19 +1073,19 @@ function addItemToMainContainerStar(vegetableId) {
                         UnitInput.value = curUnit;
 
                         var curMinQuantity= jsonResponse.existingMinQuantity;
-                        var MinQuantityInput = document.getElementById('fruit-quantity' + curFruit);
+                        var MinQuantityInput = document.getElementById('veg-quantity' + curFruit);
                         MinQuantityInput.value = curMinQuantity;
 
                         var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
-                        var UnitMinQuantityInput = document.getElementById('fruit-unit' + curFruit);
+                        var UnitMinQuantityInput = document.getElementById('veg-unit' + curFruit);
                         UnitMinQuantityInput.value = curUnitMinQuantity;
 
                         var curAddToCart = jsonResponse.existingAddToCart;
-                        var AddToCartInput = document.getElementById('fruit-quantity-addToCart' + curFruit);
+                        var AddToCartInput = document.getElementById('veg-quantity-addToCart' + curFruit);
                         AddToCartInput.value = curAddToCart;
 
                         var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
-                        var UnitAddToCartInput = document.getElementById('fruit-unit-addToCart' + curFruit);
+                        var UnitAddToCartInput = document.getElementById('veg-unit-addToCart' + curFruit);
                         UnitAddToCartInput.value = curUnitAddToCart;
                         
                         var curDate = jsonResponse.existingDate;
@@ -1097,7 +1096,7 @@ function addItemToMainContainerStar(vegetableId) {
             
                     }
                 };
-                xhr.send(`vegetableName=${vegetableName}&account_id=${account_id}`);
+                xhr.send(`VegName=${vegetableName}&account_id=${account_id}`);
 
 
                 // Attach event listeners to the increment and decrement buttons
