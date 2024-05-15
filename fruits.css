@@ -698,30 +698,3 @@ label {
 }
 
 
-
-
-/*
-.speedometer{
-    width: 30px; 
-    height: auto; 
-    display: block;
-    margin: 0 auto;
-}
-
-.top-left-button.with-icon {
-    padding-left: 40px; 
-    position: relative;
-}
-
-.top-left-button.with-icon::before {
-    content: '';
-    position: absolute;
-    left: 19px;
-    top: 50%; 
-    transform: translateY(-50%); 
-    width: 20px; 
-    height: 20px; 
-    background-image: url('speedometer.png');
-    background-size: cover;
-}
-*/

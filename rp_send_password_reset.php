@@ -48,3 +48,5 @@ if ($mysqli->affected_rows) {
 }
 
 echo "Message sent, please check your inbox.";
+
+

@@ -14,7 +14,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh; /* Use min-height for better responsiveness */
-    background-image: url('background_img/pic4.jpg');
+    background-image: url('background_img/main_page_pic2.jpg');
     background-size: cover; /* Ensure the background image covers the entire viewport */
 }
 
@@ -24,15 +24,15 @@ body {
     max-width: 400px; /* Added a maximum width for better responsiveness */
     margin: 50px auto; /* Adjusted top margin */
     padding: 20px;
-    background-color: rgba(248, 209, 240, 0.8);
+    background-color:  rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background for content readability */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
 
 /* Heading styles */
 h1 {
-    color: #007BFF;
-    font-size: 36px; /* Slightly reduced font size for a cleaner look */
+    color:rgb(10, 10, 83);
+    font-size: 50px; /* Adjust the font size as needed */
     font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
@@ -61,21 +61,26 @@ input[type="password"] {
     border-radius: 4px;
 }
 
-/* Submit button styles */
+/* Submit button styles 
 input[type="submit"] {
-    background-color: #007BFF;
+
+
+    background-color:rgb(10, 10, 83);
+
     color: #fff;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 5px;
     font-weight: bold;
     font-size: 16px;
     font-family: 'Sofia Sans', sans-serif;
-    display: block; /* Ensure the button is a block element */
-    margin: 0 auto; /* Center the button within the container */
-}
+    display: block; 
+    margin: 0 auto;
 
+    transition: background-color 0.3s ease-in-out;
+}
+*/
 input[type="submit"]:hover {
     background-color: #0056b3;
 }
@@ -88,19 +93,27 @@ input[type="submit"]:hover {
 /* Button styles */
 #btn {
     width: 100px;
-    background-color: #0056b3; /* Changed background color to match hover color */
-    color: black;
+    /*background-color: #0056b3;  Changed background color to match hover color */
+    background-color:rgb(10, 10, 83);
+    color: white;
     padding: 10px 20px;
     font-size: large;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
     font-family: 'Sofia Sans', sans-serif;
     display: block; /* Ensure the button is a block element */
     margin: 0 auto; /* Center the button within the container */
+    transition: background-color 0.3s ease-in-out;
 }
 
 #btn:hover {
-    background-color: lightblue;
+    background-color:#5ca0ed;
+}
+
+
+.error-message {
+    color: red; /* Set text color to red */
+    font-weight: bold; /* Make text bold */
+    margin-top: 10px; /* Add some top margin for spacing */
 }

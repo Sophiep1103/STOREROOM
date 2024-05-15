@@ -118,3 +118,9 @@ button[type="submit"]:hover {
 #forgotPassword:hover {
     color:#5ca0ed; /* Change the text color on hover */
 }
+
+.error-message {
+    color: red; /* Set text color to red */
+    font-weight: bold; /* Make text bold */
+    margin-top: 10px; /* Add some top margin for spacing */
+}

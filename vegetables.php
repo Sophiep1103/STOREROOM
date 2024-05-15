@@ -749,11 +749,10 @@ function handleItemChange(event) {
         console.log(vegetableId);
         if (veg_quantity > quantity ){
             console.log("error");
-            document.getElementById(`quantityContainer${vegetableId}`).classList.add('warning');
+            quantityContainer.classList.add('warning');
         } else {
             document.getElementById(`quantityContainer${vegetableId}`).classList.remove('warning');
         }
-        
     }
 }
 
@@ -1057,40 +1056,48 @@ function addItemToMainContainerStar(vegetableId) {
                      
                         //var jsonResponse = JSON.parse(xhr.responseText);
 
-                        var curFruit = jsonResponse.existingVeg;
+                        var curVeg = jsonResponse.existingVeg;
                        // console.log(curFruit);
 
                         var curQuantity = jsonResponse.existingQuantity;
-                        var quantityInput = document.getElementById('quantity' + curFruit);
+                        var quantityInput = document.getElementById('quantity' + curVeg);
                         quantityInput.value = curQuantity;
 
                         var curNote = jsonResponse.existingNote;
-                        var NoteInput = document.getElementById('noteText' + curFruit);
+                        var NoteInput = document.getElementById('noteText' + curVeg);
                         NoteInput.value = curNote;
 
                         var curUnit  = jsonResponse.existingUnit;
-                        var UnitInput = document.getElementById('unit' + curFruit);
+                        var UnitInput = document.getElementById('unit' + curVeg);
                         UnitInput.value = curUnit;
 
                         var curMinQuantity= jsonResponse.existingMinQuantity;
-                        var MinQuantityInput = document.getElementById('veg-quantity' + curFruit);
+                        var MinQuantityInput = document.getElementById('veg-quantity' + curVeg);
                         MinQuantityInput.value = curMinQuantity;
 
                         var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
-                        var UnitMinQuantityInput = document.getElementById('veg-unit' + curFruit);
+                        var UnitMinQuantityInput = document.getElementById('veg-unit' + curVeg);
                         UnitMinQuantityInput.value = curUnitMinQuantity;
 
                         var curAddToCart = jsonResponse.existingAddToCart;
-                        var AddToCartInput = document.getElementById('veg-quantity-addToCart' + curFruit);
+                        var AddToCartInput = document.getElementById('veg-quantity-addToCart' + curVeg);
                         AddToCartInput.value = curAddToCart;
 
                         var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
-                        var UnitAddToCartInput = document.getElementById('veg-unit-addToCart' + curFruit);
+                        var UnitAddToCartInput = document.getElementById('veg-unit-addToCart' + curVeg);
                         UnitAddToCartInput.value = curUnitAddToCart;
                         
                         var curDate = jsonResponse.existingDate;
-                        var DateInput = document.getElementById('Date' + curFruit);
+                        var DateInput = document.getElementById('Date' + curVeg);
                         DateInput.value = curDate;
+
+
+                                        // Apply warning border if quantity is smaller than the minimum quantity
+                        if (curQuantity < curMinQuantity) {
+                            var quantityContainer = document.getElementById('quantityContainer' + curVeg);
+                            quantityContainer.classList.add('warning');
+                        }
+                        
 
 
             
@@ -1113,6 +1120,29 @@ function addItemToMainContainerStar(vegetableId) {
                     var unit = newItem.querySelector('#unit' + vegetableName).value;
 
                 });
+
+        // Get the unit of the minimum quantity from the database
+
+        // Apply warning border if quantity is smaller than the minimum quantity
+        var minQuantityInput = document.getElementById('veg-quantity' + fruitName);
+        var quantityContainer = document.getElementById('quantityContainer' + fruitName);
+
+        quantityContainer.addEventListener('input', function() {
+            if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
+
+        // Apply warning border when the screen is up
+        window.addEventListener('load', function() {
+            if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
 
     }
 

@@ -53,6 +53,10 @@ h1 {
     font-weight: bold;
 }
 
+.quantity-container.warning {
+    border: 3px solid red; /* Change the border color to red for the warning condition */
+}
+
 /* Adjust alignment for the last row */
 .items-container::after {
     content: "";
@@ -649,7 +653,7 @@ label {
 
 
 /* Specific styling for fruit popups */
-.fruit-popup, .fruit-popup-addToCart {
+.veg-popup, .veg-popup-addToCart {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -666,7 +670,7 @@ label {
 }
 
 /* Styling for the close button in the fruit popup */
-.fruit-popup .close {
+.veg-popup .close {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -674,7 +678,7 @@ label {
 }
 
 /* Styling for the close button in the fruit popup */
-.fruit-popup-addToCart .close {
+.veg-popup-addToCart .close {
     position: absolute;
     top: 5px;
     right: 5px;

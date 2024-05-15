@@ -1,6 +1,11 @@
 <?php 
+    session_start(); // Start the session
     include("connection.php");
     include("register.php");
+    $error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : "";
+    // Clear the error message to prevent it from being displayed multiple times
+    unset($_SESSION['error_message']);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,7 +17,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Sofia+Sans&display=swap');
     </style>
     <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js" defer></script>
-    <script src="/validation.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -44,6 +48,10 @@
             <div class="form-group">
                 <button type="submit" name= "submit" id="btn">Register</button>
             </div>
+                               <!-- Display error message if it exists -->
+            <?php if (!empty($error_message)): ?>
+                <p id="errorMessage2" class="error-message"><?php echo $error_message; ?></p>
+            <?php endif; ?>
         </form>
     </div>
 
@@ -114,6 +122,20 @@
         return true; // Allow the form to submit if all validations pass
     }
     */
+
+
+    function validateEmailFormat() {
+    var emailInput = document.getElementById("email");
+    var emailError = document.getElementById("emailError");
+    var emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (emailFormat.test(emailInput.value)) {
+        emailError.textContent = ""; // Clear any previous email error messages
+    } else {
+        emailError.textContent = "Invalid email format. Please enter a valid email address.";
+    }
+}
+
     </script>
 </body>
 </html>

@@ -1,0 +1,700 @@
+
+
+/* Set font-family for all text elements */
+body, h1, p,select, input {
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+/* Style the header (h1 element) */
+h1 {
+    font-size: 70px; 
+    color: rgb(10, 10, 83); 
+    font-weight: bold; 
+    text-align: center; 
+    text-transform: uppercase; 
+    padding: 15px 0; 
+}
+
+/* Style the item container */
+.items-container {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.8); /* Add a light background for items */
+    padding: 10px; /* Reduce padding for items */
+    align-items: stretch; /* Ensure all items have the same height */
+}
+
+/* Style each item */
+.item {
+    width: 18%; /* Adjust the width as needed for 5 items in a row */
+    margin: 0 10px;
+    text-align: center;
+    border: 2px solid #ccc; /* Bold gray border */
+    padding: 5px; /* Reduce padding for smaller items */
+    background-color: #fff; /* White background */
+    margin-bottom: 10px; /* Add margin between rows */
+    border-radius: 5px;
+}
+
+/* Style the item name */
+.item h2 {
+    font-size: 20px; /* Reduce the font size for smaller items */
+    margin: 5px 0; /* Adjust margins for smaller items */
+}
+
+/* Style the item details */
+.item-details p {
+    font-size: 14px; /* Reduce the font size for smaller items */
+}
+
+.item-details input {
+    font-weight: bold;
+}
+
+/* Adjust alignment for the last row */
+.items-container::after {
+    content: "";
+    flex-grow: 1;
+    width: calc(20% - 20px); /* Adjust the width for smaller items */
+}
+
+/* Style the plus and minus buttons */
+.item-controls button {
+    background-color: #ccc;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    text-align: center;
+    line-height: 30px;
+    position: relative;
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.increment {
+    background-color: rgb(139, 223, 139);
+    font-size: 16px; /* Adjust the font size */
+    width: 30px; /* Set the width */
+    height: 30px; /* Set the height */
+    top: 5px; /* Position the button vertically in the middle */
+    border: 2px solid rgb(134, 199, 134); /* Add a green border around the button */
+    border-radius: 50%; /* Make the buttons round */
+    padding-left: 2px;
+}
+
+.decrement {
+    background-color: rgb(225, 94, 94);
+    font-size: 16px; /* Adjust the font size */
+    width: 30px; /* Set the width */
+    height: 30px; /* Set the height */
+    top: 5px; /* Position the button vertically in the middle */
+    border: 2px solid rgb(189, 100, 100); /* Add a red border around the button */
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.quantity-container {
+    display: flex; /* Enable flex layout for the quantity container */
+    align-items: center; /* Vertically align items in the container */
+}
+
+.small-space {
+    width: 60px; /* Adjust the width as needed */
+}
+
+#saveButton {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px; /* Add some margin to the top */
+}
+
+#saveButton:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+.extra_item{
+    width: 20%;
+}
+
+
+.sticky-note {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;  
+}
+
+.note-text {
+    width: 100%;
+    height: 75px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    margin-bottom: 10px;
+    
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 24px, #ddd 24px, #ddd 25px, transparent 25px);
+}
+
+.save-button {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+   /* margin-top: 10px; /* Add some margin to the top */
+}
+
+
+.save-button:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+/*border-color:rgb(10, 10, 83);*/
+
+.note-text:focus {
+    outline: none; /* Remove the default outline */
+    border: 2px solid rgb(10, 10, 83); /* Change the border color to blue on focus */
+}
+
+
+/* Style the item */
+.item {
+    position: relative;
+}
+
+/* Apply a faded background image */
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('veg.jpg') center/cover no-repeat;
+    opacity: 0.3; 
+    z-index: -1;
+}
+
+
+/* Style the item container */
+.items-container {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.8); /* Add a light background for items */
+    padding: 10px; /* Reduce padding for items */
+    align-items: stretch; /* Ensure all items have the same height */
+}
+
+/* Style each item */
+.item {
+    width: 18%; /* Adjust the width as needed for 5 items in a row */
+    margin: 0 10px;
+    text-align: center;
+    border: 2px solid #ccc; /* Bold gray border */
+    padding: 5px; /* Reduce padding for smaller items */
+    background-color: #fff; /* White background */
+    margin-bottom: 10px; /* Add margin between rows */
+}
+
+/* Style the item name */
+.item h2 {
+    font-size: 20px; /* Reduce the font size for smaller items */
+    margin: 5px 0; /* Adjust margins for smaller items */
+}
+
+/* Style the item details */
+.item-details p {
+    font-size: 14px; /* Reduce the font size for smaller items */
+}
+
+/* Style the unit and quantity spans */
+.item-details select, .item-details input {
+    font-weight: bold;
+}
+
+/* Adjust alignment for the last row */
+.items-container::after {
+    content: "";
+    flex-grow: 1;
+    width: calc(20% - 20px); /* Adjust the width for smaller items */
+}
+
+/* Style the plus and minus buttons */
+.item-controls button {
+    background-color: #ccc;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    text-align: center;
+    line-height: 30px;
+    position: relative;
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.increment {
+    background-color: rgb(139, 223, 139);
+    font-size: 16px; /* Adjust the font size */
+    width: 30px; /* Set the width */
+    height: 30px; /* Set the height */
+    top: 5px; /* Position the button vertically in the middle */
+    border: 2px solid rgb(134, 199, 134); /* Add a green border around the button */
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.decrement {
+    background-color: rgb(225, 94, 94);
+    font-size: 16px; /* Adjust the font size */
+    width: 30px; /* Set the width */
+    height: 30px; /* Set the height */
+    top: 5px; /* Position the button vertically in the middle */
+    border: 2px solid rgb(189, 100, 100); /* Add a red border around the button */
+    border-radius: 50%; /* Make the buttons round */
+}
+
+.quantity-container {
+    display: flex; /* Enable flex layout for the quantity container */
+    align-items: center; /* Vertically align items in the container */
+}
+
+.small-space {
+    width: 60px; /* Adjust the width as needed */
+}
+
+#saveButton {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px; /* Add some margin to the top */
+}
+
+#saveButton:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+.extra_item{
+    width: 20%;
+}
+
+
+.sticky-note {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.note-text {
+    width: 100%;
+    height: 75px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    margin-bottom: 10px;
+    
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 24px, #ddd 24px, #ddd 25px, transparent 25px);
+}
+
+.save-button {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+   /* margin-top: 10px; /* Add some margin to the top */
+}
+
+
+.save-button:hover {
+    background-color: #5ca0ed; /* Change the button's background color on hover */
+}
+
+
+.note-text:focus {
+    outline: none; /* Remove the default outline */
+    border: 2px solid rgb(10, 10, 83); /* Change the border color to blue on focus */
+}
+
+
+
+
+/* Style the item */
+.item {
+    position: relative;
+}
+
+/* Style the item date */
+.item .item-date {
+    font-size: 14px;
+    color: #0a0a53;
+    font-weight: bold;
+    padding: 5px 5px;
+    margin-bottom: 10px;
+}
+
+/* Style the item image container */
+.item .image-container {
+    max-height: 80px; /* Set a maximum height for the image container */
+    overflow: hidden; /* Hide overflowing image */
+    padding-top: 20px; /* Add padding to the top of the image container */
+}
+
+
+/* Style the item image container */
+.item .image-container {
+    max-height: 80px; /* Set a maximum height for the image container */
+    overflow: hidden; /* Hide overflowing image */
+    padding-top: 20px; /* Add padding to the top of the image container */
+}
+
+
+/*vi ticking*/
+/* Style the item checkbox */
+
+
+
+
+/* Style the item content */
+.item-content {
+    position: relative;
+}
+
+
+
+
+
+
+/* Style the item */
+.item {
+    position: relative;
+    border: 2px solid #ccc; /* Add a border to the item */
+    padding: 10px; /* Add padding to the item */
+}
+
+
+
+/* Style the item image */
+.item img {
+    max-width: 100%;
+    height: auto; /* 100px?*/
+    border: 4px solid rgba(219, 182, 232, 0.95);
+    max-height: 90px; /*80?*/
+    margin-top: 45px; 
+    border-radius: 5px;
+    
+}
+
+
+
+
+/*star */
+.favorite {
+    text-align: center;
+}
+
+.favorite i {
+    font-size: 24px;
+    cursor: pointer;
+    color: #0ff1da ;
+    display: block;
+    margin-top: 5px; 
+}
+
+
+.selectable.selected {
+    border: 4px solid rgb(10, 10, 83);
+    font-weight: bold;
+    border-radius: 5px;
+    
+    
+}
+
+
+/* Additional styles for the search bar */
+.search-wrapper {
+    margin-bottom: 20px;
+    padding-left: 10px;
+}
+
+
+/* Style for the search label */
+label[for="search"] {
+    display: block;
+    margin-bottom: 2px;
+    font-weight: bold;
+    padding-left: 70px;
+    color: rgb(10, 10, 83);
+    font-size: 16px;
+
+}
+
+/* Style for the search input */
+#search {
+    width: 20%;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+
+}
+
+/* Optional: Add some animation on focus */
+#search:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px  rgb(10, 10, 83);;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+
+
+.open-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+   
+}
+
+
+#main-menu-btn {
+    position: fixed;
+    top: 10px; 
+    left: 10px;
+    padding: 10px;
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* Add a transition for a smooth effect */
+    opacity: 1; /* Initially visible */
+   
+}
+
+.quantity-container {
+    display: inline-flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.quantity-container.warning {
+    border: 3px solid red; /* Change the border color to red for the warning condition */
+}
+
+
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+   /* background-color:rgb(221, 210, 242);*/
+    background: rgba(255, 255, 255, 0.8);
+    overflow-x: hidden;
+    padding-top: 20px;
+    z-index: 1;
+}
+
+.popup-content {
+    padding: 20px;
+    
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.left-arrow-button {
+    position: absolute;
+    top: 90%;
+    right: 80%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    cursor: pointer;
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+
+
+
+/* Style the window items */
+.items-container-window {
+    list-style: none;
+    padding: 5px;
+    margin: 0; /* Add space above and below the list */
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next row */
+    justify-content: space-between; /* Adjust as needed */
+}
+
+.selectable-window {
+    text-align: center; /* Center text and image */
+    border: 2px solid #999; /* Add a thin frame */
+    padding: 5px; /* Adjust padding for spacing */
+    background-color: #fff;
+    border-radius: 5px;
+    width: 48%; /* Set your desired width for two items in a row with some spacing */
+    box-sizing: border-box; /* Include padding and border in the total width/height */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items vertically */
+    margin: 5px 0; /* Add margin for spacing between rows */
+}
+
+.selectable-window img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain; /* Maintain aspect ratio and cover the container */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+
+/* Style for the search input */
+#search-window {
+    width: 100%;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border: 2px solid   #999 ; /* Add a thin frame */
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    
+
+}
+label {
+    display: block; /* Ensure the label takes full width */
+    margin-top: 15px;
+}
+
+.highlight {
+    background-color:rgba(219, 182, 232, 0.95);
+    font-weight: bold;
+}
+
+.selected-frame {
+    border: 3px solid rgb(10, 10, 83);
+    font-weight: bold;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Example styling for the top-left button */
+.top-left-button {
+    position: absolute;
+    left: 16px;
+    background-color:rgb(10, 10, 83);
+    color: #fff;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    width: 185px; /* Adjust the width as needed */
+    height: 28px; /* Adjust the height as needed */
+}
+
+
+/* Specific styling for fruit popups */
+.beverage-popup, .beverage-popup-addToCart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Set a value higher than the z-index of the fruit elements */
+    background-color: white;
+    padding: 10px; /* Adjust the padding to make the popup smaller */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 200px; /* Set a specific width for the popup */
+    text-align: center; /* Center text content */
+    max-height: 120px; /* Set a maximum height to limit the popup size */
+    overflow: auto; /* Add scrollbar if content overflows */
+    background-color:rgba(219, 182, 232, 0.95); /* Set the background color to blue */
+}
+
+/* Styling for the close button in the fruit popup */
+.beverage-popup .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+
+/* Styling for the close button in the fruit popup */
+.beverage-popup-addToCart .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+
+.setBtn{
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+  
+}
+
+[id^="topLeftButton-AddToCart"] {
+    margin-top: 8px; /* Adjust the margin as needed */
+}
+
+

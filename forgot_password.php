@@ -10,8 +10,24 @@
         
         if (mysqli_num_rows($result) > 0) {
             // The email exists in the database
-            // You can proceed to send a password reset email or redirect to the reset password page
-           // header("Location: send_email_password.php?email=$email");
+            // Generate a token
+            $token = bin2hex(random_bytes(32)); // Generates a 64-character random token
+            $token_hash = hash("sha256", $token);
+            
+            // Set expiration time (e.g., 24 hours from now)
+            $expiration_time = date('Y-m-d H:i:s', strtotime('+24 hours'));
+            
+            // Update the user's record in the database with the token and expiration time
+            $update_query = "UPDATE users
+                            SET reset_token_hash = '$token_hash',
+                                reset_token_expire_at = '$expiration_time'
+                            WHERE email = '$email'";
+            mysqli_query($conn, $update_query);
+            
+            // Now you can proceed to send the token to the user via email or other means
+            // For simplicity, let's assume you redirect the user to a page where they can reset their password
+            header("Location: rp_reset_password.php?token=$token");
+            exit; // Make sure to exit to prevent further execution of the script
         } else {
             // The email does not exist in the database
             // You can display an error message to inform the user

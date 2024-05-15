@@ -39,31 +39,67 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
         <ul>
             <li><button class="btn-custom" id="buttonToFruits"> <i class="fas fa-lemon" style="color: rgb(10, 10, 83);"></i>  Fruits</button></li>
             <li><button class="btn-custom" id="buttonToVegetables"> <i class="fas fa-carrot" style="color: rgb(10, 10, 83);"></i>  Vegetables</button></li>
-            <li><button class="btn-custom"><i class="fas fa-cheese" style="color: rgb(10, 10, 83);"></i> Dairy products and eggs</button></li>
-            <li><button class="btn-custom"><i class="fas fa-drumstick-bite" style="color: rgb(10, 10, 83);"></i>  Meat, chicken and fish</button></li>
-            <li><button class="btn-custom"> <i class="fas fa-bread-slice" style="color: rgb(10, 10, 83);"></i>  Bread and buns</button></li>
-            <li><button class="btn-custom"><i class="fas fa-wine-bottle"  style="color: rgb(10, 10, 83);"></i>  Beverages, wine, alcohol</button></li>
-            <li><button class="btn-custom"> <i class="fas fa-ice-cream" style="color: rgb(10, 10, 83);"></i>  Freezer products</button></li>
-            <li><button class="btn-custom"><i class="fas fa-cookie" style="color: rgb(10, 10, 83);"></i>  Cooking and baking</button></li>
-            <li><button class="btn-custom"><i class="fas fa-candy-cane" style="color: rgb(10, 10, 83);"></i>  Snacks, sweets and cereals</button></li>
+            <li><button class="btn-custom" id="buttonToDiary" ><i class="fas fa-cheese" style="color: rgb(10, 10, 83);"></i> Dairy products and eggs</button></li>
+            <li><button class="btn-custom" id="buttonToMeat"><i class="fas fa-drumstick-bite" style="color: rgb(10, 10, 83);"></i>  Meat, chicken and fish</button></li>
+            <li><button class="btn-custom" id="buttonToBeverages"><i class="fas fa-wine-bottle"  style="color: rgb(10, 10, 83);"></i>  Beverages, wine, alcohol</button></li>
+            <li><button class="btn-custom" id="buttonToFrozen"> <i class="fas fa-ice-cream" style="color: rgb(10, 10, 83);"></i>  Freezer products</button></li>
+            <li><button class="btn-custom" id="buttonToGranola"><i class="fas fa-pump-soap" style="color: rgb(10, 10, 83);"></i>  Cereals, cereal bars and granola</button></li>
+            <li><button class="btn-custom" id="buttonToCandy"><i class="fas fa-candy-cane" style="color: rgb(10, 10, 83);"></i>  Snacks, sweets and candies</button></li>
             <li><button class="btn-custom"><i class="fas fa-pump-soap" style="color: rgb(10, 10, 83);"></i>  Cleaning materials</button></li><br>
-
             <li><button class="btn-custom pink-button" id="buttonToShoppingCart"> <i class="fas fa-shopping-cart" style="color: rgb(10, 10, 83);"></i>   Shopping Cart</button></li>
         </ul>
     </div>
     </div>
     <script>
         document.getElementById("buttonToFruits").addEventListener("click", function() {
-            // Navigate to the fruits_and_vegetables.php page
+
             window.location.href = "fruits.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
             
         });
 
         document.getElementById("buttonToVegetables").addEventListener("click", function() {
-            // Navigate to the fruits_and_vegetables.php page
+
             window.location.href = "vegetables.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
             
         });
+
+        document.getElementById("buttonToDiary").addEventListener("click", function() {
+
+            window.location.href = "diary.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
+            
+        });
+
+        document.getElementById("buttonToMeat").addEventListener("click", function() {
+
+        window.location.href = "meat_fish.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
+
+        });
+
+        document.getElementById("buttonToBeverages").addEventListener("click", function() {
+
+        window.location.href = "beverages.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
+
+        });
+
+
+        document.getElementById("buttonToFrozen").addEventListener("click", function() {
+
+        window.location.href = "frozen.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
+
+        });
+
+        document.getElementById("buttonToGranola").addEventListener("click", function() {
+
+        window.location.href = "granola.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
+
+        });
+
+        document.getElementById("buttonToCandy").addEventListener("click", function() {
+
+        window.location.href = "candy.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";
+
+        });
+
 
         document.getElementById("buttonToShoppingCart").addEventListener("click", function() {
             window.location.href = "shopping_cart.php?username=<?php echo $username; ?>&account_id=<?php echo $account_id; ?>";

@@ -254,16 +254,7 @@ itemDateInputs.forEach(dateInput => {
         dateInput.removeAttribute("readonly"); // Make the date field editable
     });
 });
-/*
-// Save the date when the user changes it
-itemDateInputs.forEach(dateInput => {
-    dateInput.addEventListener("change", function () {
-        const itemName = dateInput.nextElementSibling.textContent.trim(); // Get the item name
-        const newDate = dateInput.value; // Get the updated date
 
-     });
-});
-*/
 // Get references to the favorite star icons
 const favoriteIcons = document.querySelectorAll(".favorite i");
 
@@ -596,8 +587,7 @@ function addItemToMainContainer() {
                         console.log(curRedFrame);
                         }
 
-                        //var curIsStarred = jsonResponse.existingIsStarred;
-                        //var curIsSelected = jsonResponse.existingIsSelected;
+
 
                     }
                 };
@@ -726,12 +716,26 @@ function handleItemChange(event) {
         console.log(`Item changed: ${fruitId}, Quantity: ${quantity}, Starred: ${isStarred}, Selected: ${isSelected}, Date: ${date}`);
 
         const quantityContainer = document.getElementById(`quantityContainer${fruitId}`);
+        /*
         console.log(fruitId);
         if (fruit_quantity > quantity ){
             console.log("error");
             document.getElementById(`quantityContainer${fruitId}`).classList.add('warning');
         } else {
             document.getElementById(`quantityContainer${fruitId}`).classList.remove('warning');
+        }
+        */
+
+
+        // Get the unit of the minimum quantity from the database
+        const minQuantityUnit = item.querySelector('.fruit-unit-select').value;
+
+
+       
+        if (parseFloat(fruit_quantity) > parseFloat(quantity) && minQuantityUnit===unit) {
+            quantityContainer.classList.add('warning');
+        } else {
+            quantityContainer.classList.remove('warning');
         }
         
     }
@@ -922,11 +926,9 @@ function setDefaultUnit(unitSelect) {
 }
 
 function addItemToMainContainerStar(fruitId) {
-    console.log(fruitId) ;
+    console.log(fruitId);
     fruitName = fruitId.fruit_id;
     const account_id = <?php echo json_encode($account_id); ?>;
-
-   /// $fruitName = fruit_id;
 
     // Check if the item with the same name already exists in the main container
     var existingItem = document.getElementById("main-" + fruitName);
@@ -1010,95 +1012,118 @@ function addItemToMainContainerStar(fruitId) {
                 `;
 
                 
-                // Update the ID to make it unique
-                var newItemId = "main-" + fruitName;
-                newItem.id = newItemId;
+        // Update the ID to make it unique
+        var newItemId = "main-" + fruitName;
+        newItem.id = newItemId;
 
-                // Increment the counter for the next iteration
-                uniqueIdCounter++;
+        // Increment the counter for the next iteration
+        uniqueIdCounter++;
 
-                // Reset the quantity input value
-                newItem.querySelector('.quantity-input').value = "0";
+        // Reset the quantity input value
+        newItem.querySelector('.quantity-input').value = "0";
 
-                // Add the cloned item to the main container
-                document.getElementById('main-container').appendChild(newItem);
+        // Add the cloned item to the main container
+        document.getElementById('main-container').appendChild(newItem);
 
                 
-                // Make an AJAX request to addItem.php to add default information to the item in the database
-                //account_id = ...
-                var xhr = new XMLHttpRequest();
-                console.log("from addItemToMainContainerStar");
-                xhr.open("POST", "addItem.php", true);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        // Make an AJAX request to addItem.php to add default information to the item in the database
+        //account_id = ...
+        var xhr = new XMLHttpRequest();
+        console.log("from addItemToMainContainerStar");
+        xhr.open("POST", "addItem.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        console.log(xhr.responseText); // Log the response from the server
-                        var jsonResponse = JSON.parse(xhr.responseText);
-                        // here I get the previous data from the fruits database !!! 
-                        var jsonResponse = JSON.parse(xhr.responseText);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText); // Log the response from the server
+                var jsonResponse = JSON.parse(xhr.responseText);
+                // here I get the previous data from the fruits database !!! 
+                var jsonResponse = JSON.parse(xhr.responseText);
 
-                        var curFruit = jsonResponse.existingFruit;
-                       // console.log(curFruit);
+                var curFruit = jsonResponse.existingFruit;
 
-                        var curQuantity = jsonResponse.existingQuantity;
-                        var quantityInput = document.getElementById('quantity' + curFruit);
-                        quantityInput.value = curQuantity;
+                var curQuantity = jsonResponse.existingQuantity;
+                var quantityInput = document.getElementById('quantity' + curFruit);
+                quantityInput.value = curQuantity;
 
-                        var curNote = jsonResponse.existingNote;
-                        var NoteInput = document.getElementById('noteText' + curFruit);
-                        NoteInput.value = curNote;
+                var curNote = jsonResponse.existingNote;
+                var NoteInput = document.getElementById('noteText' + curFruit);
+                NoteInput.value = curNote;
 
-                        var curUnit  = jsonResponse.existingUnit;
-                        var UnitInput = document.getElementById('unit' + curFruit);
-                        UnitInput.value = curUnit;
+                var curUnit  = jsonResponse.existingUnit;
+                var UnitInput = document.getElementById('unit' + curFruit);
+                UnitInput.value = curUnit;
 
-                        var curMinQuantity= jsonResponse.existingMinQuantity;
-                        var MinQuantityInput = document.getElementById('fruit-quantity' + curFruit);
-                        MinQuantityInput.value = curMinQuantity;
+                var curMinQuantity= jsonResponse.existingMinQuantity;
+                var MinQuantityInput = document.getElementById('fruit-quantity' + curFruit);
+                MinQuantityInput.value = curMinQuantity;
 
-                        var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
-                        var UnitMinQuantityInput = document.getElementById('fruit-unit' + curFruit);
-                        UnitMinQuantityInput.value = curUnitMinQuantity;
+                var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
+                var UnitMinQuantityInput = document.getElementById('fruit-unit' + curFruit);
+                UnitMinQuantityInput.value = curUnitMinQuantity;
 
-                        var curAddToCart = jsonResponse.existingAddToCart;
-                        var AddToCartInput = document.getElementById('fruit-quantity-addToCart' + curFruit);
-                        AddToCartInput.value = curAddToCart;
+                var curAddToCart = jsonResponse.existingAddToCart;
+                var AddToCartInput = document.getElementById('fruit-quantity-addToCart' + curFruit);
+                AddToCartInput.value = curAddToCart;
 
-                        var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
-                        var UnitAddToCartInput = document.getElementById('fruit-unit-addToCart' + curFruit);
-                        UnitAddToCartInput.value = curUnitAddToCart;
+                var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
+                var UnitAddToCartInput = document.getElementById('fruit-unit-addToCart' + curFruit);
+                UnitAddToCartInput.value = curUnitAddToCart;
                         
-                        var curDate = jsonResponse.existingDate;
-                        var DateInput = document.getElementById('Date' + curFruit);
-                        DateInput.value = curDate;
+                var curDate = jsonResponse.existingDate;
+                var DateInput = document.getElementById('Date' + curFruit);
+                DateInput.value = curDate;
+
+                // Apply warning border if quantity is smaller than the minimum quantity
+                if (curQuantity < curMinQuantity) {
+                    var quantityContainer = document.getElementById('quantityContainer' + curFruit);
+                    quantityContainer.classList.add('warning');
+                }
+            }
+        };
+        xhr.send(`fruitName=${fruitName}&account_id=${account_id}`);
+
+        // Attach event listeners to the increment and decrement buttons
+        newItem.querySelector('.increment').addEventListener('click', handleIncrement);
+        newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
+
+        // Set up listener for the "Save" button
+        var saveNoteButton = newItem.querySelector('#saveNoteButton' + fruitName);
+        console.log(fruitName);
+        saveNoteButton.addEventListener('click', function () {
+            var quantity = newItem.querySelector('#quantity' + fruitName).value;
+            var note = newItem.querySelector('#noteText' + fruitName).value;
+            var item_date = newItem.querySelector('#Date' + fruitName).value;
+            var unit = newItem.querySelector('#unit' + fruitName).value;
+        });
+
+        // Apply warning border if quantity is smaller than the minimum quantity
+        var minQuantityInput = document.getElementById('fruit-quantity' + fruitName);
+        var quantityContainer = document.getElementById('quantityContainer' + fruitName);
+
+        quantityContainer.addEventListener('input', function() {
+            if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
+
+        // Apply warning border when the screen is up
+        window.addEventListener('load', function() {
+            if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
 
 
-            
-                    }
-                };
-                xhr.send(`fruitName=${fruitName}&account_id=${account_id}`);
 
-
-                // Attach event listeners to the increment and decrement buttons
-                newItem.querySelector('.increment').addEventListener('click', handleIncrement);
-                newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
-
-                // Set up listener for the "Save" button
-                var saveNoteButton = newItem.querySelector('#saveNoteButton' + fruitName);
-                console.log(fruitName);
-                saveNoteButton.addEventListener('click', function () {
-                    var quantity = newItem.querySelector('#quantity' + fruitName).value;
-                    var note = newItem.querySelector('#noteText' + fruitName).value;
-                    var item_date = newItem.querySelector('#Date' + fruitName).value;
-                    var unit = newItem.querySelector('#unit' + fruitName).value;
-
-                });
 
     }
-
 }
-    
+
     </script>
 
 </body>
