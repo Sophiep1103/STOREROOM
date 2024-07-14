@@ -73,9 +73,9 @@ $conn->close();
                 <p>Lemon</p>
                 </li>
 
-                <li class="selectable-window" id="oranges-window" onclick="selectItem('oranges-window')">
-                <img src="fruits_pics/orange.jpg" alt="Oranges">
-                <p>Oranges</p>
+                <li class="selectable-window" id="orange-window" onclick="selectItem('orange-window')">
+                <img src="fruits_pics/orange.jpg" alt="orange">
+                <p>orange</p>
                 </li>
 
                 <li class="selectable-window" id="green_apple-window" onclick="selectItem('green_apple-window')">
@@ -119,8 +119,8 @@ $conn->close();
                 </li>
 
                 <li class="selectable-window" id="melon-window" onclick="selectItem('melon-window')">
-                <img src="fruits_pics/melon.jpeg" alt="Melon">
-                <p>Melon</p>
+                <img src="fruits_pics/melon.jpeg" alt="melon">
+                <p>melon</p>
                 </li>
 
                 <li class="selectable-window" id="black_grapes-window" onclick="selectItem('black_grapes-window')">
@@ -176,14 +176,16 @@ window.addEventListener('scroll', () => {
 
 
     starredItems = []; // Array to store the names of starred items
+    selectedItems = []; // Array to store the names of starred items
     selectedItemsArray = []; // Array to store selected items
 
     // Assuming you have a list of fruit IDs
-    var fruitIds = ["Apple", "Bananas", "Lemon", "Orange", "GreenApple", "Mango", "Pomegranate", "Avocado", "Persimmon", "Pomelo", "RedPomelo", "Watermelon", "Melon", "BlackGrapes", "GreenGrapes", "Pineapple"];
+    var fruitIds = ["Apple", "Bananas", "Lemon", "orange", "GreenApple", "Mango", "Pomegranate", "Avocado", "Persimmon", "Pomelo", "RedPomelo", "Watermelon", "melon", "BlackGrapes", "GreenGrapes", "Pineapple"];
 
     // Call fetchStarredItems when the page loads
     document.addEventListener("DOMContentLoaded", function () {
         fetchStarredItems();
+        fetchSelectedItems();
     });
 
     document.getElementById("main-menu-btn").addEventListener("click", function() {
@@ -267,6 +269,19 @@ function isAtLeastOneItemSelected() {
     const selectedItems = document.querySelectorAll(".selected");
     return selectedItems.length > 0;
 }
+
+function getFileType(fruitName) {
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    const lowerCaseName = fruitName.toLowerCase();
+    for (const ext of imageExtensions) {
+        console.log(ext);
+        if (lowerCaseName.endsWith('.' + ext)) {
+            return ext;
+        }
+    }
+    return 'jpg'; // Default to jpg if no extension matched
+}
+
 
 // Function to handle item search
 function searchItems() {
@@ -424,10 +439,28 @@ function searchItemsWindow() {
         }
     });
 }
-
-
 // Counter for generating unique IDs
 var uniqueIdCounter = 1;
+
+function determineImageSource(name, callback) {
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    const baseSrc = `fruits_pics/${name}`;
+    let loaded = false;
+
+    imageExtensions.forEach(ext => {
+        const img = new Image();
+        img.src = `${baseSrc}.${ext}`;
+        img.onload = function() {
+            if (!loaded) {
+                loaded = true;
+                callback(img.src);
+            }
+        };
+        img.onerror = function() {
+            console.log(`Failed to load ${img.src}`);
+        };
+    });
+}
 
 function addItemToMainContainer() {
 
@@ -435,11 +468,15 @@ function addItemToMainContainer() {
     // Get all selected items in the popup
     var selectedItems = document.querySelectorAll('.selectable-window.selected-frame');
 
+
     if (selectedItems.length > 0) {
         // Iterate through each selected item
         selectedItems.forEach(function(selectedItem) {
             // Get the fruit name (assuming it's in the alt attribute of the image)
             var fruitName = selectedItem.querySelector('img').alt;
+
+                // Determine the correct file type for the fruit image
+    const fileType = getFileType(fruitName);
 
             // Check if the item with the same name already exists in the main container
             var existingItem = document.getElementById("main-" + fruitName);
@@ -488,7 +525,7 @@ function addItemToMainContainer() {
                         </div>
                     </div>
                 <div>
-                    <img src="${selectedItem.querySelector('img').src}" alt="${selectedItem.querySelector('img').alt}">
+                <img src="fruits_pics/${fruitName}.${fileType}" onerror="this.src='fruits_pics/${fruitName}.jpeg'; this.onerror=null;" alt="${fruitName}">
                     <h2>${selectedItem.querySelector('p').innerText}</h2>
                     <div class="item-details">
                         <p>Unit:
@@ -545,7 +582,7 @@ function addItemToMainContainer() {
                 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
-                        console.log(xhr.responseText); // Log the response from the server
+                        
                         // here I get the previous data from the fruits database !!! 
                         var jsonResponse = JSON.parse(xhr.responseText);
                         console.log( jsonResponse.isNew)   
@@ -584,7 +621,7 @@ function addItemToMainContainer() {
                         DateInput.value = curDate;
 
                         var curRedFrame = jsonResponse.redFrame;
-                        console.log(curRedFrame);
+                     
                         }
 
 
@@ -623,7 +660,7 @@ function addItemToMainContainer() {
 document.getElementById('main-container').addEventListener('click', function(event) {
     // Check if the clicked element or any of its ancestors is an item
     const clickedItem = event.target.closest('.item');
-  //  console.log('Clicked item:', clickedItem);
+
 
     if (clickedItem) {
         // Check if the clicked element is the image within the item
@@ -716,17 +753,6 @@ function handleItemChange(event) {
         console.log(`Item changed: ${fruitId}, Quantity: ${quantity}, Starred: ${isStarred}, Selected: ${isSelected}, Date: ${date}`);
 
         const quantityContainer = document.getElementById(`quantityContainer${fruitId}`);
-        /*
-        console.log(fruitId);
-        if (fruit_quantity > quantity ){
-            console.log("error");
-            document.getElementById(`quantityContainer${fruitId}`).classList.add('warning');
-        } else {
-            document.getElementById(`quantityContainer${fruitId}`).classList.remove('warning');
-        }
-        */
-
-
         // Get the unit of the minimum quantity from the database
         const minQuantityUnit = item.querySelector('.fruit-unit-select').value;
 
@@ -868,15 +894,7 @@ function fetchStarredItems() {
                            
                         });
                         
-                       /*
-                        // Iterate through each starred item and add it to the main container
-                        response.starredItems.forEach(function (starredItem) {
-                            (function (item) {
-                                console.log(item);
-                                addItemToMainContainerStar(item);
-                            })(starredItem);
-                        });
-                        */
+                       
 
                     } else {
                         console.error("starredItems is not an array:", response.starredItems);
@@ -894,9 +912,46 @@ function fetchStarredItems() {
     xhrFetchStarredItems.send(`account_id=${account_id}`);
 }
 
+// sophie 9.7
+function fetchSelectedItems() {
+    const account_id = <?php echo json_encode($account_id); ?>;
 
-// Get references to the input fields, unit selects, and buttons for all items
-//const items = document.querySelectorAll(".item");
+    // Make an AJAX request to fetch starred items
+    var xhrFetchSelectedItems = new XMLHttpRequest();
+    xhrFetchSelectedItems.open("POST", "fetchSelectedItems.php", true);
+    xhrFetchSelectedItems.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhrFetchSelectedItems.onreadystatechange = function () {
+        if (xhrFetchSelectedItems.readyState == 4) {
+            if (xhrFetchSelectedItems.status == 200) {
+                try {
+
+                    var response = JSON.parse(xhrFetchSelectedItems.responseText);
+
+                    if (Array.isArray(response.selectedItems)) {
+                        // Iterate through each starred item and add it to the main container
+                        response.selectedItems.forEach(function (selectedItem) {
+                            addItemToMainContainerSelected(selectedItem);
+                           
+                        });
+                       
+
+                    } else {
+                        console.error("selectedItems is not an array:", response.selectedItems);
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                }
+            } else {
+                console.error("HTTP Error:", xhrFetchSelectedItems.status, xhrFetchSelectedItems.statusText);
+            }
+        }
+    };
+
+    // Send data to fetchSelectedItems.php (replace with your actual endpoint and parameters)
+    xhrFetchSelectedItems.send(`account_id=${account_id}`);
+}
+
+
 
 // Initialize input fields with saved values
 function updateInputs() {
@@ -925,14 +980,32 @@ function setDefaultUnit(unitSelect) {
         unitSelect.value = "kg";
 }
 
+
+// Function to determine the correct image source and handle fallbacks
+function determineImageSource(name) {
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    const baseSrc = `fruits_pics/${name}`;
+    for (const ext of imageExtensions) {
+        const img = new Image();
+        img.src = `${baseSrc}.${ext}`;
+        img.onload = function() {
+            document.getElementById(`fruit-image-${name}`).src = img.src;
+        };
+        img.onerror = function() {
+            console.log(`Failed to load ${img.src}`);
+        };
+    }
+}
+
 function addItemToMainContainerStar(fruitId) {
-    console.log(fruitId);
     fruitName = fruitId.fruit_id;
     const account_id = <?php echo json_encode($account_id); ?>;
 
     // Check if the item with the same name already exists in the main container
     var existingItem = document.getElementById("main-" + fruitName);
 
+    // Determine the correct file type for the fruit image
+    const fileType = getFileType(fruitName);
     if (!existingItem) {
 
         // Create a new list item for the main container
@@ -977,7 +1050,8 @@ function addItemToMainContainerStar(fruitId) {
                         </div>
                     </div>
                 <div>
-                    <img src="fruits_pics/${fruitName}.jpg" alt="${fruitName}">
+                
+                    <img src="fruits_pics/${fruitName}.${fileType}" onerror="this.src='fruits_pics/${fruitName}.jpeg'; this.onerror=null;" alt="${fruitName}">
                     <h2>${fruitName}</h2>
                     <div class="item-details">
                    
@@ -1031,8 +1105,223 @@ function addItemToMainContainerStar(fruitId) {
         var xhr = new XMLHttpRequest();
         console.log("from addItemToMainContainerStar");
         xhr.open("POST", "addItem.php", true);
+
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            
+        console.log("from addItemToMainContainerStar2");    
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText); // Log the response from the server
+                var jsonResponse = JSON.parse(xhr.responseText);
+                // here I get the previous data from the fruits database !!! 
+                var jsonResponse = JSON.parse(xhr.responseText);
+
+                var curFruit = jsonResponse.existingFruit;
+
+                var curQuantity = jsonResponse.existingQuantity;
+                var quantityInput = document.getElementById('quantity' + curFruit);
+                quantityInput.value = curQuantity;
+
+                var curNote = jsonResponse.existingNote;
+                var NoteInput = document.getElementById('noteText' + curFruit);
+                NoteInput.value = curNote;
+
+                var curUnit  = jsonResponse.existingUnit;
+                var UnitInput = document.getElementById('unit' + curFruit);
+                UnitInput.value = curUnit;
+
+                var curMinQuantity= jsonResponse.existingMinQuantity;
+                var MinQuantityInput = document.getElementById('fruit-quantity' + curFruit);
+                MinQuantityInput.value = curMinQuantity;
+
+                var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
+                var UnitMinQuantityInput = document.getElementById('fruit-unit' + curFruit);
+                UnitMinQuantityInput.value = curUnitMinQuantity;
+
+                var curAddToCart = jsonResponse.existingAddToCart;
+                var AddToCartInput = document.getElementById('fruit-quantity-addToCart' + curFruit);
+                AddToCartInput.value = curAddToCart;
+
+                var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
+                var UnitAddToCartInput = document.getElementById('fruit-unit-addToCart' + curFruit);
+                UnitAddToCartInput.value = curUnitAddToCart;
+                        
+                var curDate = jsonResponse.existingDate;
+                var DateInput = document.getElementById('Date' + curFruit);
+                DateInput.value = curDate;
+
+                // Apply warning border if quantity is smaller than the minimum quantity
+                if (curQuantity < curMinQuantity) {
+                    var quantityContainer = document.getElementById('quantityContainer' + curFruit);
+                    quantityContainer.classList.add('warning');
+                }
+            }
+        };
+        xhr.send(`fruitName=${fruitName}&account_id=${account_id}`);
+
+        // Attach event listeners to the increment and decrement buttons
+        newItem.querySelector('.increment').addEventListener('click', handleIncrement);
+        newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
+
+        // Set up listener for the "Save" button
+        var saveNoteButton = newItem.querySelector('#saveNoteButton' + fruitName);
+        console.log(fruitName);
+        saveNoteButton.addEventListener('click', function () {
+            var quantity = newItem.querySelector('#quantity' + fruitName).value;
+            var note = newItem.querySelector('#noteText' + fruitName).value;
+            var item_date = newItem.querySelector('#Date' + fruitName).value;
+            var unit = newItem.querySelector('#unit' + fruitName).value;
+        });
+
+        // Apply warning border if quantity is smaller than the minimum quantity
+        var minQuantityInput = document.getElementById('fruit-quantity' + fruitName);
+        var quantityContainer = document.getElementById('quantityContainer' + fruitName);
+
+        quantityContainer.addEventListener('input', function() {
+            if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
+
+        // Apply warning border when the screen is up
+window.addEventListener('load', function() {
+    // Declare variables inside the event listener function scope
+    var quantityInput = document.getElementById('quantity' + fruitName);
+    var minQuantityInput = document.getElementById('fruit-quantity' + fruitName);
+    var quantityContainer = document.getElementById('quantityContainer' + fruitName);
+    
+    if (quantityInput && minQuantityInput && quantityContainer) {
+        if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+            quantityContainer.classList.add('warning');
+        } else {
+            quantityContainer.classList.remove('warning');
+        }
+    } else {
+        console.error('One or more elements not found.');
+    }
+});
+
+
+
+
+    }
+}
+
+
+
+
+
+
+function addItemToMainContainerSelected(fruitId) {
+    fruitName = fruitId.fruit_id;
+    const account_id = <?php echo json_encode($account_id); ?>;
+
+    // Check if the item with the same name already exists in the main container
+    var existingItem = document.getElementById("main-" + fruitName);
+
+    // Determine the correct file type for the fruit image
+    const fileType = getFileType(fruitName);
+    console.log(fruitName);
+    console.log(fileType);
+    if (!existingItem) {
+
+        // Create a new list item for the main container
+        var newItem = document.createElement('li');
+        newItem.className = "item selectable selected"; // Added 'selected' here
+
+        // Set innerHTML based on the selected item in the popup
+        newItem.innerHTML = `
+                <div class="button-container">
+                <button onclick="openPopupMinQuantity('${fruitName}')" class="top-left-button with-icon" id="topLeftButton${fruitName}">define minimum quantity </button>
+                    <div id="fruit-popup${fruitName}" class="popup"> 
+                        <div class="popup-content-fruits">
+                            <span class="close" onclick="closePopupMinQuantity('${fruitName}')">&times;</span>
+                            <h6> Minimum Quantity: </h6>
+                            <p class="input-row">
+                                <input type="number" id="fruit-quantity${fruitName}" class="fruit-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="fruit-unit${fruitName}" class="fruit-unit-select" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupMinQuantity('${fruitName}')" id="set${fruitName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+
+                    </br>
+                    <button onclick="openPopupAddToCart('${fruitName}')" class="top-left-button" id="topLeftButton-AddToCart${fruitName}" >Add To Cart</button>
+                    <div id="fruit-popup-addToCart${fruitName}" class="popup"> 
+                        <div class="popup-content-fruits">
+                            <span class="close" onclick="closePopupAddToCart('${fruitName}')">&times;</span>
+                            <h6>Add To Cart: </h6>
+                            <p class="input-row">
+                                <input type="number" id="fruit-quantity-addToCart${fruitName}" class="fruit-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="fruit-unit-addToCart${fruitName}" class="fruit-unit-select-addToCart" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupAddToCart('${fruitName}')" id="set-addToCart${fruitName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+                <div>
+                
+                    <img src="fruits_pics/${fruitName}.${fileType}" onerror="this.src='fruits_pics/${fruitName}.jpeg'; this.onerror=null;" alt="${fruitName}">
+                    <h2>${fruitName}</h2>
+                    <div class="item-details">
+                   
+                        <p>Unit:
+                            <select id="unit${fruitName}" class="unit-select">
+                                <option value="units">units</option>
+                                <option value="kg">kg</option>
+                                <option value="gram">gram</option>
+                            </select>
+
+                        </p>
+
+                        <div class="quantity-container" id="quantityContainer${fruitName}">
+                        <button class="decrement">
+                            <i class="fas fa-minus"></i> 
+                        </button>
+                        <input type="number" id="quantity${fruitName}" class="quantity-input small-space" min="0" step="1" value="0" style="padding: 5px;">
+                        <button class="increment">
+                            <i class="fas fa-plus"></i> 
+                        </button>
+                        </div>
+
+                        <div id="stickyNote${fruitName}" class="sticky-note">
+                            <textarea id="noteText${fruitName}" class="note-text" placeholder="Write your note here..."></textarea>
+                            <input id="Date${fruitName}" class="item-date" type="date">
+                            <button id="saveNoteButton${fruitName}" class="save-button">Save</button>
+                        </div> 
+                    </div>
+                    <div class="favorite">
+                        <i id="starIcon${fruitName}" class="fas fa-star"></i> 
+                    </div>
+                `;
+
+        // Update the ID to make it unique
+        var newItemId = "main-" + fruitName;
+        newItem.id = newItemId;
+
+        // Increment the counter for the next iteration
+        uniqueIdCounter++;
+
+        // Reset the quantity input value
+        newItem.querySelector('.quantity-input').value = "0";
+
+        // Add the cloned item to the main container
+        document.getElementById('main-container').appendChild(newItem);
+                
+        // Make an AJAX request to addItem.php to add default information to the item in the database.
+        var xhr = new XMLHttpRequest();
+        console.log("from addItemToMainContainerSelected");
+        xhr.open("POST", "addItem.php", true);
+
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 console.log(xhr.responseText); // Log the response from the server
@@ -1111,16 +1400,28 @@ function addItemToMainContainerStar(fruitId) {
 
         // Apply warning border when the screen is up
         window.addEventListener('load', function() {
-            if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
-                quantityContainer.classList.add('warning');
+            // Declare variables inside the event listener function scope
+            var quantityInput = document.getElementById('quantity' + fruitName);
+            var minQuantityInput = document.getElementById('fruit-quantity' + fruitName);
+            var quantityContainer = document.getElementById('quantityContainer' + fruitName);
+            
+            if (quantityInput && minQuantityInput && quantityContainer) {
+                if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                    quantityContainer.classList.add('warning');
+                } else {
+                    quantityContainer.classList.remove('warning');
+                }
             } else {
-                quantityContainer.classList.remove('warning');
+                console.error('One or more elements not found.');
             }
         });
 
-
-
-
+        // Add click event listener to toggle 'selected' class
+        newItem.addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.classList.toggle('selected');
+            }
+        });
     }
 }
 

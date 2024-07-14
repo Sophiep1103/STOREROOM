@@ -948,7 +948,7 @@ function addItemToMainContainerStar(beverageId) {
                         </div>
                     </div>
                 <div>
-                    <img src="beverage/${beverageName}.jpg" alt="${beverageName}">
+                    <img src="Beverages, wine, alcohol/${beverageName}.jpg" alt="${beverageName}">
                     <h2>${beverageName}</h2>
                     <div class="item-details">
                    

@@ -1115,7 +1115,6 @@ window.addEventListener('load', function() {
         quantityContainer.classList.remove('warning');
     }
 });
-//////////////////
 
 
 

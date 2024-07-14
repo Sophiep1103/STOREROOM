@@ -1,9 +1,248 @@
-body {
-    background: url('background_img/paper.jpg') no-repeat center center fixed;
-    background-size: cover;
+/* Set font-family for all text elements */
+body, h1, p, select, input {
     font-family: 'Sofia Sans', sans-serif;
-    margin: 0;
-    padding: 0;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('veg.jpg') center/cover no-repeat;
+    opacity: 0.3; 
+    z-index: -1;
+}
+
+/* Style the header (h1 element) */
+h1 {
+    font-size: 70px; 
+    color: rgb(10, 10, 83); 
+    font-weight: bold; 
+    text-align: center; 
+    text-transform: uppercase; 
+    padding: 15px 0; 
+}
+
+/* Style the item container */
+.items-container {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    align-items: stretch;
+}
+
+/* Style each item */
+.item {
+    width: calc(25% - 20px);
+    margin: 0 10px 20px 10px;
+    text-align: center;
+    border: 2px solid #ccc;
+    padding: 5px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Style the item name */
+.item h2 {
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+/* Style the item details */
+.item-details p {
+    font-size: 14px;
+}
+
+.item-details input {
+    font-weight: bold;
+}
+
+/* Adjust alignment for the last row */
+.items-container::after {
+    content: "";
+    flex: auto;
+}
+
+/* Style the item controls */
+.item-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+/* Style the quantity container */
+.quantity-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style the quantity input */
+.quantity-input {
+    width: 50px;
+    text-align: center;
+    margin: 0 5px;
+    padding: 5px;
+}
+
+/* Style the increment and decrement buttons */
+.increment, .decrement {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    position: relative;
+}
+
+.increment {
+    background-color: rgb(139, 223, 139);
+    border: 2px solid rgb(134, 199, 134);
+}
+
+.decrement {
+    background-color: rgb(225, 94, 94);
+    border: 2px solid rgb(189, 100, 100);
+}
+
+.fas {
+    font-size: 14px;
+    color: white;
+}
+
+/* Style the save button */
+#saveButton, .save-button {
+    background-color: rgb(10, 10, 83);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 10px auto 0;
+}
+
+#saveButton:hover, .save-button:hover {
+    background-color: #5ca0ed;
+}
+
+/* Style the sticky note */
+.sticky-note {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.note-text {
+    width: 100%;
+    height: 75px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    margin-bottom: 10px;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 24px, #ddd 24px, #ddd 25px, transparent 25px);
+}
+
+.note-text:focus {
+    outline: none;
+    border: 2px solid rgb(10, 10, 83);
+}
+
+/* Style the item date */
+.item .item-date {
+    font-size: 14px;
+    color: #0a0a53;
+    font-weight: bold;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+/* Style the item image */
+.item .image-container {
+    max-height: 80px;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.item img {
+    max-width: 100%;
+    height: auto;
+    border: 4px solid rgba(219, 182, 232, 0.95);
+    max-height: 90px;
+    margin-top: 45px; 
+    border-radius: 5px;
 }
 
 
+
+
+
+
+
+
+
+
+/* Style the increment and decrement buttons */
+.increment, .decrement {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.increment {
+    background-color: rgb(139, 223, 139);
+    border: 2px solid rgb(134, 199, 134);
+}
+
+.decrement {
+    background-color: rgb(225, 94, 94);
+    border: 2px solid rgb(189, 100, 100);
+}
+
+.increment:hover {
+    background-color: rgb(119, 203, 119);
+}
+
+.decrement:hover {
+    background-color: rgb(205, 74, 74);
+}
+
+
+#main-menu-btn {
+    position: fixed;
+    top: 10px; 
+    left: 10px;
+    padding: 10px;
+    background-color: rgb(10, 10, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* Add a transition for a smooth effect */
+    opacity: 1; /* Initially visible */
+   
+}

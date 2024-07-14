@@ -204,6 +204,7 @@ window.addEventListener('scroll', () => {
     // Call fetchStarredItems when the page loads
     document.addEventListener("DOMContentLoaded", function () {
         fetchStarredItems();
+        fetchSelectedItems();
     });
 
     document.getElementById("main-menu-btn").addEventListener("click", function() {
@@ -616,8 +617,6 @@ function addItemToMainContainer() {
                         console.log(curRedFrame);
                         }
 
-                        //var curIsStarred = jsonResponse.existingIsStarred;
-                        //var curIsSelected = jsonResponse.existingIsSelected;
 
                     }
                 };
@@ -910,6 +909,45 @@ function fetchStarredItems() {
 }
 
 
+function fetchSelectedItems() {
+    const account_id = <?php echo json_encode($account_id); ?>;
+
+    
+    var xhrFetchSelectedItem = new XMLHttpRequest();
+    xhrFetchSelectedItem.open("POST", "fetchSelectedItemsVeg.php", true);
+    xhrFetchSelectedItem.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhrFetchSelectedItem.onreadystatechange = function () {
+        if (xhrFetchSelectedItem.readyState == 4) {
+            if (xhrFetchSelectedItem.status == 200) {
+                try {
+                    // Parse the response from the server
+                    var response = JSON.parse(xhrFetchSelectedItem.responseText);
+                    console.log(response);
+
+                    
+                    if (Array.isArray(response.selectedItems)) {
+                      
+                        
+                        response.selectedItems.forEach(function (selectedItem) {
+                            addItemToMainContainerSelected(selectedItem);
+                           
+                        });
+                        
+
+                    } else {
+                        console.error("selectedItems is not an array:", response.selectedItems);
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                }
+            } else {
+                console.error("HTTP Error:", xhrFetchSelectedItem.status, xhrFetchSelectedItem.statusText);
+            }
+        }
+    };
+
+    xhrFetchSelectedItem.send(`account_id=${account_id}`);
+}
 // Get references to the input fields, unit selects, and buttons for all items
 //const items = document.querySelectorAll(".item");
 
@@ -938,6 +976,17 @@ items.forEach(item => {
 // Set "kg" as the default unit
 function setDefaultUnit(unitSelect) {
         unitSelect.value = "kg";
+}
+
+function getFileType(fruitName) {
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    const lowerCaseName = fruitName.toLowerCase();
+    for (const ext of imageExtensions) {
+        if (lowerCaseName.endsWith(ext)) {
+            return ext;
+        }
+    }
+    return 'jpg'; // Default to jpg if no extension matched
 }
 
 function addItemToMainContainerStar(vegetableId) {
@@ -1043,7 +1092,6 @@ function addItemToMainContainerStar(vegetableId) {
 
                 
                 // Make an AJAX request to addVeg.php to add default information to the item in the database
-                //account_id = ...
                 var xhr = new XMLHttpRequest();
                 console.log("from addItemToMainContainerStar");
                 xhr.open("POST", "addVeg.php", true);
@@ -1054,10 +1102,8 @@ function addItemToMainContainerStar(vegetableId) {
                         console.log(xhr.responseText); // Log the response from the server
                         var jsonResponse = JSON.parse(xhr.responseText);
                      
-                        //var jsonResponse = JSON.parse(xhr.responseText);
 
                         var curVeg = jsonResponse.existingVeg;
-                       // console.log(curFruit);
 
                         var curQuantity = jsonResponse.existingQuantity;
                         var quantityInput = document.getElementById('quantity' + curVeg);
@@ -1097,9 +1143,6 @@ function addItemToMainContainerStar(vegetableId) {
                             var quantityContainer = document.getElementById('quantityContainer' + curVeg);
                             quantityContainer.classList.add('warning');
                         }
-                        
-
-
             
                     }
                 };
@@ -1124,8 +1167,8 @@ function addItemToMainContainerStar(vegetableId) {
         // Get the unit of the minimum quantity from the database
 
         // Apply warning border if quantity is smaller than the minimum quantity
-        var minQuantityInput = document.getElementById('veg-quantity' + fruitName);
-        var quantityContainer = document.getElementById('quantityContainer' + fruitName);
+        var minQuantityInput = document.getElementById('veg-quantity' + vegetableName);
+        var quantityContainer = document.getElementById('quantityContainer' + vegetableName);
 
         quantityContainer.addEventListener('input', function() {
             if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
@@ -1148,6 +1191,205 @@ function addItemToMainContainerStar(vegetableId) {
 
 }
     
+
+
+function addItemToMainContainerSelected(vegetableId) {
+    console.log(vegetableId);
+    vegetableName = vegetableId.veg_id;
+    const account_id = <?php echo json_encode($account_id); ?>;
+
+    // Check if the item with the same name already exists in the main container
+    var existingItem = document.getElementById("main-" + vegetableName);
+
+    if (!existingItem) {
+        // Create a new list item for the main container
+        var newItem = document.createElement('li');
+        newItem.className = "item selectable selected";
+
+        // Set innerHTML based on the selected item in the popup
+        newItem.innerHTML = `
+            <div class="button-container">
+                <button onclick="openPopupMinQuantity('${vegetableName}')" class="top-left-button with-icon" id="topLeftButton${vegetableName}">define minimum quantity </button>
+                <div id="veg-popup${vegetableName}" class="popup"> 
+                    <div class="popup-content-vegs">
+                        <span class="close" onclick="closePopupMinQuantity('${vegetableName}')">&times;</span>
+                        <h6> Minimum Quantity: </h6>
+                        <p class="input-row">
+                            <input type="number" id="veg-quantity${vegetableName}" class="veg-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                            <select id="veg-unit${vegetableName}" class="veg-unit-select" style="width: 60px; height:25px;">
+                                <option value="units">units</option>
+                                <option value="kg">kg</option>
+                                <option value="gram">gram</option>
+                            </select>
+                        </p>
+                        <button class="setBtn" onclick="closePopupMinQuantity('${vegetableName}')" id="set${vegetableName}" style="width: 60px; height:25px;"> set</button>
+                    </div>
+                </div>
+
+                </br>
+                <button onclick="openPopupAddToCart('${vegetableName}')" class="top-left-button" id="topLeftButton-AddToCart${vegetableName}" >Add To Cart</button>
+                <div id="veg-popup-addToCart${vegetableName}" class="popup"> 
+                    <div class="popup-content-vegs">
+                        <span class="close" onclick="closePopupAddToCart('${vegetableName}')">&times;</span>
+                        <h6>Add To Cart: </h6>
+                        <p class="input-row">
+                            <input type="number" id="veg-quantity-addToCart${vegetableName}" class="veg-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                            <select id="veg-unit-addToCart${vegetableName}" class="veg-unit-select-addToCart" style="width: 60px; height:25px;">
+                                <option value="units">units</option>
+                                <option value="kg">kg</option>
+                                <option value="gram">gram</option>
+                            </select>
+                        </p>
+                        <button class="setBtn" onclick="closePopupAddToCart('${vegetableName}')" id="set-addToCart${vegetableName}" style="width: 60px; height:25px;"> set</button>
+                    </div>
+                </div>
+            </div>
+            <img src="vegtables_pics/${vegetableName}.jpg" alt="${vegetableName}">
+            <h2>${vegetableName}</h2>
+            <div class="item-details">
+                <p>Unit:
+                    <select id="unit${vegetableName}" class="unit-select">
+                        <option value="units">units</option>
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                    </select>
+                </p>
+                <div class="quantity-container" id="quantityContainer${vegetableName}">
+                    <button class="decrement">
+                        <i class="fas fa-minus"></i> 
+                    </button>
+                    <input type="number" id="quantity${vegetableName}" class="quantity-input small-space" min="0" step="1" value="0" style="padding: 5px;">
+                    <button class="increment">
+                        <i class="fas fa-plus"></i> 
+                    </button>
+                </div>
+                <div id="stickyNote${vegetableName}" class="sticky-note">
+                    <textarea id="noteText${vegetableName}" class="note-text" placeholder="Write your note here..."></textarea>
+                    <input id="Date${vegetableName}" class="item-date" type="date">
+                    <button id="saveNoteButton${vegetableName}" class="save-button">Save</button>
+                </div> 
+            </div>
+            <div class="favorite">
+                <i id="starIcon${vegetableName}" class="fas fa-star"></i> 
+            </div>
+        `;
+
+        // Update the ID to make it unique
+        var newItemId = "main-" + vegetableName;
+        newItem.id = newItemId;
+
+        // Increment the counter for the next iteration
+        uniqueIdCounter++;
+
+        // Reset the quantity input value
+        newItem.querySelector('.quantity-input').value = "0";
+
+        // Add the cloned item to the main container
+        document.getElementById('main-container').appendChild(newItem);
+
+        // Make an AJAX request to addVeg.php to add default information to the item in the database
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "addVeg.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText); // Log the response from the server
+                var jsonResponse = JSON.parse(xhr.responseText);
+
+                var curVeg = jsonResponse.existingVeg;
+
+                var curQuantity = jsonResponse.existingQuantity;
+                var quantityInput = document.getElementById('quantity' + curVeg);
+                if (quantityInput) quantityInput.value = curQuantity;
+
+                var curNote = jsonResponse.existingNote;
+                var NoteInput = document.getElementById('noteText' + curVeg);
+                if (NoteInput) NoteInput.value = curNote;
+
+                var curUnit  = jsonResponse.existingUnit;
+                var UnitInput = document.getElementById('unit' + curVeg);
+                if (UnitInput) UnitInput.value = curUnit;
+
+                var curMinQuantity= jsonResponse.existingMinQuantity;
+                var MinQuantityInput = document.getElementById('veg-quantity' + curVeg);
+                if (MinQuantityInput) MinQuantityInput.value = curMinQuantity;
+
+                var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
+                var UnitMinQuantityInput = document.getElementById('veg-unit' + curVeg);
+                if (UnitMinQuantityInput) UnitMinQuantityInput.value = curUnitMinQuantity;
+
+                var curAddToCart = jsonResponse.existingAddToCart;
+                var AddToCartInput = document.getElementById('veg-quantity-addToCart' + curVeg);
+                if (AddToCartInput) AddToCartInput.value = curAddToCart;
+
+                var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
+                var UnitAddToCartInput = document.getElementById('veg-unit-addToCart' + curVeg);
+                if (UnitAddToCartInput) UnitAddToCartInput.value = curUnitAddToCart;
+                
+                var curDate = jsonResponse.existingDate;
+                var DateInput = document.getElementById('Date' + curVeg);
+                if (DateInput) DateInput.value = curDate;
+
+                // Apply warning border if quantity is smaller than the minimum quantity
+                var quantityContainer = document.getElementById('quantityContainer' + curVeg);
+                if (quantityInput && MinQuantityInput && quantityContainer) {
+                    if (parseFloat(quantityInput.value) < parseFloat(MinQuantityInput.value)) {
+                        quantityContainer.classList.add('warning');
+                    }
+                }
+            }
+        };
+        xhr.send(`VegName=${vegetableName}&account_id=${account_id}`);
+
+        // Attach event listeners to the increment and decrement buttons
+        newItem.querySelector('.increment').addEventListener('click', handleIncrement);
+        newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
+
+        // Set up listener for the "Save" button
+        var saveNoteButton = newItem.querySelector('#saveNoteButton' + vegetableName);
+        if (saveNoteButton) {
+            saveNoteButton.addEventListener('click', function () {
+                var quantity = newItem.querySelector('#quantity' + vegetableName).value;
+                var note = newItem.querySelector('#noteText' + vegetableName).value;
+                var item_date = newItem.querySelector('#Date' + vegetableName).value;
+                var unit = newItem.querySelector('#unit' + vegetableName).value;
+                // Add your save logic here
+            });
+        }
+
+        // Apply warning border if quantity is smaller than the minimum quantity
+        var minQuantityInput = document.getElementById('veg-quantity' + vegetableName);
+        var quantityInput = document.getElementById('quantity' + vegetableName);
+        var quantityContainer = document.getElementById('quantityContainer' + vegetableName);
+
+        if (quantityInput && minQuantityInput && quantityContainer) {
+            quantityInput.addEventListener('input', function() {
+                if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                    quantityContainer.classList.add('warning');
+                } else {
+                    quantityContainer.classList.remove('warning');
+                }
+            });
+
+            // Apply warning border when the screen is up
+            
+            window.addEventListener('load', function() {
+                if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                    quantityContainer.classList.add('warning');
+                } else {
+                    quantityContainer.classList.remove('warning');
+                }
+            });
+        }
+
+        // Add click event listener to toggle 'selected' class
+        newItem.addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.classList.toggle('selected');
+            }
+        });
+    }
+}
     </script>
 
 </body>

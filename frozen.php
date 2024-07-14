@@ -139,7 +139,7 @@ $conn->close();
                 </li>
 
                 <li class="selectable-window" id="potato balls-window" onclick="selectItem('potato balls-window')">
-                <img src="frozen/potato balls.jpg" alt="potato_balls">
+                <img src="frozen/potato balls.jpg" alt="potato balls">
                 <p>potato balls</p>
                 </li>
 

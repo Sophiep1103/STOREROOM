@@ -621,16 +621,6 @@ function addItemToMainContainer() {
                 newItem.querySelector('.increment').addEventListener('click', handleIncrement);
                 newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
                   
-               // Set up listener for the "Save" button
-               var saveNoteButton = newItem.querySelector('#saveNoteButton' + candyName);
-                saveNoteButton.addEventListener('click', function () {
-                    var quantity = newItem.querySelector('#quantity' + candyName).value;
-                    var note = newItem.querySelector('#noteText' + candyName).value;
-                    var item_date = newItem.querySelector('#Date' + candyName).value;
-                    var unit = newItem.querySelector('#unit' + candyName).value;
-
-                });
-
                 } else {
                     // Alert or notify the user that the item already exists in the main container
                     alert("Item '" + candyName + "' is already in the main container.");

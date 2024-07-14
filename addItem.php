@@ -35,7 +35,7 @@ if ($checkResult->num_rows > 0) {
         'existingDate' => $existingItem['item_date'],
         'existingFruit' => $fruitName
     );
-   // print_r($_POST);
+
     if(count($_POST)>2){
        // echo ("here2");
 
@@ -49,8 +49,8 @@ if ($checkResult->num_rows > 0) {
         $fruit_quantity_addToCart = $_POST['fruit_quantity_addToCart'];
 
         $isStarred = ($isStarred === "true") ? 1 : 0;
-   //     echo("wwwwwwwwwww");
-    //    echo($isStarred);
+        
+
         $is_selected = ($is_selected === "true") ? 1 : 0;
 
         $fruit_quantity = $_POST['fruit_quantity'];
@@ -122,6 +122,7 @@ $conn->close();
 
 //print_r($response);
 // Send the response as JSON
+
 header('Content-Type: application/json');
 echo json_encode($response);
 

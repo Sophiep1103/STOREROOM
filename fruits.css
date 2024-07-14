@@ -1,5 +1,4 @@
 
-
 /* Set font-family for all text elements */
 body, h1, p,select, input {
     font-family: 'Sofia Sans', sans-serif;
@@ -179,7 +178,6 @@ h1 {
 }
 
 /* Apply a faded background image */
-
 body::before {
     content: "";
     position: fixed;
@@ -337,7 +335,6 @@ body::before {
    /* margin-top: 10px; /* Add some margin to the top */
 }
 
-
 .save-button:hover {
     background-color: #5ca0ed; /* Change the button's background color on hover */
 }
@@ -347,9 +344,6 @@ body::before {
     outline: none; /* Remove the default outline */
     border: 2px solid rgb(10, 10, 83); /* Change the border color to blue on focus */
 }
-
-
-
 
 /* Style the item */
 .item {
@@ -372,7 +366,6 @@ body::before {
     padding-top: 20px; /* Add padding to the top of the image container */
 }
 
-
 /* Style the item image container */
 .item .image-container {
     max-height: 80px; /* Set a maximum height for the image container */
@@ -380,22 +373,10 @@ body::before {
     padding-top: 20px; /* Add padding to the top of the image container */
 }
 
-
-/*vi ticking*/
-/* Style the item checkbox */
-
-
-
-
 /* Style the item content */
 .item-content {
     position: relative;
 }
-
-
-
-
-
 
 /* Style the item */
 .item {
@@ -403,8 +384,6 @@ body::before {
     border: 2px solid #ccc; /* Add a border to the item */
     padding: 10px; /* Add padding to the item */
 }
-
-
 
 /* Style the item image */
 .item img {
@@ -416,9 +395,6 @@ body::before {
     border-radius: 5px;
     
 }
-
-
-
 
 /*star */
 .favorite {
@@ -441,7 +417,6 @@ body::before {
     
     
 }
-
 
 /* Additional styles for the search bar */
 .search-wrapper {
@@ -481,8 +456,6 @@ label[for="search"] {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-
-
 .open-button {
     position: fixed;
     top: 10px;
@@ -495,7 +468,6 @@ label[for="search"] {
     cursor: pointer;
    
 }
-
 
 #main-menu-btn {
     position: fixed;
@@ -522,8 +494,6 @@ label[for="search"] {
 .quantity-container.warning {
     border: 3px solid red; /* Change the border color to red for the warning condition */
 }
-
-
 
 .popup {
     display: none;
@@ -566,9 +536,6 @@ label[for="search"] {
     border-radius: 5px;
     padding: 5px 10px;
 }
-
-
-
 
 /* Style the window items */
 .items-container-window {

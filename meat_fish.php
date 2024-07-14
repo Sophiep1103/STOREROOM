@@ -937,7 +937,7 @@ function addItemToMainContainerStar(meatId) {
                         </div>
                     </div>
                 <div>
-                    <img src="meat/${meatName}.jpg" alt="${meatName}">
+                    <img src="meat_fish/${meatName}.jpg" alt="${meatName}">
                     <h2>${meatName}</h2>
                     <div class="item-details">
                    

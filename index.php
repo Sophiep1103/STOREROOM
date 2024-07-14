@@ -45,7 +45,6 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
             <li><button class="btn-custom" id="buttonToFrozen"> <i class="fas fa-ice-cream" style="color: rgb(10, 10, 83);"></i>  Freezer products</button></li>
             <li><button class="btn-custom" id="buttonToGranola"><i class="fas fa-pump-soap" style="color: rgb(10, 10, 83);"></i>  Cereals, cereal bars and granola</button></li>
             <li><button class="btn-custom" id="buttonToCandy"><i class="fas fa-candy-cane" style="color: rgb(10, 10, 83);"></i>  Snacks, sweets and candies</button></li>
-            <li><button class="btn-custom"><i class="fas fa-pump-soap" style="color: rgb(10, 10, 83);"></i>  Cleaning materials</button></li><br>
             <li><button class="btn-custom pink-button" id="buttonToShoppingCart"> <i class="fas fa-shopping-cart" style="color: rgb(10, 10, 83);"></i>   Shopping Cart</button></li>
         </ul>
     </div>
