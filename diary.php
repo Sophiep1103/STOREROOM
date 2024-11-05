@@ -180,6 +180,7 @@ window.addEventListener('scroll', () => {
 
 
     starredItems = []; // Array to store the names of starred items
+    selectedItems = []; // Array to store the names of starred items
     selectedItemsArray = []; // Array to store selected items
 
     // Assuming you have a list of diary IDs
@@ -188,6 +189,7 @@ window.addEventListener('scroll', () => {
     // Call fetchStarredItems when the page loads
     document.addEventListener("DOMContentLoaded", function () {
         fetchStarredItems();
+        fetchSelectedItems();
     });
 
     document.getElementById("main-menu-btn").addEventListener("click", function() {
@@ -296,6 +298,18 @@ function searchItems() {
             item.style.display = "none";
         }
     });
+}
+
+function getFileType(fruitName) {
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    const lowerCaseName = fruitName.toLowerCase();
+    for (const ext of imageExtensions) {
+        console.log(ext);
+        if (lowerCaseName.endsWith('.' + ext)) {
+            return ext;
+        }
+    }
+    return 'jpg'; // Default to jpg if no extension matched
 }
 
 // Function to highlight the matched portion
@@ -868,15 +882,7 @@ function fetchStarredItems() {
                            
                         });
                         
-                       /*
-                        // Iterate through each starred item and add it to the main container
-                        response.starredItems.forEach(function (starredItem) {
-                            (function (item) {
-                                console.log(item);
-                                addItemToMainContainerStar(item);
-                            })(starredItem);
-                        });
-                        */
+                       
 
                     } else {
                         console.error("starredItems is not an array:", response.starredItems);
@@ -895,8 +901,48 @@ function fetchStarredItems() {
 }
 
 
-// Get references to the input fields, unit selects, and buttons for all items
-//const items = document.querySelectorAll(".item");
+
+function fetchSelectedItems() {
+    const account_id = <?php echo json_encode($account_id); ?>;
+
+    var xhrFetchSelectedItems = new XMLHttpRequest();
+    xhrFetchSelectedItems.open("POST", "fetchSelectedItemsDiary.php", true);
+    xhrFetchSelectedItems.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhrFetchSelectedItems.onreadystatechange = function () {
+  
+        if (xhrFetchSelectedItems.readyState == 4) {
+            if (xhrFetchSelectedItems.status == 200) {
+              
+                try {
+                 
+                    // Parse the response from the server
+                    var response = JSON.parse(xhrFetchSelectedItems.responseText);
+                   
+                    if (Array.isArray(response.selectedItems)) {
+                       
+                      
+                        response.selectedItems.forEach(function (selectedItem) {
+                            addItemToMainContainerSelected(selectedItem);
+                           
+                        });
+                        
+
+                    } else {
+                        console.error("selectedItems is not an array:", response.selectedItems);
+                    }
+                } catch (error) {
+                    
+                    console.error("Error parsing JSON:", error);
+                }
+            } else {
+                console.error("HTTP Error:", xhrFetchSelectedItems.status, xhrFetchSelectedItems.statusText);
+            }
+        }
+    };
+
+    // Send data to xhrFetchSelectedItems.php (replace with your actual endpoint and parameters)
+    xhrFetchSelectedItems.send(`account_id=${account_id}`);
+}
 
 // Initialize input fields with saved values
 function updateInputs() {
@@ -1097,33 +1143,249 @@ function addItemToMainContainerStar(diaryId) {
             var unit = newItem.querySelector('#unit' + diaryName).value;
         });
 
-///////////new 3.5
-// Apply warning border if quantity is smaller than the minimum quantity
-var minQuantityInput = document.getElementById('diary-quantity' + diaryName);
-var quantityContainer = document.getElementById('quantityContainer' + diaryName);
+        // Apply warning border if quantity is smaller than the minimum quantity
+        var minQuantityInput = document.getElementById('diary-quantity' + diaryName);
+        var quantityContainer = document.getElementById('quantityContainer' + diaryName);
 
-quantityContainer.addEventListener('input', function() {
-    if (parseFloat(newItem.querySelector('.quantity-input').value) < parseFloat(minQuantityInput.value)) {
-        quantityContainer.classList.add('warning');
-    } else {
-        quantityContainer.classList.remove('warning');
-    }
-});
+        quantityContainer.addEventListener('input', function() {
+            if (parseFloat(newItem.querySelector('.quantity-input').value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
 
-// Apply warning border when the screen is up
-window.addEventListener('load', function() {
-    if (parseFloat(newItem.querySelector('.quantity-input').value) < parseFloat(minQuantityInput.value)) {
-        quantityContainer.classList.add('warning');
-    } else {
-        quantityContainer.classList.remove('warning');
-    }
-});
-//////////////////
-
+        // Apply warning border when the screen is up
+        window.addEventListener('load', function() {
+            if (parseFloat(newItem.querySelector('.quantity-input').value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
 
 
     }
 }
+
+
+
+function addItemToMainContainerSelected(diaryId) {
+    diaryName = diaryId.diary_id;
+    const account_id = <?php echo json_encode($account_id); ?>;
+
+    // Check if the item with the same name already exists in the main container
+    var existingItem = document.getElementById("main-" + diaryName);
+
+    const fileType = getFileType(diaryName);
+    console.log(diaryName);
+    if (!existingItem) {
+
+        // Create a new list item for the main container
+        var newItem = document.createElement('li');
+        newItem.className = "item selectable selected"; 
+
+        // Set innerHTML based on the selected item in the popup
+        newItem.innerHTML = `
+                <div class="button-container">
+                <button onclick="openPopupMinQuantity('${diaryName}')" class="top-left-button with-icon" id="topLeftButton${diaryName}">define minimum quantity </button>
+                    <div id="diary-popup${diaryName}" class="popup"> 
+                        <div class="popup-content-diarys">
+                            <span class="close" onclick="closePopupMinQuantity('${diaryName}')">&times;</span>
+                            <h6> Minimum Quantity: </h6>
+                            <p class="input-row">
+                                <input type="number" id="diary-quantity${diaryName}" class="diary-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="diary-unit${diaryName}" class="diary-unit-select" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupMinQuantity('${diaryName}')" id="set${diaryName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+
+                    </br>
+                    <button onclick="openPopupAddToCart('${diaryName}')" class="top-left-button" id="topLeftButton-AddToCart${diaryName}" >Add To Cart</button>
+                    <div id="diary-popup-addToCart${diaryName}" class="popup"> 
+                        <div class="popup-content-diarys">
+                            <span class="close" onclick="closePopupAddToCart('${diaryName}')">&times;</span>
+                            <h6>Add To Cart: </h6>
+                            <p class="input-row">
+                                <input type="number" id="diary-quantity-addToCart${diaryName}" class="diary-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="diary-unit-addToCart${diaryName}" class="diary-unit-select-addToCart" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupAddToCart('${diaryName}')" id="set-addToCart${diaryName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+                <div>
+                
+                    <img src="diary/${diaryName}.${fileType}" onerror="this.src='diary/${diaryName}.jpeg'; this.onerror=null;" alt="${diaryName}">
+                    <h2>${diaryName}</h2>
+                    <div class="item-details">
+                   
+                        <p>Unit:
+                            <select id="unit${diaryName}" class="unit-select">
+                                <option value="units">units</option>
+                                <option value="kg">kg</option>
+                                <option value="gram">gram</option>
+                            </select>
+
+                        </p>
+
+                        <div class="quantity-container" id="quantityContainer${diaryName}">
+                        <button class="decrement">
+                            <i class="fas fa-minus"></i> 
+                        </button>
+                        <input type="number" id="quantity${diaryName}" class="quantity-input small-space" min="0" step="1" value="0" style="padding: 5px;">
+                        <button class="increment">
+                            <i class="fas fa-plus"></i> 
+                        </button>
+                        </div>
+
+                        <div id="stickyNote${diaryName}" class="sticky-note">
+                            <textarea id="noteText${diaryName}" class="note-text" placeholder="Write your note here..."></textarea>
+                            <input id="Date${diaryName}" class="item-date" type="date">
+                            <button id="saveNoteButton${diaryName}" class="save-button">Save</button>
+                        </div> 
+                    </div>
+                    <div class="favorite">
+                        <i id="starIcon${diaryName}" class="far fa-star"></i> 
+                    </div>
+                `;
+
+        // Update the ID to make it unique
+        var newItemId = "main-" + diaryName;
+        newItem.id = newItemId;
+
+        // Reset the quantity input value
+        newItem.querySelector('.quantity-input').value = "0";
+
+        // Add the cloned item to the main container
+        document.getElementById('main-container').appendChild(newItem);
+                
+ 
+        var xhr = new XMLHttpRequest();
+        console.log("from addItemToMainContainerSelected");
+        xhr.open("POST", "addDiary.php", true);
+
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText); // Log the response from the server
+                var jsonResponse = JSON.parse(xhr.responseText);
+                // here I get the previous data from the diarys database !!! 
+
+                var curFruit = jsonResponse.existingFruit;
+
+                var curQuantity = jsonResponse.existingQuantity;
+                var quantityInput = document.getElementById('quantity' + curFruit);
+                quantityInput.value = curQuantity;
+
+                var curNote = jsonResponse.existingNote;
+                var NoteInput = document.getElementById('noteText' + curFruit);
+                NoteInput.value = curNote;
+
+                var curUnit  = jsonResponse.existingUnit;
+                var UnitInput = document.getElementById('unit' + curFruit);
+                UnitInput.value = curUnit;
+
+                var curMinQuantity= jsonResponse.existingMinQuantity;
+                var MinQuantityInput = document.getElementById('diary-quantity' + curFruit);
+                MinQuantityInput.value = curMinQuantity;
+
+                var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
+                var UnitMinQuantityInput = document.getElementById('diary-unit' + curFruit);
+                UnitMinQuantityInput.value = curUnitMinQuantity;
+
+                var curAddToCart = jsonResponse.existingAddToCart;
+                var AddToCartInput = document.getElementById('diary-quantity-addToCart' + curFruit);
+                AddToCartInput.value = curAddToCart;
+
+                var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
+                var UnitAddToCartInput = document.getElementById('diary-unit-addToCart' + curFruit);
+                UnitAddToCartInput.value = curUnitAddToCart;
+                        
+                var curDate = jsonResponse.existingDate;
+                var DateInput = document.getElementById('Date' + curFruit);
+                DateInput.value = curDate;
+
+                var isStarred = jsonResponse.is_starred;
+                var starIcon = document.getElementById('starIcon' + curFruit);
+                if (isStarred == 1 && starIcon) {
+                    starIcon.classList.remove('far');
+                    starIcon.classList.add('fas');
+                }
+
+                // Apply warning border if quantity is smaller than the minimum quantity
+                if (curQuantity < curMinQuantity) {
+                    var quantityContainer = document.getElementById('quantityContainer' + curFruit);
+                    quantityContainer.classList.add('warning');
+                }
+            }
+        };
+        xhr.send(`diaryName=${diaryName}&account_id=${account_id}`);
+
+        // Attach event listeners to the increment and decrement buttons
+        newItem.querySelector('.increment').addEventListener('click', handleIncrement);
+        newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
+
+        // Set up listener for the "Save" button
+        var saveNoteButton = newItem.querySelector('#saveNoteButton' + diaryName);
+        console.log(diaryName);
+        saveNoteButton.addEventListener('click', function () {
+            var quantity = newItem.querySelector('#quantity' + diaryName).value;
+            var note = newItem.querySelector('#noteText' + diaryName).value;
+            var item_date = newItem.querySelector('#Date' + diaryName).value;
+            var unit = newItem.querySelector('#unit' + diaryName).value;
+        });
+
+        // Apply warning border if quantity is smaller than the minimum quantity
+        var minQuantityInput = document.getElementById('diary-quantity' + diaryName);
+        var quantityInput = document.getElementById('quantity' + diaryName);
+        var quantityContainer = document.getElementById('quantityContainer' + diaryName);
+
+        quantityInput.addEventListener('input', function() {
+            if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
+
+        // Apply warning border when the screen is up
+        window.addEventListener('load', function() {
+            // Declare variables inside the event listener function scope
+            var quantityInput = document.getElementById('quantity' + diaryName);
+            var minQuantityInput = document.getElementById('diary-quantity' + diaryName);
+            var quantityContainer = document.getElementById('quantityContainer' + diaryName);
+            
+            if (quantityInput && minQuantityInput && quantityContainer) {
+                if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
+                    quantityContainer.classList.add('warning');
+                } else {
+                    quantityContainer.classList.remove('warning');
+                }
+            } else {
+                console.error('One or more elements not found.');
+            }
+        });
+
+        // Add click event listener to toggle 'selected' class
+        newItem.addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.classList.toggle('selected');
+            }
+        });
+    }
+}
+
+
+
 
     </script>
 

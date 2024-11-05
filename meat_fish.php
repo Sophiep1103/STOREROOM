@@ -140,6 +140,7 @@ window.addEventListener('scroll', () => {
 
 
     starredItems = []; // Array to store the names of starred items
+    selectedItems = []; // Array to store the names of starred items
     selectedItemsArray = []; // Array to store selected items
 
     // Assuming you have a list of meat IDs
@@ -148,6 +149,7 @@ window.addEventListener('scroll', () => {
     // Call fetchStarredItems when the page loads
     document.addEventListener("DOMContentLoaded", function () {
         fetchStarredItems();
+        fetchSelectedItems();
     });
 
     document.getElementById("main-menu-btn").addEventListener("click", function() {
@@ -858,6 +860,50 @@ function fetchStarredItems() {
 // Get references to the input fields, unit selects, and buttons for all items
 //const items = document.querySelectorAll(".item");
 
+
+function fetchSelectedItems() {
+    const account_id = <?php echo json_encode($account_id); ?>;
+
+    // Make an AJAX request to fetch selecred items
+    var xhrFetchSelectedItems = new XMLHttpRequest();
+    xhrFetchSelectedItems.open("POST", "fetchSelectedItemsMeat.php", true);
+    xhrFetchSelectedItems.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhrFetchSelectedItems.onreadystatechange = function () {
+        if (xhrFetchSelectedItems.readyState == 4) {
+            if (xhrFetchSelectedItems.status == 200) {
+                try {
+                    // Parse the response from the server
+                    var response = JSON.parse(xhrFetchSelectedItems.responseText);
+                    console.log(response);
+
+                    // Check if selectedItems is an array
+                    if (Array.isArray(response.selectedItems)) {
+                        // Iterate through each selected item and add it to the main container
+                        
+                        response.selectedItems.forEach(function (selectedItem) {
+                            addItemToMainContainerSelected(selectedItem);
+                           
+                        });
+                       
+
+                    } else {
+                        console.error("selectedItems is not an array:", response.selectedItems);
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                }
+            } else {
+                console.error("HTTP Error:", xhrFetchSelectedItems.status, xhrFetchSelectedItems.statusText);
+            }
+        }
+    };
+
+    // Send data to fetchSelectedItems.php (replace with your actual endpoint and parameters)
+    xhrFetchSelectedItems.send(`account_id=${account_id}`);
+}
+
+
+
 // Initialize input fields with saved values
 function updateInputs() {
     items.forEach(item => {
@@ -879,6 +925,19 @@ items.forEach(item => {
     const unitSelect = item.querySelector(".unit-select");
     setDefaultUnit(unitSelect);
 });
+
+function getFileType(fruitName) {
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    const lowerCaseName = fruitName.toLowerCase();
+    for (const ext of imageExtensions) {
+        console.log(ext);
+        if (lowerCaseName.endsWith('.' + ext)) {
+            return ext;
+        }
+    }
+    return 'jpg'; // Default to jpg if no extension matched
+}
+
 
 // Set "kg" as the default unit
 function setDefaultUnit(unitSelect) {
@@ -985,9 +1044,6 @@ function addItemToMainContainerStar(meatId) {
         // Add the cloned item to the main container
         document.getElementById('main-container').appendChild(newItem);
 
-                
-
-        //account_id = ...
         var xhr = new XMLHttpRequest();
         console.log("from addItemToMainContainerStar");
         xhr.open("POST", "addMeat.php", true);
@@ -1057,8 +1113,7 @@ function addItemToMainContainerStar(meatId) {
             var unit = newItem.querySelector('#unit' + meatName).value;
         });
 
-///////////new 3.5
-// Apply warning border if quantity is smaller than the minimum quantity
+
 var minQuantityInput = document.getElementById('meat-quantity' + meatName);
 var quantityContainer = document.getElementById('quantityContainer' + meatName);
 
@@ -1078,10 +1133,224 @@ window.addEventListener('load', function() {
         quantityContainer.classList.remove('warning');
     }
 });
-//////////////////
 
 
 
+
+    }
+}
+
+
+function addItemToMainContainerSelected(meatId) {
+    console.log(meatId);
+    meatName = meatId.meat_id;
+    const account_id = <?php echo json_encode($account_id); ?>;
+
+    // Check if the item with the same name already exists in the main container
+    var existingItem = document.getElementById("main-" + meatName);
+
+    if (!existingItem) {
+
+        // Create a new list item for the main container
+        var newItem = document.createElement('li');
+        newItem.className = "item selectable selected"; // Marked as selected
+
+        // Set innerHTML based on the selected item in the popup
+        newItem.innerHTML = `
+                <div class="button-container">
+                <button onclick="openPopupMinQuantity('${meatName}')" class="top-left-button with-icon" id="topLeftButton${meatName}">define minimum quantity </button>
+                    <div id="meat-popup${meatName}" class="popup"> 
+                        <div class="popup-content-meats">
+                            <span class="close" onclick="closePopupMinQuantity('${meatName}')">&times;</span>
+                            <h6> Minimum Quantity: </h6>
+                            <p class="input-row">
+                                <input type="number" id="meat-quantity${meatName}" class="meat-quantity" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="meat-unit${meatName}" class="meat-unit-select" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupMinQuantity('${meatName}')" id="set${meatName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+
+                    </br>
+                    <button onclick="openPopupAddToCart('${meatName}')" class="top-left-button" id="topLeftButton-AddToCart${meatName}" >Add To Cart</button>
+                    <div id="meat-popup-addToCart${meatName}" class="popup"> 
+                        <div class="popup-content-meats">
+                            <span class="close" onclick="closePopupAddToCart('${meatName}')">&times;</span>
+                            <h6>Add To Cart: </h6>
+                            <p class="input-row">
+                                <input type="number" id="meat-quantity-addToCart${meatName}" class="meat-quantity-addToCart" min="0" step="1" value="0" style="width: 60px; height:25px;">
+                                <select id="meat-unit-addToCart${meatName}" class="meat-unit-select-addToCart" style="width: 60px; height:25px;">
+                                    <option value="units">units</option>
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                </select>
+                            </p>
+                            <button class="setBtn" onclick="closePopupAddToCart('${meatName}')" id="set-addToCart${meatName}" style="width: 60px; height:25px;"> set</button>
+                        </div>
+                    </div>
+                <div>
+                    <img src="meat_fish/${meatName}.jpg" alt="${meatName}">
+                    <h2>${meatName}</h2>
+                    <div class="item-details">
+                   
+                        <p>Unit:
+                            <select id="unit${meatName}" class="unit-select">
+                                <option value="units">units</option>
+                                <option value="kg">kg</option>
+                                <option value="gram">gram</option>
+                            </select>
+
+                        </p>
+
+                        <div class="quantity-container" id="quantityContainer${meatName}">
+                        <button class="decrement">
+                            <i class="fas fa-minus"></i> 
+                        </button>
+                        <input type="number" id="quantity${meatName}" class="quantity-input small-space" min="0" step="1" value="0" style="padding: 5px;">
+                        <button class="increment">
+                            <i class="fas fa-plus"></i> 
+                        </button>
+                        </div>
+
+                        <div id="stickyNote${meatName}" class="sticky-note">
+                            <textarea id="noteText${meatName}" class="note-text" placeholder="Write your note here..."></textarea>
+                            <input id="Date${meatName}" class="item-date" type="date">
+                            <button id="saveNoteButton${meatName}" class="save-button">Save</button>
+                        </div> 
+                    </div>
+                    <div class="favorite">
+                        <i id="starIcon${meatName}" class="far fa-star"></i> 
+                    </div>
+                `;
+
+        // Update the ID to make it unique
+        var newItemId = "main-" + meatName;
+        newItem.id = newItemId;
+
+        // Increment the counter for the next iteration
+        uniqueIdCounter++;
+
+        // Reset the quantity input value
+        newItem.querySelector('.quantity-input').value = "0";
+
+        // Add the cloned item to the main container
+        document.getElementById('main-container').appendChild(newItem);
+
+        var xhr = new XMLHttpRequest();
+        console.log("from addItemToMainContainerSelected");
+        xhr.open("POST", "addMeat.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText); // Log the response from the server
+                var jsonResponse = JSON.parse(xhr.responseText);
+                // here I get the previous data from the meats database !!! 
+                var curMeat = jsonResponse.existingMeat;
+
+                var curQuantity = jsonResponse.existingQuantity;
+                var quantityInput = document.getElementById('quantity' + curMeat);
+                quantityInput.value = curQuantity;
+
+                var curNote = jsonResponse.existingNote;
+                var NoteInput = document.getElementById('noteText' + curMeat);
+                NoteInput.value = curNote;
+
+                var curUnit  = jsonResponse.existingUnit;
+                var UnitInput = document.getElementById('unit' + curMeat);
+                UnitInput.value = curUnit;
+
+                var curMinQuantity= jsonResponse.existingMinQuantity;
+                var MinQuantityInput = document.getElementById('meat-quantity' + curMeat);
+                MinQuantityInput.value = curMinQuantity;
+
+                var curUnitMinQuantity = jsonResponse.existingUnitMinQuantity;
+                var UnitMinQuantityInput = document.getElementById('meat-unit' + curMeat);
+                UnitMinQuantityInput.value = curUnitMinQuantity;
+
+                var curAddToCart = jsonResponse.existingAddToCart;
+                var AddToCartInput = document.getElementById('meat-quantity-addToCart' + curMeat);
+                AddToCartInput.value = curAddToCart;
+
+                var curUnitAddToCart = jsonResponse.existingUnitAddToCart;
+                var UnitAddToCartInput = document.getElementById('meat-unit-addToCart' + curMeat);
+                UnitAddToCartInput.value = curUnitAddToCart;
+                        
+                var curDate = jsonResponse.existingDate;
+                var DateInput = document.getElementById('Date' + curMeat);
+                DateInput.value = curDate;
+
+                // Apply warning border if quantity is smaller than the minimum quantity
+                if (curQuantity < curMinQuantity) {
+                    var quantityContainer = document.getElementById('quantityContainer' + curMeat);
+                    quantityContainer.classList.add('warning');
+                }
+            }
+        };
+        xhr.send(`meatName=${meatName}&account_id=${account_id}`);
+
+        // Attach event listeners to the increment and decrement buttons
+        newItem.querySelector('.increment').addEventListener('click', handleIncrement);
+        newItem.querySelector('.decrement').addEventListener('click', handleDecrement);
+
+        // Set up listener for the "Save" button
+        var saveNoteButton = newItem.querySelector('#saveNoteButton' + meatName);
+        console.log(meatName);
+        saveNoteButton.addEventListener('click', function () {
+            var quantity = newItem.querySelector('#quantity' + meatName).value;
+            var note = newItem.querySelector('#noteText' + meatName).value;
+            var item_date = newItem.querySelector('#Date' + meatName).value;
+            var unit = newItem.querySelector('#unit' + meatName).value;
+
+            // Make an AJAX request to save the note to the database
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "updateMeat.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText); // Log the response from the server
+                }
+            };
+            xhr.send(`meatName=${meatName}&quantity=${quantity}&note=${note}&unit=${unit}&date=${item_date}`);
+        });
+
+        var minQuantityInput = document.getElementById('meat-quantity' + meatName);
+        var quantityContainer = document.getElementById('quantityContainer' + meatName);
+
+        quantityContainer.addEventListener('input', function() {
+            if (parseFloat(newItem.querySelector('.quantity-input').value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
+
+        // Apply warning border when the screen is up
+        window.addEventListener('load', function() {
+            if (parseFloat(newItem.querySelector('.quantity-input').value) < parseFloat(minQuantityInput.value)) {
+                quantityContainer.classList.add('warning');
+            } else {
+                quantityContainer.classList.remove('warning');
+            }
+        });
+
+    } else {
+        // Mark the existing item as selected
+        existingItem.classList.add('selected');
+
+        // Handle star icon based on is_starred value
+        var starIcon = existingItem.querySelector('#starIcon' + meatName);
+        if (is_starred == 1) {
+            starIcon.classList.add('fas');
+            starIcon.classList.remove('far');
+        } else {
+            starIcon.classList.add('far');
+            starIcon.classList.remove('fas');
+        }
     }
 }
 

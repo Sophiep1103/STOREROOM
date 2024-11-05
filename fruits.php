@@ -1090,9 +1090,6 @@ function addItemToMainContainerStar(fruitId) {
         var newItemId = "main-" + fruitName;
         newItem.id = newItemId;
 
-        // Increment the counter for the next iteration
-        uniqueIdCounter++;
-
         // Reset the quantity input value
         newItem.querySelector('.quantity-input').value = "0";
 
@@ -1101,7 +1098,6 @@ function addItemToMainContainerStar(fruitId) {
 
                 
         // Make an AJAX request to addItem.php to add default information to the item in the database
-        //account_id = ...
         var xhr = new XMLHttpRequest();
         console.log("from addItemToMainContainerStar");
         xhr.open("POST", "addItem.php", true);
@@ -1113,7 +1109,6 @@ function addItemToMainContainerStar(fruitId) {
                 console.log(xhr.responseText); // Log the response from the server
                 var jsonResponse = JSON.parse(xhr.responseText);
                 // here I get the previous data from the fruits database !!! 
-                var jsonResponse = JSON.parse(xhr.responseText);
 
                 var curFruit = jsonResponse.existingFruit;
 
@@ -1149,6 +1144,11 @@ function addItemToMainContainerStar(fruitId) {
                 var DateInput = document.getElementById('Date' + curFruit);
                 DateInput.value = curDate;
 
+                var isSelected = jsonResponse.is_selected;
+                if (isSelected == 1) {
+                    newItem.classList.add('selected');
+                }
+
                 // Apply warning border if quantity is smaller than the minimum quantity
                 if (curQuantity < curMinQuantity) {
                     var quantityContainer = document.getElementById('quantityContainer' + curFruit);
@@ -1174,9 +1174,10 @@ function addItemToMainContainerStar(fruitId) {
 
         // Apply warning border if quantity is smaller than the minimum quantity
         var minQuantityInput = document.getElementById('fruit-quantity' + fruitName);
+        var quantityInput = document.getElementById('quantity' + fruitName);
         var quantityContainer = document.getElementById('quantityContainer' + fruitName);
 
-        quantityContainer.addEventListener('input', function() {
+        quantityInput.addEventListener('input', function() {
             if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
                 quantityContainer.classList.add('warning');
             } else {
@@ -1207,11 +1208,6 @@ window.addEventListener('load', function() {
 
     }
 }
-
-
-
-
-
 
 function addItemToMainContainerSelected(fruitId) {
     fruitName = fruitId.fruit_id;
@@ -1299,16 +1295,13 @@ function addItemToMainContainerSelected(fruitId) {
                         </div> 
                     </div>
                     <div class="favorite">
-                        <i id="starIcon${fruitName}" class="fas fa-star"></i> 
+                        <i id="starIcon${fruitName}" class="far fa-star"></i> 
                     </div>
                 `;
 
         // Update the ID to make it unique
         var newItemId = "main-" + fruitName;
         newItem.id = newItemId;
-
-        // Increment the counter for the next iteration
-        uniqueIdCounter++;
 
         // Reset the quantity input value
         newItem.querySelector('.quantity-input').value = "0";
@@ -1327,7 +1320,6 @@ function addItemToMainContainerSelected(fruitId) {
                 console.log(xhr.responseText); // Log the response from the server
                 var jsonResponse = JSON.parse(xhr.responseText);
                 // here I get the previous data from the fruits database !!! 
-                var jsonResponse = JSON.parse(xhr.responseText);
 
                 var curFruit = jsonResponse.existingFruit;
 
@@ -1363,6 +1355,13 @@ function addItemToMainContainerSelected(fruitId) {
                 var DateInput = document.getElementById('Date' + curFruit);
                 DateInput.value = curDate;
 
+                var isStarred = jsonResponse.is_starred;
+                var starIcon = document.getElementById('starIcon' + curFruit);
+                if (isStarred == 1 && starIcon) {
+                    starIcon.classList.remove('far');
+                    starIcon.classList.add('fas');
+                }
+
                 // Apply warning border if quantity is smaller than the minimum quantity
                 if (curQuantity < curMinQuantity) {
                     var quantityContainer = document.getElementById('quantityContainer' + curFruit);
@@ -1388,9 +1387,10 @@ function addItemToMainContainerSelected(fruitId) {
 
         // Apply warning border if quantity is smaller than the minimum quantity
         var minQuantityInput = document.getElementById('fruit-quantity' + fruitName);
+        var quantityInput = document.getElementById('quantity' + fruitName);
         var quantityContainer = document.getElementById('quantityContainer' + fruitName);
 
-        quantityContainer.addEventListener('input', function() {
+        quantityInput.addEventListener('input', function() {
             if (parseFloat(quantityInput.value) < parseFloat(minQuantityInput.value)) {
                 quantityContainer.classList.add('warning');
             } else {
@@ -1424,6 +1424,7 @@ function addItemToMainContainerSelected(fruitId) {
         });
     }
 }
+
 
     </script>
 

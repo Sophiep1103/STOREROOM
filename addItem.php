@@ -33,7 +33,9 @@ if ($checkResult->num_rows > 0) {
         'existingAddToCart' => $existingItem['addToCart'],
         'existingUnitAddToCart' => $existingItem['unit_addToCart'],
         'existingDate' => $existingItem['item_date'],
-        'existingFruit' => $fruitName
+        'existingFruit' => $fruitName,
+        'is_starred' => $existingItem['is_starred'],
+        'is_selected' => $existingItem['is_selected'],
     );
 
     if(count($_POST)>2){
